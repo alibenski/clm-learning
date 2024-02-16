@@ -1,0 +1,87 @@
+name: CLM Drupal Theme
+type: theme
+description: 'This is a sub-theme of Charity Zymphonies Theme'
+package: core
+base theme: charity_zymphonies_theme
+core_version_requirement: ^8 || ^9 || ^10
+
+#libraries
+libraries:
+  - clm_theme/bootstrap
+  - clm_theme/flexslider
+  - clm_theme/fontawesome
+  - clm_theme/smartmenus
+  - clm_theme/owl
+  - clm_theme/global-components
+  - clm_theme/local-stylesheets
+
+#Regions
+regions:
+
+  #Header
+  header: 'Header'
+  primary_menu: 'Primary menu'
+  search: 'Search'
+
+  #Top widgets
+  topwidget_title: 'Top widget title'
+  topwidget_first: 'Top first widget'
+  topwidget_second: 'Top second widget'
+  topwidget_third: 'Top third widget' 
+
+  #Top message widgets
+  topmessage: 'Top Message'
+
+  #Global region
+  highlighted: 'Highlighted' 
+  page_title: 'Page title'
+  breadcrumb: 'Breadcrumb'
+  content: 'Content'
+  sidebar_first: 'Left sidebar'
+  sidebar_second: 'Right sidebar'
+
+  #Clients widgets
+  clients_title: 'Clients title'
+  clients: 'Clients'
+
+  #Features widgets
+  features_title: 'Features title'
+  features_first: 'Features first widget'
+  features_second: 'Features second widget'
+  features_third: 'Features third widget'
+
+  #Services widgets
+  services_title: 'Services title'
+  services_first: 'Services first widget'
+  services_second: 'Services second widget'
+  services_third: 'Services third widget'
+  services_forth: 'Services forth widget'
+
+  #Bottom widgets
+  bottom_title: 'Bottom title'
+  bottom_first: 'Bottom first widget'
+  bottom_second: 'Bottom second widget'
+  bottom_third: 'Bottom third widget'
+  bottom_forth: 'Bottom forth widget'
+
+  #Updates widgets
+  updates_title: 'Updates title'
+  updates_first: 'Updates first widget'
+  updates_second: 'Updates second widget'
+  updates_third: 'Updates third widget'
+  updates_forth: 'Updates forth widget'
+
+  #Footer widgets
+  footer_title: 'Footer title'
+  footer_first: 'Footer first widget'
+  footer_second: 'Footer second widget'
+  footer_third: 'Footer third widget'
+
+  #Auto hidden
+  auto_hidden_block: 'Auto hidden blocks'
+
+
+# Information added by Drupal.org packaging script on 2024-01-09
+version: '1.0'
+project: 'clm_theme'
+datestamp: 1704828864
