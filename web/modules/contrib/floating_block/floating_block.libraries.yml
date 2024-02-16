@@ -1,0 +1,7 @@
+floating_block:
+  js:
+    floating_block.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings

@@ -1,0 +1,89 @@
+<?php
+
+/**
+ * @file
+ * Views Dependent Filters module file.
+ *
+ * Provides a Views exposed filter which makes other filters depend on values
+ * in yet further filters for their visibility and processing.
+ * For example: if the 'node type' filter is set to 'article', show a filter for
+ * a field that is only present on articles.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function views_dependent_filters_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the views_dependent_filters module.
+    case 'help.page.views_dependent_filters':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Allows the presence of exposed filters on a view to be
+      controlled by values in another exposed filter. Dependent filters are hidden
+      when not relevant, and their values are not considered when the exposed form
+      is submitted.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * After build form processor for the views exposed form.
+ */
+function views_dependent_filters_exposed_form_after_build($form, FormStateInterface $form_state) {
+  // We may have multiple dependency info arrays from more than one copies
+  // of the views_dependent_filters_handler_filter_dependent handler.
+  foreach ($form_state->dependent_exposed_filters as $dependency_info) {
+    $form_dependency = [];
+    foreach ($dependency_info['controllers'] as $filter_id => $controller_values) {
+      $identifier = $dependency_info['identifiers'][$filter_id];
+      // Regular form.
+      foreach ($controller_values as $controller_value) {
+        $part = ":input[name= $filter_id]";
+        $form_dependency[$part]['value'] = $controller_value;
+        // Converting in array for multi-value fields.
+        $form_dependency_array[] = $form_dependency;
+      }
+    }
+
+    // Set the dependency on each form element as required.
+    foreach ($dependency_info['dependents'] as $dependent_filter_id) {
+
+      $identifier = $dependency_info['identifiers'][$dependent_filter_id];
+      $form[$identifier]['#states']['visible'] = $form_dependency_array;
+    }
+  }
+  return $form;
+}
+
+/**
+ * Convert a string to an HTML id matching one made with drupal_html_id().
+ *
+ * We can't simply call drupal_html_id() because that only returns unique
+ * ids; this is intended for when the ID already exists and we want to recreate
+ * it from the original input.
+ */
+function views_dependent_filters_recreate_html_id($id) {
+  $id = strtr(
+    mb_strtolower($id),
+    [' ' => '-', '_' => '-', '[' => '-', ']' => '']
+  );
+
+  // As defined in http://www.w3.org/TR/html4/types.html#type-name, HTML IDs can
+  // only contain letters, digits ([0-9]), hyphens ("-"), underscores ("_"),
+  // colons (":"), and periods ("."). We strip out any character not in that
+  // list. Note that the CSS spec doesn't allow colons or periods in identifiers
+  // (http://www.w3.org/TR/CSS21/syndata.html#characters), so we strip those two
+  // characters as well.
+  $id = preg_replace('/[^A-Za-z0-9\-_]/', '', $id);
+
+  // Removing multiple consecutive hyphens.
+  $id = preg_replace('/\-+/', '-', $id);
+
+  return $id;
+}

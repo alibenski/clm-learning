@@ -1,0 +1,6 @@
+floating_block_test.page:
+  path: '/floating_block_test/page'
+  defaults:
+    _controller: 'Drupal\floating_block_test\Controller\PageController::page'
+  requirements:
+    _permission: 'access content'

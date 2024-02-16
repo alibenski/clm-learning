@@ -1,0 +1,19 @@
+{
+    "name": "drupal/hacked",
+    "description": "Shows if drupal or any of its modules have been changed",
+    "type": "drupal-module",
+    "homepage": "https://www.drupal.org/project/hacked",
+    "authors": [
+        {
+            "name": "Andrei Ivnitskii",
+            "homepage": "https://www.drupal.org/u/ivnish",
+            "role": "Maintainer"
+        }
+    ],
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/hacked",
+        "source": "https://git.drupalcode.org/project/hacked"
+    },
+    "minimum-stability": "dev",
+    "require": {}
+}

@@ -1,0 +1,13 @@
+name: OAuth 1.0
+type: module
+description: "Provides OAuth 1.0a server authentication"
+package: Web services
+core_version_requirement: ^8 || ^9 || ^10
+dependencies:
+  - drupal:system (>=8.5.0)
+configure: oauth.admin_form
+
+# Information added by Drupal.org packaging script on 2023-09-22
+version: '8.x-2.3'
+project: 'oauth'
+datestamp: 1695408198

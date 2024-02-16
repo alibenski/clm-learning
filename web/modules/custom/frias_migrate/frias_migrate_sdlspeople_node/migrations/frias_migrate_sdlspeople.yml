@@ -1,0 +1,153 @@
+uuid: 96950f78-da84-4324-8f9f-9023d954e791
+langcode: en
+status: true
+dependencies: {  }
+id: frias_migrate_sdlspeople
+class: Drupal\node\Plugin\migrate\D7NodeTranslation
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 7 Frias'
+  - Content
+migration_group: migrate_drupal_7
+label: 'Node complete (People)'
+source:
+  plugin: d7_node_complete
+  node_type: sdlspeople
+process:
+  nid:
+    -
+      plugin: get
+      source: tnid
+  vid:
+    -
+      plugin: get
+      source: vid
+  langcode:
+    -
+      plugin: default_value
+      source: language
+      default_value: und
+  title:
+    -
+      plugin: get
+      source: title
+  uid:
+    -
+      plugin: get
+      source: node_uid
+  status:
+    -
+      plugin: get
+      source: status
+  created:
+    -
+      plugin: get
+      source: created
+  changed:
+    -
+      plugin: get
+      source: timestamp
+  promote:
+    -
+      plugin: get
+      source: promote
+  sticky:
+    -
+      plugin: get
+      source: sticky
+  revision_uid:
+    -
+      plugin: get
+      source: revision_uid
+  revision_log:
+    -
+      plugin: get
+      source: log
+  revision_timestamp:
+    -
+      plugin: get
+      source: timestamp
+  content_translation_source:
+    -
+      plugin: get
+      source: source_langcode
+  comment_node_sdlspeople/0/status:
+    -
+      plugin: get
+      source: comment
+  body:
+    -
+      plugin: get
+      source: body
+  field_mt_subheader_body:
+    -
+      plugin: get
+      source: field_mt_subheader_body
+  field_mt_academic_title:
+    -
+      plugin: get
+      source: field_mt_academic_title
+  field_mt_photo:
+    -
+      plugin: sub_process
+      source: field_mt_photo
+      process:
+        target_id: fid
+        alt: alt
+        title: title
+        width: width
+        height: height
+  field_mt_cv:
+    -
+      plugin: sub_process
+      source: field_mt_cv
+      process:
+        target_id: fid
+        display: display
+        description: description
+  field_mt_websites:
+    -
+      plugin: get
+      source: field_mt_websites
+  field_mt_contact_info:
+    -
+      plugin: get
+      source: field_mt_contact_info
+  field_mt_honors:
+    -
+      plugin: get
+      source: field_mt_honors
+  field_mt_recent_publications:
+    -
+      plugin: get
+      source: field_mt_recent_publications
+  field_mt_email:
+    -
+      plugin: get
+      source: field_mt_email
+  field_mt_twitter:
+    -
+      plugin: get
+      source: field_mt_twitter
+  field_mt_linkedin:
+    -
+      plugin: get
+      source: field_mt_linkedin
+  field_typeofstaff:
+    -
+      plugin: sub_process
+      source: field_typeofstaff
+      process:
+        target_id: tid
+destination:
+  plugin: 'entity_complete:node'
+  translations: true
+  default_bundle: sdlspeople
+migration_dependencies:
+  required:
+    - upgrade_d7_user
+    - upgrade_d7_node_type
+    - upgrade_language
+  optional:
+    - upgrade_d7_field_instance

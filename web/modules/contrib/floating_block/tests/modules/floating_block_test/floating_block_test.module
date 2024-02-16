@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for the Floating Block Test module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function floating_block_test_theme(): array {
+  return [
+    'floating_block_test_page' => [
+      'variables' => [],
+    ],
+  ];
+}

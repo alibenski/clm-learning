@@ -1,0 +1,3 @@
+services:
+  floating_block:
+    class: Drupal\floating_block\Helper

@@ -1,0 +1,5 @@
+floating_block_test:
+  version: VERSION
+  css:
+    layout:
+      css/floating_block_test.css: {}

@@ -1,0 +1,7 @@
+type: module
+name: Frias Migration SDLS People Nodes
+description: 'Frias Migration SDLS People Nodes'
+package: Frias Migration to D10
+core_version_requirement: 10.x
+dependencies:
+  - drupal:migrate

@@ -1,0 +1,7 @@
+type: module
+name: Frias Migration Drupal 7 Files
+description: 'Frias Migration Drupal 7 Files'
+package: Frias Migration to D10
+core_version_requirement: 10.x
+dependencies:
+  - drupal:migrate

@@ -1,0 +1,15 @@
+name: Responsive Image Link Formatter
+description: Extends Core 'responsive_image' formatter to allow displaying responsive images wrapped within a link provided by a field.
+package: Fields
+
+type: module
+core_version_requirement: '^9.3 || ^10'
+
+dependencies:
+  - image_link_formatter:image_link_formatter
+  - drupal:responsive_image
+
+# Information added by Drupal.org packaging script on 2022-09-15
+version: '2.1.1'
+project: 'image_link_formatter'
+datestamp: 1663200714

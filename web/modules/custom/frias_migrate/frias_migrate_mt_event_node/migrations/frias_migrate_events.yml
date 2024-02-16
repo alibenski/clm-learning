@@ -1,0 +1,186 @@
+uuid: da03371a-b5ae-4164-9125-24d19a06dc9a
+langcode: en
+status: true
+dependencies: {  }
+id: frias_migrate_event
+class: Drupal\node\Plugin\migrate\D7NodeTranslation
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 7 Frias'
+  - Content
+migration_group: migrate_drupal_7
+label: 'Node complete (Event)'
+source:
+  plugin: d7_node_complete
+  node_type: mt_event
+process:
+  nid:
+    -
+      plugin: get
+      source: tnid
+  vid:
+    -
+      plugin: get
+      source: vid
+  langcode:
+    -
+      plugin: default_value
+      source: language
+      default_value: und
+  title:
+    -
+      plugin: get
+      source: title
+  uid:
+    -
+      plugin: get
+      source: node_uid
+  status:
+    -
+      plugin: get
+      source: status
+  created:
+    -
+      plugin: get
+      source: created
+  changed:
+    -
+      plugin: get
+      source: timestamp
+  promote:
+    -
+      plugin: get
+      source: promote
+  sticky:
+    -
+      plugin: get
+      source: sticky
+  revision_uid:
+    -
+      plugin: get
+      source: revision_uid
+  revision_log:
+    -
+      plugin: get
+      source: log
+  revision_timestamp:
+    -
+      plugin: get
+      source: timestamp
+  content_translation_source:
+    -
+      plugin: get
+      source: source_langcode
+  comment_node_mt_event/0/status:
+    -
+      plugin: get
+      source: comment
+  body:
+    -
+      plugin: get
+      source: body
+  field_mt_event_date:
+    -
+      plugin: sub_process
+      source: field_mt_event_date
+      process:
+        value:
+          plugin: format_date
+          from_format: 'Y-m-d H:i:s'
+          to_format: 'Y-m-d\TH:i:s'
+          source: value
+        end_value:
+          plugin: format_date
+          from_format: 'Y-m-d H:i:s'
+          to_format: 'Y-m-d\TH:i:s'
+          source: value2
+  field_mt_event_location:
+    -
+      plugin: get
+      source: field_mt_event_location
+  field_mt_event_related_resources:
+    -
+      plugin: get
+      source: field_mt_event_related_resources
+  field_mt_event_contact_info:
+    -
+      plugin: get
+      source: field_mt_event_contact_info
+  field_mt_subheader_body:
+    -
+      plugin: get
+      source: field_mt_subheader_body
+  field_image:
+    -
+      plugin: sub_process
+      source: field_image
+      process:
+        target_id: fid
+        alt: alt
+        title: title
+        width: width
+        height: height
+  field_teaser_image:
+    -
+      plugin: sub_process
+      source: field_teaser_image
+      process:
+        target_id: fid
+        alt: alt
+        title: title
+        width: width
+        height: height
+  field_teaser_text:
+    -
+      plugin: get
+      source: field_teaser_text
+  field_internal_banner:
+    -
+      plugin: get
+      source: field_internal_banner
+  field_slideshow:
+    -
+      plugin: get
+      source: field_slideshow
+  field_associated_course:
+    -
+      plugin: get
+      source: field_associated_course
+  field_lms_code:
+    -
+      plugin: get
+      source: field_lms_code
+  field_associated_mc_course:
+    -
+      plugin: sub_process
+      source: field_associated_mc_course
+      process:
+        target_id: tid
+  field_mt_event_latitude:
+    -
+      plugin: get
+      source: field_mt_event_latitude
+  field_mt_event_longitude:
+    -
+      plugin: get
+      source: field_mt_event_longitude
+  field_language:
+    -
+      plugin: get
+      source: field_language
+  field_course_subtitle:
+    -
+      plugin: get
+      source: field_course_subtitle
+destination:
+  plugin: 'entity_complete:node'
+  translations: true
+  default_bundle: mt_event
+migration_dependencies:
+  required:
+    - upgrade_d7_user
+    - upgrade_d7_node_type
+    - upgrade_language
+  optional:
+    - upgrade_d7_field_instance
