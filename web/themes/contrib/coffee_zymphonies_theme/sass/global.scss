@@ -1,0 +1,19 @@
+/** 
+	* Filename:     global.css
+	* Version:      1.0.0 (2023-01-13)
+	* Website:      https://www.zymphonies.com
+	* Description:  Global Styles
+	* Author:		Zymphonies Team
+					info@zymphonies.com
+**/
+
+@import "variables-and-mixins";
+@import "base";
+@import "typhography";
+@import "global-styles";
+@import "home.scss";
+@import "header";
+@import "slider";
+@import "menu";
+@import "demo";
+@import "pages";
