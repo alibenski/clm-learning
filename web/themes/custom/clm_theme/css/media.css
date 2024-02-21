@@ -1,0 +1,16 @@
+.region-primary-menu {
+    display: inline-block !important;
+    width: auto;
+    margin: 0;
+    background: none;
+    border-radius: 5px;
+    vertical-align: middle;
+    float: right;
+    position: static; }
+    .region-primary-menu ul {
+      border: 0;
+      float: right; }
+      .region-primary-menu ul ul {
+        background: #fff;
+        background: #2a68af;
+        border-radius: 5px; }

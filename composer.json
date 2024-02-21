@@ -21,6 +21,7 @@
         "drupal/backup_migrate": "^5.0",
         "drupal/better_exposed_filters": "^6.0",
         "drupal/blazy": "^2.21",
+        "drupal/bootstrap_barrio": "^5.5",
         "drupal/captcha": "^2.0",
         "drupal/charity_zymphonies_theme": "^3.0",
         "drupal/coffee_zymphonies_theme": "1.0.1",

@@ -5,6 +5,11 @@ description: A subtheme of charity_zymphonies_theme
 package: core
 core_version_requirement: ^10
 libraries:
+  - clm_theme/bootstrap
+  - clm_theme/flexslider
+  - clm_theme/fontawesome
+  - clm_theme/smartmenus
+  - clm_theme/owl
   - clm_theme/global
 #Regions
 regions:

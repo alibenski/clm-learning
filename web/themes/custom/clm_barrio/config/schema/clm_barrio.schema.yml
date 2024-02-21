@@ -1,0 +1,5 @@
+# Schema for the configuration files of the Bootstrap Barrio Subtheme.
+
+clm_barrio.settings:
+  type: theme_settings
+  label: 'CLM Barrio settings'
