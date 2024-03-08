@@ -2,3 +2,15 @@
  * @file
  * Subtheme specific CSS.
  */
+
+ .navbar-brand {
+    width: 25%;
+    margin: 1rem;
+ }
+
+ @media (min-width: 320px) and (max-width: 992px){ 
+    .navbar-brand {
+        width: 100%;
+        margin: 1rem;
+    }
+}
