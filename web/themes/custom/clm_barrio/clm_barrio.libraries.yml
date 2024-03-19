@@ -24,6 +24,11 @@ bootstrap_cdn:
       //cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css: {}
   dependencies:
     - core/popperjs
+bootstrap_icon:
+  version: VERSION
+  css:
+    component:
+      //cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css: {}
 color.preview:
   version: VERSION
   css:

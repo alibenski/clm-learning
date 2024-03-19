@@ -2,15 +2,85 @@
  * @file
  * Subtheme specific CSS.
  */
+h1, h2, h3, h4, h5, h6 {
+    line-height: 1.20;
+    padding: 0;
+    margin: 20px 0 10px 0;
+    font-weight: 500;
+    text-transform: uppercase;
+}
 
- .navbar-brand {
+#block-clm-barrio-moodleblock h2.title {
+    font-weight: 700;
+}
+
+a, .link {
+    text-decoration: none;
+}
+
+.navbar-brand {
     width: 25%;
     margin: 1rem;
- }
+}
 
- @media (min-width: 320px) and (max-width: 992px){ 
+@media (min-width: 320px) and (max-width: 992px){ 
     .navbar-brand {
         width: 100%;
         margin: 1rem;
     }
+}
+
+.views-field-field-image {
+    margin: 0 20px 20px 0;
+    float: left;
+}
+
+#block-clm-barrio-content .views-row {
+    border-bottom: 1px solid #acacac;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+#block-clm-barrio-content .overlayed {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    max-width: 100%;
+    float: left;
+}
+
+#block-clm-barrio-content .views-field-field-image {
+    width: 130px;
+    margin: 20px 20px 20px 0;
+    float: left;
+}
+
+.views-field-field-mt-event-date-div .event-date--same-day span.day {
+    color: #fff;
+    font-size: 32px;
+    font-weight: 900;
+    /* position: absolute; */
+    bottom: -4px;
+    right: -2px;
+    text-transform: uppercase;
+    text-align: right;
+    line-height: 1;
+}
+
+.views-field-field-mt-event-date-div {
+    position: absolute;
+    width: 75px;
+    height: 75px;
+    background-color: #2a68af;
+    /* top: 4px; */
+    left: 0;
+}
+
+.views-field-field-mt-event-date {
+    margin: 0 10px 40px 10px;
+    padding:10px;
+}
+
+.view-mt-events .view-event-wrapper .views-field-title, .view-mt-events .view-event-wrapper .views-field-body, .view-mt-events .view-event-wrapper .views-field-view-node, .view-mt-events .more-link {
+    margin-left: 95px;
 }
