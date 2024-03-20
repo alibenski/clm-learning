@@ -14,6 +14,10 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
 }
 
+.view-mt-events h5 {
+    margin:0;
+}
+
 a, .link {
     text-decoration: none;
 }
@@ -73,14 +77,29 @@ a, .link {
     height: 75px;
     background-color: #2a68af;
     /* top: 4px; */
-    left: 0;
+    /* left: 0; */
 }
 
 .views-field-field-mt-event-date {
-    margin: 0 10px 40px 10px;
+    margin: 0 10px 10px 10px;
     padding:10px;
 }
 
-.view-mt-events .view-event-wrapper .views-field-title, .view-mt-events .view-event-wrapper .views-field-body, .view-mt-events .view-event-wrapper .views-field-view-node, .view-mt-events .more-link {
+.view-mt-events .view-event-wrapper .views-field-title, .view-mt-events .view-event-wrapper .views-field-body, .view-mt-events .view-event-wrapper .views-field-view-node, .view-mt-events .view-event-wrapper .event-time, .view-mt-events .more-link {
     margin-left: 95px;
+}
+
+.view-mt-events .view-event-wrapper .event-time .bi-clock {
+    margin-right: 5px;
+}
+
+footer.site-footer {
+    background: #055a8e;
+}
+@media (min-width: 851px){
+    .site-footer__top .region {
+        width: 24%;
+        padding: 0 0.65%;
+        margin: 15px;
+    }
 }
