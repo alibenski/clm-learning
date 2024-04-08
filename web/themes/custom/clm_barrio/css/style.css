@@ -294,3 +294,100 @@ footer.site-footer {
     background-color: #bf8124;
 }
 /****EOF Color on Title Top only****/
+
+blockquote {
+  font-size: 24px;
+  font-style: italic;
+  padding:0 0 0 150px;
+  border-left: none;
+  position: relative;
+  margin: 40px 0 50px;
+}
+blockquote p {
+  font-weight: 400;
+  line-height: 1.44;
+}
+.footer-area blockquote {
+  padding-left: 70px;
+}
+
+/* Blockquote quote symbol */
+blockquote:after {
+  position: absolute;
+  font-family: 'PT Serif', Georgia, Times, Times New Roman, Serif;
+  content: "“";
+  left: 45px;
+  top: 0;
+  color: #2a68af;
+  font-style: normal;
+  font-size: 160px;
+  line-height: 1;
+}
+.footer-area blockquote:after {
+  left: 0;
+  font-size: 130px;
+}
+@media (min-width: 992px) {
+  .two-sidebars blockquote {
+    padding: 0 0 0 75px;
+  }
+  .two-sidebars blockquote:after {
+    left: 0;
+    font-size: 130px;
+  }
+}
+@media (max-width: 991px) {
+  .footer-area blockquote {
+    padding-left: 40px;
+    font-size: 18px;
+  }
+  .footer-area blockquote:after {
+    left: 0;
+    font-size: 90px;
+  }
+}
+@media (max-width: 767px) {
+  blockquote {
+    padding: 0 0 0 75px;
+  }
+  blockquote:after {
+    left: 0;
+    font-size: 130px;
+  }
+}
+
+#block-clm-barrio-views-block-general-info-view-block-faq-mc--2 {
+    border-radius: 3px;
+    border: 1px solid #e9e9e9;
+    margin-bottom: 30px;
+    padding: 0 0 10px 0;
+}
+
+#block-clm-barrio-views-block-general-info-view-block-faq-mc--2 .field-content {
+  padding: 0 0 10px 5px;
+}
+
+#block-clm-barrio-views-block-general-info-view-block-faq-mc--2 h2.title:before {
+    content: '\F505';
+    font-family: 'Bootstrap-icons';
+    margin-right: 15px;
+}
+
+#block-clm-barrio-views-block-general-info-view-block-faq-mc--2 h2.title {
+    text-transform: capitalize;
+    position: relative;
+    text-align: left;
+    padding: 18px 18px 18px 30px;
+    border-bottom: 2px solid #2989d8;
+    font-weight: 500;
+    color: #fff;
+    font-size: 18px;
+    background: #2989d8;
+    margin: 0 0 10px 0;
+}
+
+#block-clm-barrio-views-block-general-info-view-block-faq-mc--2 .more-link {
+        border-bottom: none;
+    margin-left: 25px;
+    padding-left: 30px;
+}
