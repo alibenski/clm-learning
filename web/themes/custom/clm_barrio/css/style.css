@@ -86,13 +86,8 @@ a, .link {
 /* 
     Frontpage Right Sidebar "moodleblock"
 */
-.sidebar #block-clm-barrio-moodleblock h2.title {
-    font-size: 1.2em;
-    font-weight: 600;
-}
-
 img.mood.views-field-field-image {
-    margin: 0 20px 20px 0;
+    margin: 0 20px 20px 10px;
     float: left;
 }
 
@@ -356,38 +351,147 @@ blockquote:after {
   }
 }
 
-#block-clm-barrio-views-block-general-info-view-block-faq-mc--2 {
+.sidebar .block {
     border-radius: 3px;
     border: 1px solid #e9e9e9;
     margin-bottom: 30px;
     padding: 0 0 10px 0;
 }
 
-#block-clm-barrio-views-block-general-info-view-block-faq-mc--2 .field-content {
+.sidebar .block .field-content, .sidebar .block p {
   padding: 0 0 10px 5px;
 }
 
-#block-clm-barrio-views-block-general-info-view-block-faq-mc--2 h2.title:before {
-    content: '\F505';
-    font-family: 'Bootstrap-icons';
-    margin-right: 15px;
-}
+/* .sidebar .block h2.title:before {
+    content: '\f00c';
+    font-family: 'fontAwesome';
+    margin-right: 5px;    
+} */
 
-#block-clm-barrio-views-block-general-info-view-block-faq-mc--2 h2.title {
+.sidebar .block h2.title {
     text-transform: capitalize;
     position: relative;
     text-align: left;
     padding: 18px 18px 18px 30px;
     border-bottom: 2px solid #2989d8;
-    font-weight: 500;
+    font-weight: 400;
     color: #fff;
     font-size: 18px;
     background: #2989d8;
     margin: 0 0 10px 0;
 }
 
-#block-clm-barrio-views-block-general-info-view-block-faq-mc--2 .more-link {
-        border-bottom: none;
+.sidebar .block .more-link {
+    border-bottom: none;
     margin-left: 25px;
     padding-left: 30px;
+}
+
+/* M&C and Events Node Pages*/
+.css-gen-info .views-row {
+  border-bottom: none;
+  margin-right: 15px;
+  margin-left: 15px;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+
+}
+
+.path-node .field--name-field-image {
+    display: table;
+    margin: auto;
+    float: none;
+}
+
+.mc-node-section {
+    margin: 15px 0;
+    border: solid 1px whitesmoke;
+}
+
+.node-event-section.node-event-info {
+    background-color: #f6f6f2;
+    border-color: #f9f9f9;
+    border-radius: 3px;
+    border: 1px solid #e9e9e9;
+    margin-bottom: 30px;
+    padding: 0 0 10px 0;
+}
+
+.mc-node-section div.field__item, 
+.node-event-section.node-event-info div.field--label-hidden,
+.node-event-section.node-event-info div.field--label-inline,
+.node-event-section.node-event-info div#field-language-display {
+    padding: 0 60px 0 75px;
+    line-height: 1.20;
+    margin: 20px 0 10px 0;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.node-event-section.node-event-info .field__label, 
+.node-event-section.node-event-info label {
+    font-style: italic;
+    font-weight: 500;
+    color:#2989d8;
+    text-transform: capitalize; 
+}
+
+.mc-node-section span.field--name-title {
+    font-size: large;
+    line-height: 1.20;
+    margin: 20px 0 10px 0;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: all 0.2s ease-in-out;
+}
+
+.mc-node-section span.field--name-title:before {
+    content: '\f054';
+    font-family: fontAwesome;
+    margin-right: 15px;
+}
+
+.mc-node-section span.field--name-title:hover {
+    padding-left: 5px;
+    transition: all 0.2s ease-in-out;
+}
+
+
+h2.course-group-name-wrapper {
+    font-size: 28px;
+    display: block;
+    background-color: rgba(42, 86, 153, .9);
+    color: white;
+    font-weight: 500;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 12px 12px 12px 21px;
+}
+
+h2.course-group-name-wrapper:before {
+    content: '\f046';
+    font-family: fontAwesome;
+    margin-right: 25px;
+}
+
+h2.course-desc-group-name-wrapper {
+    font-size: 28px;
+    display: block;
+    background-color: rgba(42, 86, 153, .9);
+    color: white;
+    font-weight: 500;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 12px 12px 12px 21px;
+}
+
+h2.course-desc-group-name-wrapper:before {
+    content: '\f05a';
+    font-family: fontAwesome;
+    margin-right: 25px;
+}
+
+/* M&C Dates for this Training Block */
+table tr th {
+    color:#2989d8;
 }
