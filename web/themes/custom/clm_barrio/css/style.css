@@ -18,6 +18,10 @@ a, .link {
     text-decoration: none;
 }
 
+.node--unpublished {
+    background-color: rgba(178,34,34,0.60);
+}
+
 .navbar-brand {
     width: 25%;
     margin: 1rem;
@@ -28,6 +32,16 @@ a, .link {
         width: 100%;
         margin: 1rem;
     }
+}
+
+.field__label {
+    font-weight: bold;
+}
+
+.fieldset-wrapper {
+    border: 1px solid #dddddd;
+    padding: 0.5em;
+    margin: 20px 0 35px;
 }
 
 /* 
@@ -397,7 +411,8 @@ blockquote:after {
 
 }
 
-.path-node .field--name-field-image {
+.path-node .field--name-field-image,
+.path-node .field--name-field-teaser-image {
     display: table;
     margin: auto;
     float: none;
@@ -494,4 +509,555 @@ h2.course-desc-group-name-wrapper:before {
 /* M&C Dates for this Training Block */
 table tr th {
     color:#2989d8;
+}
+
+/****Feed Language Schedule Node****/
+.ribbon {
+  /* line-height: 0.8em; */
+  font-size: 1.5em;
+  /* text-transform: uppercase; */
+  text-align: center;
+  font-weight: bold;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.15);
+  letter-spacing: -2px;
+  display: block;
+  width: 6rem;
+  height: 5rem;
+  background: linear-gradient(to bottom, #999999 0%, #cccccc 100%);
+  color: white;
+  margin: 1em 0.5em 0;
+  float: none;
+  padding-top: 1rem;
+  position: relative;
+  -webkit-filter: drop-shadow(0 0.5rem 0.3em rgba(0, 0, 0, 0.5));
+  transform: translate3d(0, 0, 0);
+}
+.ribbon:after {
+  content: "";
+  width: 0;
+  height: 0;
+  border-right: 3rem solid transparent;
+  border-left: 3rem solid transparent;
+  border-top: 1.5rem solid #CCCCCC;
+  position: absolute;
+  top: 5rem;
+  left: 0;
+}
+.ribbon.ribbon--red {
+  background: linear-gradient(to bottom, #d3362d 0%, #e57368 100%);
+}
+.ribbon.ribbon--red:after {
+  border-top: 1.5rem solid #E57368;
+}
+.ribbon.ribbon--orange {
+  background: linear-gradient(to bottom, #e7711b 0%, #f7981d 100%);
+}
+.ribbon.ribbon--orange:after {
+  border-top: 1.5rem solid #F7981D;
+}
+.ribbon.ribbon--yellow {
+  background: linear-gradient(to bottom, #f1ca3a 0%, #f6eb3b 100%);
+}
+.ribbon.ribbon--yellow:after {
+  border-top: 1.5rem solid #F6EB3B;
+}
+.ribbon.ribbon--green {
+  background: linear-gradient(to bottom, #5f9654 0%, #65b045 100%);
+}
+.ribbon.ribbon--green:after {
+  border-top: 1.5rem solid #65B045;
+}
+.ribbon.ribbon--blue {
+  background: linear-gradient(to bottom, #1c91c0 0%, #11a9cc 100%);
+}
+.ribbon.ribbon--blue:after {
+  border-top: 1.5rem solid #11A9CC;
+}
+.ribbon.ribbon--purple {
+  background: linear-gradient(to bottom, #5c3292 0%, #7e3794 100%);
+}
+.ribbon.ribbon--purple:after {
+  border-top: 1.5rem solid #7E3794;
+}
+
+.ds-2col-stacked-fluid.node.node-feed-language-schedule.lang-not-avail-class.view-mode-teaser_title.teaser-region-content-wrapper{display: none;}
+.node-type-feed-language-schedule.lang-not-avail-class .group-footer, .node-type-feed-language-schedule.lang-registration-closed .group-footer  {display: none;}
+.node-type-feed-language-schedule #block-views-ccdb7d24ec55f3a0556df0868faf277c h2.title {
+	position: relative;
+    text-align: center;
+    padding: 18px 18px 18px 18px;
+    border-bottom: 2px solid #2989d8;
+    font-weight: 600;
+    font-size: 18px;
+}
+.node-type-feed-language-schedule #block-views-ccdb7d24ec55f3a0556df0868faf277c a.more.enrol-button:hover {color:#fff;}
+.node-type-feed-language-schedule.lang-registration-closed #block-views-ccdb7d24ec55f3a0556df0868faf277c, 
+.node-type-feed-language-schedule.lang-not-avail-class #block-views-ccdb7d24ec55f3a0556df0868faf277c {display: none;}
+.node-feed-language-schedule .field-name-field-description .field-items {margin-right: 50px;}
+.group-css-ribbon-node {
+  position:absolute;
+  right: 0;
+  z-index: 1;
+  overflow: hidden;
+  width: 130px;
+  height: 100px;
+  text-align: right;
+}
+.lang-registration-closed .group-header {
+    border: 1px solid whitesmoke;
+    padding: 0 5px 0 5px;
+}
+.lang-registration-closed .group-css-ribbon-node {
+  position:absolute;
+  right: -19px;
+  z-index: 1;
+  overflow: hidden;
+  width: 170px;
+  height: 100px;
+  text-align: right;	
+}
+.lang-registration-closed .group-css-ribbon-node span {
+  font-size: 13px;
+  font-weight: 500;
+  color: #FFF;
+  text-transform: uppercase;
+  text-align: left;
+  line-height: 20px;
+  width: 180px;
+  display: block;
+  background: #4d4d4d;
+  background: linear-gradient(#B0AFAF 0%, #4d4d4d 100%);
+  box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+  position:relative;
+}
+.lang-registration-closed .group-css-ribbon-node span::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0px;
+    bottom: -1em;
+    left: -2.05em;
+    pointer-events: none;
+    -webkit-mask: none;
+    left: auto;
+    right: 10px;
+    border-top: 1.0em solid #4d4d4d;
+    border-right: 1.5em solid transparent;
+}
+.lang-avail-class .group-css-ribbon-node  span {
+  font-size: 11px;
+  font-weight: 600;
+  color: #FFF;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 20px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  width: 150px;
+  display: block;
+  background: #236127;
+  background: linear-gradient(#23B02D 0%, #236127 100%);
+  box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+  position:relative;
+  top: 23px;
+  right: -21px;
+}
+.lang-not-avail-class .group-css-ribbon-node  span {
+  font-size: 10px;
+  font-weight: 600;
+  color: #FFF;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 20px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  width: 150px;
+  display: block;
+  background: #F70505;
+  background: linear-gradient(#F70505 0%, #8F0808 100%);
+  box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+  position:relative;
+  top: 25px;
+  right: -21px;
+}
+.lang-registration-closed .lang-text-status {
+    display: inline-block;
+    color: white;
+ 	background: #4d4d4d;
+ 	background: linear-gradient(#7f7f7f 0%, #4d4d4d 100%);
+    padding: 5px 20px 5px 15px;	
+}
+.lang-avail-class .lang-text-status {
+    display: inline-block;
+    color: white;
+	background: #236127;
+	background: linear-gradient(#23B02D 0%, #236127 100%);
+    padding: 5px 20px 5px 15px;
+}
+.lang-not-avail-class .lang-text-status {
+    display: inline-block;
+    color: white;
+  	background: #F70505;
+  	background: linear-gradient(#F70505 0%, #8F0808 100%);
+    padding: 5px 20px 5px 15px;	
+}
+
+/*****uncomment if information icon is needed
+.lang-text-status:before {
+    content: '\f05a';
+    font-family: fontAwesome;
+    margin-right: 15px;
+}*****/
+
+.node--type-feed-language-schedule .group_feed_sched_label span {
+	font-family: 'Roboto', Helvetica Neue, Arial, Sans-serif;
+	font-size: 15px;
+    font-weight: 400;
+    line-height: 1.45;
+	margin-top: 0;
+    white-space: nowrap;
+    display: inline-block;
+    color: white;
+    background: rgba(42,86,153,.9);
+    background: linear-gradient(#2989d8 0%, #1e5799 100%);
+    padding: 5px 20px 5px 20px;
+}
+.node--type-feed-language-schedule .group_feed_sched_label span:before {
+	content: '\f133';
+    font-family: fontAwesome;
+    margin-right: 15px;
+}
+.node--type-feed-language-schedule .field-name-field-days {
+	background: #f8f8f8;
+	border: 1px solid #dddddd;
+	border-right-style: none;
+
+}
+.node--type-feed-language-schedule .field-name-field-days .field-items, .node--type-feed-language-schedule .field-name-field-days .field-label {
+	margin-left: 5px;
+}
+.node--type-feed-language-schedule .field-name-field-timenow {
+	background: #f8f8f8;
+	border: 1px solid #dddddd;
+	border-left-style: none;
+}
+.node--type-feed-language-schedule .field-name-field-timenow .field-items, .node--type-feed-language-schedule .field-name-field-timenow .field-label {
+	margin-left: 5px;
+}
+.node--type-feed-language-schedule .group-right {
+	padding: 32px 0 0 0;
+}
+.node--type-feed-language-schedule .group-footer {
+	padding: 5px 0 0 0;
+}
+.node--type-feed-language-schedule .group-add-info-tbl {
+	background:none; 
+}
+.node--type-feed-language-schedule .ui-state-default a {
+	font-size: 19px;
+}
+.node--type-feed-language-schedule .fieldset-legend {
+	font-size: 15px;
+    font-weight: 700;
+    line-height: 1.45;
+    margin-top: 0;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.node--type-feed-language-schedule.lang-not-avail-class .field-name-field-term-duration, .node--type-feed-language-schedule.lang-not-avail-class .field-name-field-application-deadline {
+	display: none;
+}
+
+.node--type-feed-language-schedule .field--name-field-format .field__label {
+	display: inline-block;
+	font-size: 15px;
+	margin: 10px 0 10px 0;
+    font-weight: bold;
+}
+.node--type-feed-language-schedule .field--name-field-format .field-items {
+	display: inline-block;
+	font-size: 15px;
+	margin: 10px 0 10px 5px;
+	padding-top: 0.1em;
+}
+.node--type-feed-language-schedule .field--name-field-format .field__label:before {
+	content: '\f046';
+    font-family: fontAwesome;
+    margin-right: 15px;
+}
+.node--type-feed-language-schedule .field--name-field-term-duration .field__label {
+	display: inline-block;
+	font-size: 15px;
+	margin: 10px 0 10px 0;
+    font-weight: bold;
+}
+.node--type-feed-language-schedule .field--name-field-term-duration .field-items {
+	display: inline-block;
+	font-size: 15px;
+	margin: 10px 0 10px 5px;
+	padding-top: 0.1em;
+}
+.node--type-feed-language-schedule .field--name-field-term-duration .field__label:before {
+	content: '\f046';
+    font-family: fontAwesome;
+    margin-right: 15px;
+}
+.node--type-feed-language-schedule .field--name-field-season .field__label {
+	display: inline-block;
+	font-size: 15px;
+	margin: 10px 0 10px 0;
+    font-weight: bold;
+}
+.node--type-feed-language-schedule .field-type-taxonomy-term-reference {
+	margin: 0 0 0 0;
+}
+.node--type-feed-language-schedule .field--name-field-season .field__label:before {
+	content: '\f046';
+    font-family: fontAwesome;
+    margin-right: 15px;
+}
+.node--type-feed-language-schedule .field--name-field-season .field-items {
+	display: inline-block;
+	font-size: 15px;
+	margin: 10px 0 10px 5px;
+	padding-top: 0.1em;
+}
+.node--type-feed-language-schedule .field--name-field-time-duration .field__label {
+	display: inline-block;
+	font-size: 15px;
+	margin: 10px 0 10px 0;
+    font-weight: bold;
+}
+.node--type-feed-language-schedule .field--name-field-time-duration .field__label:before {
+	content: '\f046';
+    font-family: fontAwesome;
+    margin-right: 15px;
+}
+.node--type-feed-language-schedule .field--name-field-time-duration .field-items {
+	display: inline-block;
+	font-size: 15px;
+	margin: 10px 0 10px 5px;
+	padding-top: 0.1em;
+}
+.node--type-feed-language-schedule .field--name-field-price .field__label {
+	display: inline-block;
+	font-size: 15px;
+	margin: 10px 0 10px 0;
+    font-weight: bold;
+}
+.node--type-feed-language-schedule .field--name-field-price .field__label:before {
+	content: '\f046';
+    font-family: fontAwesome;
+    margin-right: 15px;
+}
+.node--type-feed-language-schedule .field--name-field-price .field-items {
+	display: inline-block;
+	font-size: 15px;
+	margin: 10px 0 10px 5px;
+	padding-top: 0.1em;
+}
+.node--type-feed-language-schedule .field--name-field-eligibility .field__label {
+	display: inline-block;
+	font-size: 15px;
+	margin: 10px 0 10px 0;
+    font-weight: bold;
+}
+.node--type-feed-language-schedule .field--name-field-eligibility .field__label:before {
+	content: '\f046';
+    font-family: fontAwesome;
+    margin-right: 15px;
+}
+.node--type-feed-language-schedule .field--name-field-eligibility .field-items {
+	display: inline-block;
+	font-size: 15px;
+	margin: 10px 0 10px 5px;
+	padding-top: 0.1em;
+}
+.node--type-feed-language-schedule .field--name-field-application-deadline  .field__label {
+	display: inline-block;
+	font-size: 15px;
+	margin: 10px 0 10px 0;
+    font-weight: bold;
+}
+.node--type-feed-language-schedule .field--name-field-application-deadline .field__label:before {
+	content: '\f046';
+    font-family: fontAwesome;
+    margin-right: 15px;
+}
+.node--type-feed-language-schedule .field--name-field-application-deadline .field-items {
+	display: inline-block;
+	font-size: 15px;
+	margin: 10px 0 10px 5px;
+	padding-top: 0.1em;
+}
+/****Language Course Availability Tag****/
+.node--type-feed-language-schedule.node--view-mode-teaser-title {
+    position: relative;
+    background-color: whitesmoke;
+    padding: 0px 2px 10px 20px;
+    margin: 20px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: whitesmoke;
+}
+.lang-title-teaser {
+    width: 90%;
+}
+.field-name-field-season .label-inline {
+    display: inline;
+}
+/****If border is required for each node in teaser title view mode****
+
+.lang-avail-class {
+  border-style: solid;
+  border-width: 1px;
+  border-color: green;
+}
+
+.lang-not-avail-class {
+  border-style: solid;
+  border-width: 1px;
+  border-color: red;
+}
+****If border is required for each node in teaser title view mode****/
+
+.group-css-ribbon {
+	position:absolute;
+	right: -5px;
+	top: -5px;
+	z-index: 1;
+	overflow: hidden;
+	width: 102px;
+	height: 75px;
+	text-align: right;
+}
+.lang-registration-closed .group-css-ribbon {
+    position: absolute;
+    right: -14px;
+    top: -5px;
+    z-index: 1;
+    overflow: hidden;
+    width: 180px;
+    height: 32px;
+    text-align: right;;
+}
+.lang-registration-closed .group-css-ribbon  span {
+    font-size: 11px;
+    font-weight: 500;
+    color: #FFF;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 20px;
+    width: 140px;
+    display: block;
+    background: #4d4d4d;
+    background: linear-gradient(#B0AFAF 0%, #4d4d4d 100%);
+    box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+    position: relative;
+    right: -45px;
+}
+
+.lang-registration-closed .group-css-ribbon span::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0px;
+    bottom: -1em;
+    left: -2.05em;
+    pointer-events: none;
+    -webkit-mask: none;
+    left: auto;
+    right: 3px;
+    border-top: 1.0em solid #4d4d4d;
+    border-right: 1.5em solid transparent;;
+}
+
+.lang-avail-class .group-css-ribbon  span {
+  font-size: 9px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 20px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  width: 103px;
+  display: block;
+  background: #236127;
+  background: linear-gradient(#23B02D 0%, #236127 100%);
+  box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+  position:relative;
+  top: 19px;
+  right: -21px;
+}
+.lang-avail-class .group-css-ribbon span::before {
+  content: "";
+  position: absolute; left: 0px; top: 100%;
+  z-index: -1;
+  border-left: 3px solid #236127;
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #236127;
+}
+.lang-avail-class .group-css-ribbon span::after {
+  content: "";
+  position: absolute; right: 0px; top: 100%;
+  z-index: -1;
+  border-left: 3px solid transparent;
+  border-right: 3px solid #236127;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #236127;
+}
+
+.lang-not-avail-class .group-css-ribbon  span {
+  font-size: 9px;
+  font-weight: 700;
+  color: #FFF;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 20px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  width: 103px;
+  display: block;
+  background: #F70505;
+  background: linear-gradient(#F70505 0%, #8F0808 100%);
+  box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+  position:relative;
+  top: 19px;
+  right: -21px;
+}
+.lang-not-avail-class .group-css-ribbon span::before {
+  content: "";
+  position: absolute; left: 0px; top: 100%;
+  z-index: -1;
+  border-left: 3px solid #8F0808;
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #8F0808;
+}
+.lang-not-avail-class .group-css-ribbon span::after {
+  content: "";
+  position: absolute; right: 0px; top: 100%;
+  z-index: -1;
+  border-left: 3px solid transparent;
+  border-right: 3px solid #8F0808;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #8F0808;
+}
+/****End of Language Course Availability Tag****/
+
+.general-courses-div {
+    border: solid 1px whitesmoke; margin: 10px 0;
 }
