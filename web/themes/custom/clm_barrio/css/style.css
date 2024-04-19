@@ -451,7 +451,8 @@ blockquote:after {
     text-transform: capitalize; 
 }
 
-.mc-node-section span.field--name-title {
+.mc-node-section span.field--name-title,
+.view-courses span.field--name-title {
     font-size: large;
     line-height: 1.20;
     margin: 20px 0 10px 0;
@@ -460,13 +461,35 @@ blockquote:after {
     transition: all 0.2s ease-in-out;
 }
 
+.view-courses .item-list ul  {
+    margin: 1.25em 0 0.25em 0;
+}
+
+.view-courses li.list-group-item  {
+    font-size: large;
+    line-height: 1.20;
+    margin: 0 10px 0 10px;
+    padding: 10px 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: all 0.2s ease-in-out;
+}
+
+.view-courses li.list-group-item a  {
+    font-size: initial;
+    line-height: 1.20;
+    padding: 10px;
+    font-weight: 500;
+}
+
 .mc-node-section span.field--name-title:before {
     content: '\f054';
     font-family: fontAwesome;
     margin-right: 15px;
 }
 
-.mc-node-section span.field--name-title:hover {
+.mc-node-section span.field--name-title:hover,
+.view-courses span.field--name-title:hover  {
     padding-left: 5px;
     transition: all 0.2s ease-in-out;
 }
@@ -481,6 +504,9 @@ h2.course-group-name-wrapper {
     margin-top: 0px;
     margin-bottom: 0px;
     padding: 12px 12px 12px 21px;
+}
+h2.course-group-name-wrapper a {
+    color: white;
 }
 
 h2.course-group-name-wrapper:before {
@@ -1060,4 +1086,9 @@ table tr th {
 
 .general-courses-div {
     border: solid 1px whitesmoke; margin: 10px 0;
+}
+
+.sidebar .block .views-field-field-download-link .field-content,
+.sidebar .block .views-field-field-coming-term-file .field-content {
+    padding: unset;
 }
