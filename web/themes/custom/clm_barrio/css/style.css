@@ -73,6 +73,10 @@ div#main.container {
     padding: 0 11px 0 11px;
 }
 
+#block-clm-barrio-main-menu .navbar-nav a.nav-link:hover {
+    background-color: transparent;
+}
+
 #block-clm-barrio-main-menu .navbar-nav li:after {
     content: '';
     display: block;
@@ -1269,3 +1273,48 @@ table tr th {
     -moz-transition: all .5s ease-in-out;
     -o-transition: all .5s ease-in-out;
 }
+
+/****FAQ Language Page****/
+.sidebar .nav {
+    display: contents;
+    border-radius: 3px;
+    border: 1px solid #e9e9e9;
+    margin-bottom: 30px;
+    padding: 0 0 10px 0;
+}
+
+.sidebar .nav .field-content, .sidebar .nav p {
+  padding: 0 0 10px 5px;
+}
+
+.sidebar .nav h2.title {
+    text-transform: capitalize;
+    position: relative;
+    text-align: left;
+    padding: 18px 18px 18px 30px;
+    border-bottom: 2px solid #2989d8;
+    font-weight: 400;
+    color: #fff;
+    font-size: 18px;
+    background: #2989d8;
+    margin: 0 0 10px 0;
+}
+
+#block-clm-barrio-faqmenu h2.title { border-bottom: none;}
+#block-clm-barrio-faqmenu li a:before {   
+    content: '\f006'; 
+    font-family: 'FontAwesome';
+    float: left;
+    margin-left: -1.5em;
+    color: #0074D9; 
+}
+#block-clm-barrio-faqmenu ul.menu li a {padding: 7px 0 8px 38px;} 
+@media (min-width: 768px) {
+    #block-clm-barrio-faqmenu { border: solid 0px whitesmoke;     margin: 0 0 20px 0;    padding: 10px 70px !important; }
+    #block-clm-barrio-faqmenu div.content { display: table; margin: auto; } 
+    }
+@media (min-width: 992px) {
+    #block-clm-barrio-faqmenu { border: solid 0px whitesmoke;     margin: 0 0 20px 0;    padding: 10px 70px !important; }
+    }
+.button-container {    padding: 20px;    border: solid 1px whitesmoke;    background-color: whitesmoke;}
+a.more.round-button {font-size: 12px; border-radius: 25px;}

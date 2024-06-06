@@ -44,11 +44,14 @@ a:focus,
   color: white;
 }
 .nav-link {
-  color: rgb(231, 231, 231);
+  /* color: rgb(231, 231, 231); */
+  color: #2a68af;
 }
 .nav-link:hover,
 .nav-link:focus {
-  color: rgb(231, 231, 231);
+  /* color: rgb(231, 231, 231); */
+  color: #2a68af;
+  background-color: #eee;
 }
 a:active,
 .link:active {

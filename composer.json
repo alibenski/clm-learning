@@ -61,6 +61,7 @@
         "drupal/quicktabs": "^3.0@alpha",
         "drupal/rules": "^3.0@alpha",
         "drupal/scheduler": "^2.0",
+        "drupal/scroll_top_button": "^2.0",
         "drupal/slick": "^2.10",
         "drupal/slick_views": "^2.8",
         "drupal/superfish": "^1.7",
