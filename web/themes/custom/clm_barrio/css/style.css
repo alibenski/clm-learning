@@ -2,6 +2,11 @@
  * @file
  * Subtheme specific CSS.
  */
+img {
+    height: auto;
+    max-width: 100%;
+}
+
 h1, h2, h3, h4, h5, h6 {
     line-height: 1.20;
     padding: 0;
@@ -42,6 +47,10 @@ a, .link {
     border: 1px solid #dddddd;
     padding: 0.5em;
     margin: 20px 0 35px;
+}
+
+div#main.container {
+    padding: 60px 0;
 }
 
 /* 
@@ -456,7 +465,7 @@ blockquote:after {
     font-size: large;
     line-height: 1.20;
     margin: 20px 0 10px 0;
-    font-weight: 700;
+    font-weight: 500;
     text-transform: uppercase;
     transition: all 0.2s ease-in-out;
 }
@@ -1091,4 +1100,172 @@ table tr th {
 .sidebar .block .views-field-field-download-link .field-content,
 .sidebar .block .views-field-field-coming-term-file .field-content {
     padding: unset;
+}
+
+/*********Thumbnail EXAMS landing page*********/
+.view-id-exams_slideshow.view-display-id-block_1 .exam-content {
+     margin-left: 0px;
+     margin-right: 0px;
+     padding: 0;
+     border: 10px solid transparent;
+     overflow: hidden;
+     position: relative;
+     text-align: center;
+     -moz-backface-visibility: hidden;
+     -webkit-backface-visibility: hidden;
+     backface-visibility: hidden;
+     cursor: default;
+     background: none;
+     -webkit-transition: all 0.5s ease-in-out;
+     -moz-transition: all 0.5s ease-in-out;
+     -o-transition: all 0.5s ease-in-out;
+     -ms-transition: all 0.5s ease-in-out;
+     transition: all 0.5s ease-in-out;
+}
+.view-id-exams_slideshow.view-display-id-block_1 .exam-content .overlay{
+    border-bottom: 40px solid rgba(42, 104, 175, 0.7);
+    width: 100%;
+    height: 45px;
+    bottom: 0;
+    opacity: .90;
+    position: absolute;
+    right: 0;
+    text-indent: -9999px;
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+.view-id-exams_slideshow.view-display-id-block_1 .exam-content:hover .overlay {
+    border-bottom: 500px solid rgba(42, 104, 175, 0.7); //size must be double container
+    border-left: 500px solid transparent;//size must be double container
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+.view-id-exams_slideshow.view-display-id-block_1  .exam-content .initial-overlay-content a {
+    font-size: 15px;
+    bottom: 15px;
+    color: #fff;
+    position: absolute;
+    right: 15px;
+    -moz-transition: all 0.2s cubic-bezier(0.6, -0.28, 0.74, 0.05);
+    -o-transition: all 0.2s cubic-bezier(0.6, -0.28, 0.74, 0.05);
+    -webkit-transition: all 0.2s cubic-bezier(0.6, -0.28, 0.74, 0.05);
+    transition: all 0.2s cubic-bezier(0.6, -0.28, 0.74, 0.05);
+    -ms-transition: all 0.2s cubic-bezier(0.6, -0.28, 0.74, 0.05);
+}
+.view-id-exams_slideshow.view-display-id-block_1  .exam-content:hover .initial-overlay-content{
+    opacity: 0;
+    -moz-transition: all 0.2s ease-out;
+    -o-transition: all 0.2s ease-out;
+    -webkit-transition: all 0.2s ease-out;
+    transition: all 0.2s ease-out;
+    -ms-transition: all 0.2s ease-out;
+}
+.view-id-exams_slideshow.view-display-id-block_1 .exam-content .exam-overlay-content {
+    bottom: 0;
+    color: #fff;
+    left: 0;
+    opacity: 0;
+    padding: 30px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    -moz-transition: all 0.5s ease-out;
+    -o-transition: all 0.5s ease-out;
+    -webkit-transition: all 0.5s ease-out;
+    -ms-transition: all 0.5s ease-out;
+    transition: all 0.5s ease-out;
+}
+.view-id-exams_slideshow.view-display-id-block_1 .exam-content .exam-overlay-content a  {
+    color: #fff;
+    text-decoration: none;
+    -moz-transition: all 0.2s ease-out;
+    -o-transition: all 0.2s ease-out;
+    -webkit-transition: all 0.2s ease-out;
+    -ms-transition:all 0.2s ease-out;
+    transition: all 0.2s ease-out;
+}
+.view-id-exams_slideshow.view-display-id-block_1 .exam-content .exam-overlay-content h4  {
+    color: #fff;
+    text-decoration: none;
+    -moz-transition: all 0.2s ease-out;
+    -o-transition: all 0.2s ease-out;
+    -webkit-transition: all 0.2s ease-out;
+    -ms-transition:all 0.2s ease-out;
+    transition: all 0.2s ease-out;
+}
+.view-id-exams_slideshow.view-display-id-block_1 .exam-content:hover .exam-overlay-content {
+    opacity: 1;
+    -moz-transition: all 0.2s ease-out;
+    -o-transition: all 0.2s ease-out;
+    -webkit-transition: all 0.2s ease-out;
+    -ms-transition:all 0.2s ease-out;
+    transition: all 0.2s ease-out;
+    -moz-transition-delay: 0.2s;
+    -o-transition-delay: 0.2s;
+    -webkit-transition-delay: 0.2s;
+    -ms-transition-delay: 0.2s;
+    transition-delay: 0.2s;
+}
+.view-id-exams_slideshow.view-display-id-block_1 .view-content {
+	margin-left: 20%;
+	margin-right: 20%;
+}
+@media (min-width: 1200px) {
+.view-id-exams_slideshow.view-display-id-block_1 .exam-content.col-responsive { 
+	width: 50%;
+	float: right;}
+}
+@media (max-width: 549px) {
+.view-id-exams_slideshow.view-display-id-block_1 { all:unset; }
+.view-id-exams_slideshow.view-display-id-block_1 .exam-content { all:unset; }
+.view-id-exams_slideshow.view-display-id-block_1 .exam-content .overlay { all:unset; }
+.view-id-exams_slideshow.view-display-id-block_1 .exam-content:hover .overlay { all:unset; }
+.view-id-exams_slideshow.view-display-id-block_1 .exam-content .initial-overlay-content{ all:unset; display: none;}
+.view-id-exams_slideshow.view-display-id-block_1 .exam-content:hover .initial-overlay-content{ all:unset; display: none; }
+.view-id-exams_slideshow.view-display-id-block_1 .exam-content .exam-overlay-content { all:unset; }
+.view-id-exams_slideshow.view-display-id-block_1 .exam-content .exam-overlay-content a h5  { color: #FF9900; text-decoration: none; }
+.view-id-exams_slideshow.view-display-id-block_1 .exam-content .exam-overlay-content h4  { all:unset; }
+.view-id-exams_slideshow.view-display-id-block_1 .exam-content:hover .exam-overlay-content { all:unset; }
+.view-id-exams_slideshow.view-display-id-block_1 .view-content { all:unset; }
+}
+
+/* About Us Page */
+.page-node-148 .field--name-field-image {
+    display: table;
+    float: left;
+    margin: 0 1em 0 0;
+}
+
+/****Custom General Information Topics Page****/
+.view-general-info-language-view div.highlight-item.views-row {
+    position:relative;
+    border: 1px solid whitesmoke !important;
+    height: 250px;
+    margin-bottom: 0;
+    transition: all .2s ease-in-out;
+   -webkit-transition: all .2s ease-in-out;
+   -ms-transition: all .2s ease-in-out;
+   -moz-transition: all .2s ease-in-out;
+   -o-transition: all .2s ease-in-out;
+}
+.view-general-info-language-view .gen-info-content-inside {
+    display: inline-block;
+    position: absolute;
+    bottom: 15px;
+    right: 20px;
+    font-size: 12px;
+    padding: 10px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    transition: all .5s ease-in-out;
+    -webkit-transition: all .5s ease-in-out;
+    -ms-transition: all .5s ease-in-out;
+    -moz-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
 }

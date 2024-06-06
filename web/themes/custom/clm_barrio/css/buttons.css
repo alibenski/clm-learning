@@ -1,0 +1,60 @@
+/* Buttons */
+ul.links li a,
+a.more,
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+.checkout-buttons .checkout-cancel,
+.checkout-buttons .checkout-back,
+.checkout-buttons .checkout-cancel:focus,
+.checkout-buttons .checkout-back:focus,
+.tp-caption.more-link a {
+  font-size: 14px;
+  text-transform: uppercase;
+  padding: 15px 23px;
+  display: inline-block;
+  line-height: 1;
+  border: none;
+  min-width: 130px;
+  background-color: #2a68af;
+   color: #fff;
+   text-decoration: none;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  margin:10px 0;
+  text-align: center;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+}
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  margin-right: 5px;
+}
+ul.links li a:hover,
+a.more:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+input[type="button"]:hover,
+.checkout-buttons .checkout-cancel:hover,
+.checkout-buttons .checkout-back:hover {
+  text-decoration: none;
+  background-color: #4187d1;
+  color: #ffffff;
+}
+span.button-operator {
+  margin:0 10px 0 5px;
+}
+.comment_forbidden a:last-child {
+  margin: 0 10px 10px 0;
+}
+.node footer .comment_forbidden a:first-child {
+  margin-right: 5px;
+}
+.node footer .comment_forbidden a:last-child {
+  margin: 0 5px 10px 5px;
+}

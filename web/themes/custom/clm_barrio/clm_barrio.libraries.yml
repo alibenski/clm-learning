@@ -4,6 +4,7 @@ global-styling:
     js/global.js: {}
   css:
     component:
+      css/buttons.css: {}
       css/style.css: {}
       css/colors.css: {}
       css/carousel.css: {}
