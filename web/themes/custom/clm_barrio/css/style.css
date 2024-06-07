@@ -192,6 +192,15 @@ footer.site-footer {
     background: #055a8e;
 }
 
+footer.site-footer .nav-link {
+    color: rgb(231, 231, 231); ;
+}
+
+footer.site-footer .nav-link:hover, 
+footer.site-footer .nav-link:focus {
+    background-color: transparent;
+}
+
 @media (min-width: 851px){
     .site-footer__top .region {
         width: 24%;
@@ -1275,29 +1284,9 @@ table tr th {
 }
 
 /****FAQ Language Page****/
-.sidebar .nav {
-    display: contents;
-    border-radius: 3px;
-    border: 1px solid #e9e9e9;
-    margin-bottom: 30px;
-    padding: 0 0 10px 0;
-}
-
-.sidebar .nav .field-content, .sidebar .nav p {
-  padding: 0 0 10px 5px;
-}
-
-.sidebar .nav h2.title {
-    text-transform: capitalize;
-    position: relative;
-    text-align: left;
-    padding: 18px 18px 18px 30px;
-    border-bottom: 2px solid #2989d8;
-    font-weight: 400;
-    color: #fff;
-    font-size: 18px;
-    background: #2989d8;
-    margin: 0 0 10px 0;
+#block-clm-barrio-faqmenu .nav-link:hover, 
+#block-clm-barrio-faqmenu .nav-link:focus {
+    background-color: transparent;
 }
 
 #block-clm-barrio-faqmenu h2.title { border-bottom: none;}
