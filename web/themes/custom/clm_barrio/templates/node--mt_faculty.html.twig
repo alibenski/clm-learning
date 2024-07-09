@@ -10,7 +10,7 @@
     {% if (content.field_mt_photo|render) %}
       <div class="photo-wrapper">
         {{ content.field_mt_photo }}
-        {% if (content.field_mt_email|render) or (content.field_mt_twitter|render) or (content.field_mt_linkedin|render) %}
+        {% if (content.field_mt_email|render) or (content.field_mt_twitter|render) or (content.field_mt_linkedin|render) or (content.field_mt_booking|render) %}
           <ul class="members-social-bookmarks">
             {% if content.field_mt_email|render %}
               <li class="email"><a target="_blank" href="mailto:{{node.field_mt_email.value}}"><i class="fa fa-email"></i></a></li>
@@ -21,7 +21,13 @@
             {% if content.field_mt_linkedin|render %}
               <li class="linkedin"><a target="_blank" href="{{node.field_mt_linkedin.uri}}"><i class="fa fa-linkedin"></i></a></li>
             {% endif %}
+            {% if content.field_mt_booking|render %}
+              <li class="booking"><a target="_blank" href="{{node.field_mt_booking.uri}}"><i class="fa fa-calendar"></i></a></li>
+            {% endif %}
           </ul>
+          {% if content.field_mt_booking|render %}
+            <div class="booking"><a class="btn btn-outline-secondary" target="_blank" href="{{node.field_mt_booking.uri}}">Book Coaching Session</a></div>
+          {% endif %}
         {% endif %}
       </div>
     {% endif %}
@@ -38,7 +44,13 @@
           {% if content.field_mt_linkedin|render %}
             <li class="linkedin"><a target="_blank" href="{{node.field_mt_linkedin.uri}}"><i class="fa fa-linkedin"></i></a></li>
           {% endif %}
+          {% if content.field_mt_booking|render %}
+            <li class="booking"><a target="_blank" href="{{node.field_mt_booking.uri}}"><i class="fa fa-calendar"></i></a></li>
+          {% endif %}
         </ul>
+        {% if content.field_mt_booking|render %}
+          <div class="booking"><a class="btn btn-outline-secondary" target="_blank" href="{{node.field_mt_booking.uri}}">Book Coaching Session</a></div>
+        {% endif %}
       {% endif %}
     {% endif %}
 
@@ -58,7 +70,7 @@
       {% endif %}
 
       <div{{ content_attributes }}>
-        {{ content | without('field_mt_photo','field_mt_email','field_mt_twitter','field_mt_linkedin', 'group_mt_faculty_details','comment')}}
+        {{ content | without('field_mt_photo','field_mt_email','field_mt_twitter','field_mt_linkedin', 'field_mt_booking', 'group_mt_faculty_details','comment')}}
       </div>
     </div>
   </div>

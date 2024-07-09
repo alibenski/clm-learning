@@ -11,6 +11,7 @@ global-styling:
       css/node.css: {}
       css/node-faculty_student.css: {}
       css/group-accordion.css: {}
+      css/icons-list.css: {}
 bootstrap:
   js:
     /libraries/popper.js/dist/umd/popper.min.js: { weight: -19 }
