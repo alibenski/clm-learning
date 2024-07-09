@@ -1,0 +1,39 @@
+.field--name-field-mt-academic-title {
+  margin:-10px 0 15px;
+}
+.node-mt-faculty.node.node-teaser,
+.node-mt-student.node.node-teaser {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #acacac;
+}
+.photo-wrapper {
+  float: left;
+  width: 100%;
+  margin-top: 10px;
+  max-width: 205px;
+}
+.node--view-mode-teaser .photo-wrapper {
+  max-width: 130px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
+@media (min-width: 992px) {
+  .two-sidebars .photo-wrapper {
+    max-width: 130px;
+  }
+}
+@media (max-width: 767px) {
+  .photo-wrapper {
+    max-width: 140px;
+  }
+}
+@media (max-width: 480px) {
+  .photo-wrapper,
+  .node--view-mode-teaser .photo-wrapper {
+    max-width: 205px;
+    position: relative;
+    text-align: center;
+    margin: 10px auto 30px;
+    float: none;
+  }
+}

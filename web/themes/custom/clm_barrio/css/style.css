@@ -395,7 +395,7 @@ blockquote:after {
 }
 
 .sidebar .block .field-content, .sidebar .block p {
-  padding: 0 0 10px 5px;
+  padding: 5px 5px 10px 5px;
 }
 
 /* .sidebar .block h2.title:before {

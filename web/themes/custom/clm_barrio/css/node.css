@@ -1,0 +1,161 @@
+/**
+ * @file
+ * Visual styles for Scholarly's node component.
+ */
+
+/*Node*/
+article.node {
+  position: relative;
+}
+.node header {
+  padding: 0 0 5px;
+}
+.node header .field--name-user-picture {
+  padding: 0 0px 20px 0;
+  float: none;
+  margin: 0;
+}
+.node header h2 {
+  margin: 0 0 5px;
+}
+.node--view-mode-teaser .node__links {
+  margin-top: 20px;
+}
+.node--content-container {
+  position: relative;
+}
+.article-content.custom-width {
+  margin-left: 225px;
+}
+
+/* Teaser mode */
+.node--view-mode-teaser {
+  /* margin-bottom: 60px; */
+  padding: 0 0 30px 0;
+  /* border-bottom: 1px solid #acacac; */
+}
+.node--view-mode-teaser .article-content.custom-width {
+  margin-left: 150px;
+}
+
+/* Smaller screen widths */
+@media (min-width: 992px) {
+  .two-sidebars .article-content.custom-width {
+    margin-left: 150px;
+  }
+}
+@media (max-width: 767px) {
+  .article-content.custom-width {
+    margin-left: 160px;
+  }
+}
+@media (max-width: 480px) {
+  .article-content.custom-width,
+  .node--view-mode-teaser .article-content.custom-width {
+    margin-left: 0;
+    clear: both;
+  }
+}
+
+/*Post submitted info*/
+.submitted-info {
+  font-size: 11px;
+  margin: 0 0 10px;
+  display: block;
+}
+@media (max-width:767px) {
+  article .node--submitted-info {
+    margin-bottom: 15px;
+  }
+  .submitted-date,
+  .node--submitted-info .month,
+  .node--submitted-info .year,
+  .node--submitted-info .day,
+  .node--submitted-info .comments-count,
+  .node--submitted-info i,
+  .node--submitted-info .comment-counter {
+    display: inline-block;
+    font-size: 13px;
+    line-height: 1;
+  }
+  .submitted-date + .comments-count {
+    border-left: 1px solid #c2c2c2;
+    display: inline-block;
+    margin-left: 7px;
+    padding-left: 10px;
+  }
+  .node--submitted-info i {
+    padding-right: 3px;
+  }
+  .submitted-date + #affix.affix-top > div:first-child,
+  .comments-count + #affix.affix-top > div:first-child {
+    padding-top: 10px;
+  }
+}
+@media (min-width: 768px) {
+  .node--submitted-info {
+    width: 55px;
+    float: left;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .submitted-date {
+    border-right: 1px solid #c2c2c2;
+    padding-bottom: 10px;
+  }
+  .comments-count {
+    border-right: 1px solid #c2c2c2;
+  }
+  .submitted-date + .comments-count {
+    border-top: 1px solid #c2c2c2;
+  }
+  .node--submitted-info .month,
+  .node--submitted-info .year {
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+  .node--submitted-info .day {
+    font-size: 29px;
+    font-weight: 900;
+    margin-bottom: 2px;
+  }
+  .node--submitted-info i {
+    margin-bottom: 5px;
+    width: 100%;
+    padding-top: 17px;
+  }
+  .comment-counter {
+    font-size: 11px;
+    padding-bottom: 15px;
+  }
+  .node--submitted-info + .node--content {
+    padding-left: 75px;
+    position: relative;
+  }
+  .submitted-date + #affix.affix-top > div:first-child,
+  .comments-count + #affix.affix-top > div:first-child {
+    padding-top: 30px;
+  }
+}
+
+/*Subheader*/
+.field--name-field-mt-subheader-body {
+  font-size: 21px;
+  padding: 0 0 25px 0;
+  line-height: 1.33;
+}
+.subheader {
+  padding: 0 0 40px;
+}
+
+/*subtitle*/
+.field--name-field-mt-subtitle {
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding-bottom: 15px;
+}

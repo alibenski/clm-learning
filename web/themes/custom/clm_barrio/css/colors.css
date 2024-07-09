@@ -51,7 +51,6 @@ a:focus,
 .nav-link:focus {
   /* color: rgb(231, 231, 231); */
   color: #2a68af;
-  background-color: #eee;
 }
 a:active,
 .link:active {

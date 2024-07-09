@@ -8,6 +8,9 @@ global-styling:
       css/style.css: {}
       css/colors.css: {}
       css/carousel.css: {}
+      css/node.css: {}
+      css/node-faculty_student.css: {}
+      css/group-accordion.css: {}
 bootstrap:
   js:
     /libraries/popper.js/dist/umd/popper.min.js: { weight: -19 }
