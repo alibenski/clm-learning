@@ -1,0 +1,163 @@
+/* View Faculty Staff & Students */
+.view-faculty-staff .views-row,
+.view-mt-students .views-row {
+  margin-bottom: 35px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #acacac;
+}
+.view-faculty-staff h3,
+.view-faculty-staff h3 a {
+  margin: 0;
+  line-height: 1.2;
+}
+.view-mt-students h3 {
+  margin-bottom: 5px;
+}
+.view-faculty-staff .views-field-field-mt-academic-title {
+  margin-bottom: 10px;
+}
+.views-field-field-mt-photo .field-content {
+  float: left;
+  margin: 5px 20px 10px 0;
+  max-width: 150px;
+}
+.views-field-field-mt-photo img,
+.field-name-field-mt-photo {
+  border: 1px solid #e5e5e5;
+}
+.footer-area .views-field-field-mt-photo img,
+.footer-area .field-name-field-mt-photo {
+  border: none;
+}
+.views-field-field-mt-contact-info p:last-child {
+  padding-bottom: 0;
+}
+@media (max-width: 480px) {
+  .views-field-field-mt-contact-info {
+    float: left;
+  }
+}
+
+/* Faculty Staff Page */
+.block-system .view-faculty-staff .view-content > h3,
+.block-system .view-mt-students .view-content > h3 {
+  width: 55px;
+  height: 55px;
+  background-color: #252525;
+  color: #f0f0f0;
+  font-size: 40px;
+  text-align: center;
+  line-height: 53px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: block;
+}
+.block-system .view-mt-students .view-content > h3 {
+  margin-bottom: 0;
+  margin-top: 15px;
+}
+@media (min-width: 768px) {
+  .block-system .view-faculty-staff .views-row.group,
+  .block-system .view-mt-students .views-row.group {
+    margin-left: 150px;
+    position: relative;
+  }
+  .block-system .view-faculty-staff h3 + .views-row.group {
+    margin-top: -59px;
+  }
+  .block-system .view-mt-students h3 + .views-row.group {
+    margin-top: -59px;
+  }
+  .block-system .view-faculty-staff .views-row.group:before,
+  .block-system .view-mt-students .views-row.group:before {
+    content: "";
+    height: 200%;
+    width: 1px;
+    background-color: #acacac;
+    left: -75px;
+    top: 4px;
+    display: block;
+    position: absolute;
+  }
+  .block-system .view-mt-students .views-row.group:before {
+    top: 5px;
+  }
+  .block-system .view-faculty-staff .views-row.group:last-child:before,
+  .block-system .view-mt-students .views-row.group:last-child:before {
+    height: 100%;
+  }
+  .block-system .view-faculty-staff .view-content>h3,
+  .block-system .view-mt-students .view-content>h3 {
+    display: inline-block;
+    margin-bottom: 0;
+    margin-top: 10px;
+  }
+}
+
+/* Featured Students & Teachers view */
+/* Featured blocks content */
+.block-views .view-faculty-staff,
+.block-views .view-mt-students {
+  border-bottom: none;
+}
+.block-views .view-faculty-staff .views-row,
+.block-views .view-mt-students .views-row {
+  border-bottom: none;
+  margin-bottom: 25px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.block-views .views-field-field-mt-photo {
+  max-width: 100%;
+}
+.block-views .views-field-field-mt-photo .field-content {
+  float: none;
+  margin: 0;
+  max-width: 100%
+}
+.title-wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 5;
+}
+.title-wrapper a {
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 7px 10px;
+  display: block;
+  background-color: rgba(37,37,37,0.9);
+}
+.title-wrapper a:hover {
+  text-decoration: none;
+  color: #fff;
+  background-color: rgba(85,85,85,0.9);
+}
+@media (min-width: 992px) {
+  .block-views .view-faculty-staff .views-row.custom-md-8,
+  .block-views .view-mt-students .views-row.custom-md-8 {
+    width: 12.5%;
+    float: left;
+  }
+}
+@media (max-width: 480px) {
+  .view-faculty-staff .image-wrapper,
+  .view-mt-students .image-wrapper {
+    max-width: 205px;
+    margin: 0 auto
+  }
+  .block-views .view-faculty-staff .views-row,
+  .block-views .view-mt-students .views-row,
+  .block-views .view-faculty-staff .views-row.custom-col-8,
+  .block-views .view-mt-students .views-row.custom-col-8 {
+    margin: 0 0 30px;
+    width: 100%;
+    float: none;
+  }
+}
+.block-views .view-faculty-staff .more-link,
+.block-views .view-mt-students .more-link {
+  padding-left: 10px;
+}

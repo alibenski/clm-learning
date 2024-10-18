@@ -1307,3 +1307,66 @@ table tr th {
     }
 .button-container {    padding: 20px;    border: solid 1px whitesmoke;    background-color: whitesmoke;}
 a.more.round-button {font-size: 12px; border-radius: 25px;}
+
+/****LearningCentreStaff****/
+#block-clm-barrio-content .view-faculty-staff .overlayed {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    max-width: 150px;
+    float: left;
+}
+
+/****Coaching Page****/
+.title-wrapper a,
+.highlighted-content-wrapper .title a {
+  background-color: rgba(42,104,175,0.90);
+}
+
+#block-clm-barrio-views-block-faculty-staff-block-2 h2.title { font-size: 21px; font-weight: 700; }
+
+#block-clm-barrio-views-block-faculty-staff-block-2 .block-views .views-field-field-mt-photo {
+  max-width: 85%;
+}
+
+#block-clm-barrio-views-block-faculty-staff-block-2 .block-views .views-field-field-mt-photo .field-content {
+  float: none;
+  margin: 0;
+  max-width: 85%
+}
+
+.custom-bios-image .overlayed.user-thumb img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    filter: grayscale(100%);
+    filter: gray;
+    -webkit-transition: all linear 0.2s;
+    -moz-transition: all linear 0.2s;
+    -o-transition: all linear 0.2s;
+    -ms-transition: all linear 0.2s;
+    transition: all linear 0.2s;
+}
+.custom-bios-image .overlayed.user-thumb:hover img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    -webkit-filter: grayscale(0%);
+    -moz-filter: grayscale(0%);
+    -ms-filter: grayscale(0%);
+    -o-filter: grayscale(0%);
+    filter: grayscale(0%);
+    -webkit-transition: all linear 0.2s;
+    -moz-transition: all linear 0.2s;
+    -o-transition: all linear 0.2s;
+    -ms-transition: all linear 0.2s;
+    transition: all linear 0.2s;
+    
+}
+
+#block-clm-barrio-blockforcoachingpage h2 {border-bottom: none;}
+#block-clm-barrio-blockforcoachingpage {background: none; border: none;}

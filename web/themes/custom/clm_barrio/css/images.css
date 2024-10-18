@@ -1,0 +1,85 @@
+/* images */
+.views-field-field-image img,
+.view-mt-courses .views-field-field-image img {
+  border: 1px solid #e5e5e5;
+}
+.footer-area .views-field-field-image,
+.footer-area .view-mt-courses .views-field-field-image img {
+  border: none;
+}
+.view-mt-courses .views-field-field-image {
+  border: none;
+}
+.images-container {
+  margin-bottom: 50px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+.node--view-mode-teaser .images-container {
+  margin-bottom: 0;
+}
+.node--view-mode-teaser .field--type-image,
+.node-mt-slideshow-entry .field--type-image {
+  margin: 0 20px 20px 0;
+}
+.image-preview {
+  overflow: hidden;
+  position: relative;
+  max-width: 100%;
+}
+.image-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+.image-preview a.image-popup img,
+.node--view-mode-teaser .field--type-image img {
+  border:1px solid #e5e5e5;
+}
+.image-preview .overlayed {
+  margin-bottom: 1px;
+}
+.node--view-mode-teaser .field--type-image img:hover {
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+  -webkit-transition: opacity linear 0.2s;
+  -moz-transition: opacity linear 0.2s;
+  -o-transition: opacity linear 0.2s;
+  -ms-transition: opacity linear 0.2s;
+  transition: opacity linear 0.2s;
+}
+.image-caption {
+  clear: both;
+}
+.image-caption p {
+  background: #ebebeb;
+  color: #111;
+  padding: 15px;
+  margin: 0;
+  font-style: italic;
+  font-weight: 700;
+}
+
+/* image listing */
+.image-listing-items {
+  overflow: hidden;
+  padding-top: 15px;
+}
+.image-listing-item {
+  float: left;
+  padding: 0;
+  border: 1px solid #e5e5e5;
+  margin: 0 2.66% 2.66% 0;
+  max-width: 17.866666666%;
+  position: relative;
+}
+.image-listing-item.overlayed {
+  max-width: 17.866666666%;
+}
+.image-listing-items .image-listing-item:nth-child(5n) {
+  margin-right: 0px;
+}
+@media (max-width: 767px) {
+  .custom-width .field--type-image {
+    margin: 0 0 20px 0;
+  }
+}
