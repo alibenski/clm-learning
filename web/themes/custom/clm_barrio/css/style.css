@@ -1226,8 +1226,8 @@ table tr th {
     transition-delay: 0.2s;
 }
 .view-id-exams_slideshow.view-display-id-block_1 .view-content {
-	margin-left: 5%%;
-	margin-right: 5%%;
+	margin-left: 5%;
+	margin-right: 5%;
 }
 @media (min-width: 1200px) {
 .view-id-exams_slideshow.view-display-id-block_1 .exam-content.col-responsive { 
