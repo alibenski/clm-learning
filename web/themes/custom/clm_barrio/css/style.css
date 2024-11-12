@@ -404,7 +404,7 @@ blockquote:after {
     margin-right: 5px;    
 } */
 
-.sidebar .block h2.title {
+.sidebar .block h2.title, .sidebar h2#block-clm-barrio-sidemenu-menu {
     text-transform: capitalize;
     position: relative;
     text-align: left;
@@ -1226,8 +1226,8 @@ table tr th {
     transition-delay: 0.2s;
 }
 .view-id-exams_slideshow.view-display-id-block_1 .view-content {
-	margin-left: 20%;
-	margin-right: 20%;
+	margin-left: 5%%;
+	margin-right: 5%%;
 }
 @media (min-width: 1200px) {
 .view-id-exams_slideshow.view-display-id-block_1 .exam-content.col-responsive { 
@@ -1308,13 +1308,19 @@ table tr th {
 .button-container {    padding: 20px;    border: solid 1px whitesmoke;    background-color: whitesmoke;}
 a.more.round-button {font-size: 12px; border-radius: 25px;}
 
-/****LearningCentreStaff****/
+/****LearningCentreStaff / SDLSPeopleView****/
 #block-clm-barrio-content .view-faculty-staff .overlayed {
     position: relative;
     overflow: hidden;
     display: block;
     max-width: 150px;
     float: left;
+}
+
+#block-clm-barrio-content .view-id-sdlspeopleview .views-row {
+    border-bottom: 0;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 /****Coaching Page****/
@@ -1370,3 +1376,85 @@ a.more.round-button {font-size: 12px; border-radius: 25px;}
 
 #block-clm-barrio-blockforcoachingpage h2 {border-bottom: none;}
 #block-clm-barrio-blockforcoachingpage {background: none; border: none;}
+
+/*Menus*/
+#block-clm-barrio-sidemenu ul.nav {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+#block-clm-barrio-sidemenu ul.nav li {
+  margin: 0 35px;
+  position: relative;
+  list-style: none;
+  padding: 0 5px;
+}
+#block-clm-barrio-sidemenu ul.nav li a,
+#block-clm-barrio-sidemenu ul.nav li span {
+  padding: 7px 0 8px 25px;
+  line-height: 150%;
+  display: block;
+}
+#block-clm-barrio-sidemenu ul.nav li a.active,
+#block-clm-barrio-sidemenu ul.nav li a.active-trail,
+#block-clm-barrio-sidemenu ul.nav li span.active,
+#block-clm-barrio-sidemenu ul.nav li span.active-trail {
+  color: #1d1d1d;
+}
+#block-clm-barrio-sidemenu ul.nav li a:hover,
+#block-clm-barrio-sidemenu ul.nav li span:hover {
+  text-decoration: none;
+  /* background-color: #252525; */
+  color: #018fe2;
+}
+#block-clm-barrio-sidemenu ul.nav li.nav-item--expanded ul {
+  padding-left: 25px;
+}
+/*nav arrows  */
+#block-clm-barrio-sidemenu ul.nav li.nav-item > a:before,
+#block-clm-barrio-sidemenu ul.nav li.nav-item > span:before {
+  content: "\f105";
+  font-family: 'FontAwesome';
+  position: absolute;
+  left: 0px;
+  font-size: 20px;
+  top: 7px;
+  color: #2a68af;
+  -webkit-transition: all linear 0.2s;
+  -moz-transition: all linear 0.2s;
+  -o-transition: all linear 0.2s;
+   -ms-transition: all linear 0.2s;
+  transition: all linear 0.2s;
+  font-weight: 700;
+}
+/* ul.nav li.nav-item--expanded > a:before,
+ul.nav li.nav-item--expanded > span:before {
+  content: "\f107";
+  font-family: 'FontAwesome';
+  position: absolute;
+  left: 0px;
+  font-size: 20px;
+  top: 7px;
+  color: #2a68af;
+  -webkit-transition: all linear 0.2s;
+  -moz-transition: all linear 0.2s;
+  -o-transition: all linear 0.2s;
+   -ms-transition: all linear 0.2s;
+  transition: all linear 0.2s;
+  font-weight: 700;
+} */
+/* ul.nav li.nav-item--active-trail > a:before,
+ul.nav li.nav-item--active-trail a.active:before,
+ul.nav li.nav-item--active-trail > span:before,
+ul.nav li.nav-item--active-trail span.active:before {
+  color: #1d1d1d;
+} */
+#block-clm-barrio-sidemenu ul.nav li > a:hover:before,
+#block-clm-barrio-sidemenu ul.nav li > span:hover:before {
+  left: 10px;
+  color: #2a68af!important;
+}
+/* ul.nav li.nav-item--active-trail > a:hover:before,
+ul.nav li.nav-item--active-trail > span:hover:before {
+  left: 5px;
+} */
