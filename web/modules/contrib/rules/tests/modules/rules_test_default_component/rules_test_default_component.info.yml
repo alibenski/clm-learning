@@ -6,7 +6,7 @@ dependencies:
   - rules:rules
   - rules:rules_test
 
-# Information added by Drupal.org packaging script on 2023-10-03
-version: '8.x-3.0-alpha8'
+# Information added by Drupal.org packaging script on 2024-07-25
+version: '4.0.0'
 project: 'rules'
-datestamp: 1696376273
+datestamp: 1721935275

@@ -1,18 +1,24 @@
 <?php
 
-namespace Drupal\rules\Commands;
+namespace Drupal\rules\Drush\Commands;
 
+// cspell:ignore rlst renb rdis rdel rexp rrev
+
+use Consolidation\AnnotatedCommand\Hooks\HookManager;
 use Consolidation\OutputFormatters\StructuredData\RowsOfFields;
 use Drupal\Core\Config\CachedStorage;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Serialization\Yaml;
+use Drupal\Component\Serialization\Yaml;
 use Drupal\rules\Core\RulesEventManager;
+use Drush\Attributes as CLI;
 use Drush\Commands\DrushCommands;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Drush 9+ commands for the Rules module.
+ * Drush 12+ commands for the Rules module.
  */
-class RulesCommands extends DrushCommands {
+class RulesDrushCommands extends DrushCommands {
 
   /**
    * The config factory service.
@@ -86,7 +92,14 @@ class RulesCommands extends DrushCommands {
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function listAll($type = '', array $options = ['format' => 'table', 'fields' => '']) {
+  #[CLI\Command(name: 'rules:list', aliases: ['rules-list', 'rlst'])]
+  #[CLI\Usage(name: 'drush rules:list', description: 'Lists both Reaction Rules and Rules Components.')]
+  #[CLI\Usage(name: 'drush rules:list component', description: 'Lists only Rules Components.')]
+  #[CLI\Usage(name: 'drush rules:list --fields=machine-name', description: 'Lists just the machine names.')]
+  #[CLI\Usage(name: 'drush rules:list --fields=machine-name --pipe', description: 'Outputs machine names in a format suitable for piping.')]
+  #[CLI\FieldLabels(labels: ['machine-name' => 'Rule', 'label' => 'Label', 'event' => 'Event', 'active' => 'Active'])]
+  #[CLI\DefaultFields(fields: ['machine-name', 'label', 'event', 'active'])]
+  public function listAll(string $type = '', array $options = ['format' => 'table', 'fields' => '']): RowsOfFields {
     // Type is 'rule', or 'component'. Any other value (or no value) will
     // list both Reaction Rules and Rules Components.
     switch ($type) {
@@ -151,7 +164,15 @@ class RulesCommands extends DrushCommands {
    *
    * @throws \Exception
    */
-  public function enable($rule) {
+  #[CLI\Command(name: 'rules:enable', aliases: ['rules-enable', 'renb'])]
+  #[CLI\Argument(name: 'rule', description: 'Reaction Rule name (machine name) to enable.')]
+  #[CLI\Usage(name: 'drush rules:enable', description: 'Displays all disabled rules and allows you to select one to enable.')]
+  #[CLI\Usage(name: 'drush rules:enable test_rule', description: "Enables the rule with machine name 'test_rule'.")]
+  public function enable(string $rule = NULL): void {
+    if ($rule === NULL) {
+      // There are no Reaction Rules to enable.
+      return;
+    }
     // The $rule argument must be a Reaction Rule.
     if ($this->configStorage->exists('rules.reaction.' . $rule)) {
       $config = $this->configFactory->getEditable('rules.reaction.' . $rule);
@@ -191,7 +212,15 @@ class RulesCommands extends DrushCommands {
    *
    * @throws \Exception
    */
-  public function disable($rule) {
+  #[CLI\Command(name: 'rules:disable', aliases: ['rules-disable', 'rdis'])]
+  #[CLI\Argument(name: 'rule', description: 'Reaction Rule name (machine name) to disable.')]
+  #[CLI\Usage(name: 'drush rules:disable', description: 'Displays all enabled rules and allows you to select one to disable.')]
+  #[CLI\Usage(name: 'drush rules:disable test_rule', description: "Disables the rule with machine name 'test_rule'.")]
+  public function disable(string $rule = NULL): void {
+    if ($rule === NULL) {
+      // There are no Reaction Rules to disable.
+      return;
+    }
     // The $rule argument must be a Reaction Rule.
     if ($this->configStorage->exists('rules.reaction.' . $rule)) {
       $config = $this->configFactory->getEditable('rules.reaction.' . $rule);
@@ -231,7 +260,12 @@ class RulesCommands extends DrushCommands {
    *
    * @throws \Exception
    */
-  public function delete($rule) {
+  #[CLI\Command(name: 'rules:delete', aliases: ['rules-delete', 'rdel'])]
+  #[CLI\Argument(name: 'rule', description: 'Rule name (machine name) to delete.')]
+  #[CLI\Usage(name: 'drush rules:delete', description: 'Displays all rules and allows you to select one to delete.')]
+  #[CLI\Usage(name: 'drush rules:delete test_rule', description: "Permanently deletes the rule with machine name 'test_rule'.")]
+  #[CLI\HookSelector(name: 'interact-rule-names')]
+  public function delete(string $rule): void {
     // The $rule argument could refer to a Reaction Rule or a Rules Component.
     if ($this->configStorage->exists('rules.reaction.' . $rule)) {
       $config = $this->configFactory->getEditable('rules.reaction.' . $rule);
@@ -275,7 +309,13 @@ class RulesCommands extends DrushCommands {
    *
    * @throws \Exception
    */
-  public function export($rule) {
+  #[CLI\Command(name: 'rules:export', aliases: ['rules-export', 'rexp'])]
+  #[CLI\Argument(name: 'rule', description: 'Rule name (machine name) to export.')]
+  #[CLI\Usage(name: 'drush rules:export', description: 'Displays all rules and allows you to select one to export.')]
+  #[CLI\Usage(name: 'drush rules:export test_rule > rules.reaction.test_rule.yml', description: "Exports the Rule with machine name 'test_rule' and saves it in a .yml file.")]
+  #[CLI\Usage(name: "drush rules:list rule --fields=machine-name --pipe | xargs -I{}  sh -c \"drush rules:export '{}' > 'rules.reaction.{}.yml'\"", description: 'Exports all Reaction Rules into individual YAML files.')]
+  #[CLI\HookSelector(name: 'interact-rule-names')]
+  public function export(string $rule): void {
     // The $rule argument could refer to a Reaction Rule or a Rules Component.
     $config = $this->configStorage->read('rules.reaction.' . $rule);
     if (empty($config)) {
@@ -310,7 +350,11 @@ class RulesCommands extends DrushCommands {
    *
    * @throws \Exception
    */
-  public function revert($rule) {
+  #[CLI\Command(name: 'rules:revert', aliases: ['rules-revert', 'rrev'])]
+  #[CLI\Argument(name: 'rule', description: 'Rule name (machine name) to revert.')]
+  #[CLI\Usage(name: 'drush rules:revert test_rule', description: "Restores the module-provided Rule with machine id 'test_rule' to its original state. If the Rule hasn't been customized on the site, this has no effect.")]
+  #[CLI\HookSelector(name: 'interact-rule-names')]
+  public function revert(string $rule): void {
     // @todo Implement this function.
 
     // The $rule argument could refer to a Reaction Rule or a Rules Component.
@@ -343,7 +387,8 @@ class RulesCommands extends DrushCommands {
    * @command rules:events
    * @aliases rules-events
    */
-  public function listEvents() {
+  #[CLI\Command(name: 'rules:events', aliases: ['rules-events'])]
+  public function listEvents(): void {
     $this->formatOutput('plugin.manager.rules_event', 'Available Rules Events:');
   }
 
@@ -353,7 +398,8 @@ class RulesCommands extends DrushCommands {
    * @command rules:conditions
    * @aliases rules-conditions
    */
-  public function listConditions() {
+  #[CLI\Command(name: 'rules:conditions', aliases: ['rules-conditions'])]
+  public function listConditions(): void {
     $this->formatOutput('plugin.manager.condition', 'Available Rules Conditions:');
   }
 
@@ -363,7 +409,8 @@ class RulesCommands extends DrushCommands {
    * @command rules:actions
    * @aliases rules-actions
    */
-  public function listActions() {
+  #[CLI\Command(name: 'rules:actions', aliases: ['rules-actions'])]
+  public function listActions(): void {
     $this->formatOutput('plugin.manager.rules_action', 'Available Rules Actions:');
   }
 
@@ -373,17 +420,27 @@ class RulesCommands extends DrushCommands {
    * @command rules:expressions
    * @aliases rules-expressions
    */
-  public function listExpressions() {
+  #[CLI\Command(name: 'rules:expressions', aliases: ['rules-expressions'])]
+  public function listExpressions(): void {
     $this->formatOutput('plugin.manager.rules_expression', 'Available Rules Expressions:');
   }
 
   /**
    * Helper function to format command output.
+   *
+   * @param string $plugin_manager_service
+   *   The service name to use.
+   * @param string $title
+   *   The output title.
+   * @param bool $categories
+   *   Whether to group output into categories or not.
+   * @param bool $short
+   *   TRUE to display short form of output.
    */
-  protected function formatOutput($plugin_manager_service, $title, $categories = TRUE, $short = FALSE) {
+  protected function formatOutput(string $plugin_manager_service, string $title, bool $categories = TRUE, bool $short = FALSE): void {
     // Dependency injection deliberately not used because we don't know
     // a priori what service will be needed. So ignore the phpcs message.
-    // @phpcs:ignore DrupalPractice.Objects.GlobalDrupal.GlobalDrupal
+    // phpcs:ignore DrupalPractice.Objects.GlobalDrupal.GlobalDrupal
     $definitions = \Drupal::service($plugin_manager_service)->getDefinitions();
     $plugins = [];
     foreach ($definitions as $plugin) {
@@ -423,9 +480,10 @@ class RulesCommands extends DrushCommands {
   }
 
   /**
-   * @hook interact @interact-enabled-rules
+   * Drush hook to prompt user to select from a list of enabled Rules.
    */
-  public function interactEnabledRules($input, $output) {
+  #[CLI\Hook(type: HookManager::INTERACT, target: 'rules:disable')]
+  public function interactEnabledRules(InputInterface $input, OutputInterface $output): void {
     if (empty($input->getArgument('rule'))) {
       $rules = $this->configFactory->listAll('rules.reaction');
       // Loop over configuration entities for this $item.
@@ -435,15 +493,20 @@ class RulesCommands extends DrushCommands {
           unset($rules[$index]);
         }
       }
-      $choice = $this->io()->choice('Choose a Reaction Rule', drush_map_assoc($rules));
+      if (empty($rules)) {
+        $this->io()->info('There are no enabled Reaction Rules to choose from.');
+        return;
+      }
+      $choice = $this->io()->choice('Choose a Reaction Rule to disable', array_combine($rules, $rules));
       $input->setArgument('rule', $choice);
     }
   }
 
   /**
-   * @hook interact @interact-disabled-rules
+   * Drush hook to prompt user to select from a list of disabled Rules.
    */
-  public function interactDisabledRules($input, $output) {
+  #[CLI\Hook(type: HookManager::INTERACT, target: 'rules:enable')]
+  public function interactDisabledRules(InputInterface $input, OutputInterface $output): void {
     if (empty($input->getArgument('rule'))) {
       $rules = $this->configFactory->listAll('rules.reaction');
       // Loop over configuration entities for this $item.
@@ -453,20 +516,25 @@ class RulesCommands extends DrushCommands {
           unset($rules[$index]);
         }
       }
-      $choice = $this->io()->choice('Choose a Reaction Rule', drush_map_assoc($rules));
+      if (empty($rules)) {
+        $this->io()->info('There are no disabled Reaction Rules to choose from.');
+        return;
+      }
+      $choice = $this->io()->choice('Choose a Reaction Rule to enable', array_combine($rules, $rules));
       $input->setArgument('rule', $choice);
     }
   }
 
   /**
-   * @hook interact @interact-rule-names
+   * Drush hook to prompt user to select from a list of Rule names.
    */
-  public function interactRuleNames($input, $output) {
+  #[CLI\Hook(type: HookManager::INTERACT, selector: 'interact-rule-names')]
+  public function interactRuleNames(InputInterface $input, OutputInterface $output): void {
     if (empty($input->getArgument('rule'))) {
       $rule_names = $this->configFactory->listAll('rules.reaction');
       $component_names = $this->configFactory->listAll('rules.component');
       $config_names = array_merge($rule_names, $component_names);
-      $choice = $this->io()->choice('Choose a Rule', drush_map_assoc($config_names));
+      $choice = $this->io()->choice('Choose a Rule', array_combine($config_names, $config_names));
       $input->setArgument('rule', $choice);
     }
   }
