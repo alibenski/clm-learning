@@ -41,13 +41,16 @@ function views_dependent_filters_exposed_form_after_build($form, FormStateInterf
   foreach ($form_state->dependent_exposed_filters as $dependency_info) {
     $form_dependency = [];
     foreach ($dependency_info['controllers'] as $filter_id => $controller_values) {
-      $identifier = $dependency_info['identifiers'][$filter_id];
-      // Regular form.
-      foreach ($controller_values as $controller_value) {
-        $part = ":input[name= $filter_id]";
-        $form_dependency[$part]['value'] = $controller_value;
-        // Converting in array for multi-value fields.
-        $form_dependency_array[] = $form_dependency;
+      if (array_key_exists($filter_id, $dependency_info['identifiers'])) {
+        $identifier = $dependency_info['identifiers'][$filter_id];
+
+        // Regular form.
+        foreach ($controller_values as $controller_value) {
+          $part = ":input[name= $filter_id]";
+          $form_dependency[$part]['value'] = $controller_value;
+          // Converting in array for multi-value fields.
+          $form_dependency_array[] = $form_dependency;
+        }
       }
     }
 

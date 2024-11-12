@@ -89,7 +89,7 @@ final class ServiceTest extends KernelTestBase {
   /**
    * Data provider for testInvalidConfig.
    */
-  public function providerConfig(): array {
+  public static function providerConfig(): array {
     return [
       'missing service name' => [
         'configuration' => [],

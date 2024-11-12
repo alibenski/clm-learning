@@ -26,8 +26,7 @@ function job_scheduler_waiting_drush_command() {
  */
 function drush_job_scheduler_waiting_perform($name = '') {
   if (!$name) {
-    drush_set_error('JOB_ERROR', dt('You must specify name of the job.'));
-    return;
+    throw new \Exception(dt('You must specify name of the job.'));
   }
 
   job_scheduler_waiting_perform_job($name);

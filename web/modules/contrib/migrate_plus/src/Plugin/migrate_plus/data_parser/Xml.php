@@ -4,8 +4,11 @@ declare(strict_types = 1);
 
 namespace Drupal\migrate_plus\Plugin\migrate_plus\data_parser;
 
+use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\migrate\MigrateException;
 use Drupal\migrate_plus\DataParserPluginBase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Obtain XML data for migration using the XMLReader pull parser.
@@ -20,7 +23,7 @@ use Drupal\migrate_plus\DataParserPluginBase;
  *   title = @Translation("XML")
  * )
  */
-class Xml extends DataParserPluginBase {
+class Xml extends DataParserPluginBase implements ContainerFactoryPluginInterface {
 
   use XmlTrait;
 
@@ -28,6 +31,11 @@ class Xml extends DataParserPluginBase {
    * The XMLReader we are encapsulating.
    */
   protected \XMLReader $reader;
+
+  /**
+   * The file system service.
+   */
+  protected FileSystemInterface $fileSystem;
 
   /**
    * Array of the element names from the query.
@@ -80,10 +88,21 @@ class Xml extends DataParserPluginBase {
   protected bool $prefixedName = FALSE;
 
   /**
-   * {@inheritdoc}
+   * Constructs a new XML data parser.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\File\FileSystemInterface $file_system
+   *   The file system service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, FileSystemInterface $file_system) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
+
+    $this->fileSystem = $file_system;
 
     $this->reader = new \XMLReader();
 
@@ -116,6 +135,18 @@ class Xml extends DataParserPluginBase {
         $this->parentElementsOfInterest[] = str_replace('..\\', '', $xpath);
       }
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): DataParserPluginBase {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('file_system')
+    );
   }
 
   /**
@@ -167,6 +198,13 @@ class Xml extends DataParserPluginBase {
   protected function openSourceUrl($url): bool {
     // (Re)open the provided URL.
     $this->reader->close();
+
+    // Fetch the data and save it to a temporary file.
+    $xml_data = $this->getDataFetcherPlugin()->getResponseContent($url);
+    $url = $this->fileSystem->tempnam('temporary://', 'file');
+    if (file_put_contents($url, $xml_data) === FALSE) {
+      throw new MigrateException('Unable to save temporary XML');
+    }
 
     // Clear XML error buffer. Other Drupal code that executed during the
     // migration may have polluted the error buffer and could create false

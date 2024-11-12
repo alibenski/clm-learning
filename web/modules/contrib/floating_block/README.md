@@ -25,7 +25,7 @@ None.
 
 ## CONFIGURATION
 
- Configure which htmls blocks to apply the effect to in
+ Configure which html blocks to apply the effect to in
   Administration > Configuration > User interface > Floating block
 
  Customize the menu settings in Administer  Site configuration

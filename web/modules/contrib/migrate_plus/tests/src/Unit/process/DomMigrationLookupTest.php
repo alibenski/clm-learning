@@ -121,7 +121,7 @@ final class DomMigrationLookupTest extends MigrateProcessTestCase {
   /**
    * Dataprovider for testConfigValidation().
    */
-  public function providerTestConfigValidation(): array {
+  public static function providerTestConfigValidation(): array {
     $cases = [
       'migrations-empty' => [
         ['migrations' => []],
@@ -168,7 +168,7 @@ final class DomMigrationLookupTest extends MigrateProcessTestCase {
   /**
    * Dataprovider for testTransform().
    */
-  public function providerTestTransform(): array {
+  public static function providerTestTransform(): array {
     $cases = [
       'users-migration' => [
         [],

@@ -123,21 +123,19 @@ class FileBlob extends ProcessPluginBase implements ContainerFactoryPluginInterf
     // Determine if we're going to overwrite existing files or not touch them.
     $replace = $this->getOverwriteMode();
 
-    // Attempt to save the file to avoid calling file_prepare_directory() any
-    // more than absolutely necessary.
-    if ($this->putFile($destination, $blob, $replace)) {
-      return $destination;
-    }
+    // Create the directory or modify permissions if necessary
     $dir = $this->getDirectory($destination);
     $success = $this->fileSystem->prepareDirectory($dir, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
     if (!$success) {
       throw new MigrateSkipProcessException("Could not create directory '$dir'");
     }
 
-    if ($this->putFile($destination, $blob, $replace)) {
-      return $destination;
+    // Attempt to save the file
+    if (!$this->putFile($destination, $blob, $replace)) {
+      throw new MigrateSkipProcessException("Blob data could not be copied to $destination.");
     }
-    throw new MigrateSkipProcessException("Blob data could not be copied to $destination.");
+
+    return $destination;
   }
 
   /**

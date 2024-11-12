@@ -44,7 +44,6 @@ final class EntityLookupTest extends KernelTestBase {
    */
   protected function setUp(): void {
     parent::setUp();
-    $this->installSchema('system', ['sequences']);
     $this->installEntitySchema('user');
     $this->installEntitySchema('node');
     $this->installConfig(['filter']);
@@ -134,7 +133,7 @@ final class EntityLookupTest extends KernelTestBase {
    * @covers ::transform
    * @dataProvider providerTestLookupOperators
    */
-  public function testLookupOperators($configuration, $lookup_value, $expected_value): void {
+  public function testLookupOperators(array $configuration, mixed $lookup_value, mixed $expected_value): void {
     $migration = \Drupal::service('plugin.manager.migration')
       ->createStubMigration([
         'id' => 'test',
@@ -157,7 +156,7 @@ final class EntityLookupTest extends KernelTestBase {
    * @return array[]
    *   The test cases.
    */
-  public function providerTestLookupOperators(): array {
+  public static function providerTestLookupOperators(): array {
     return [
       'Default operator' => [
         [

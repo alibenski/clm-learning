@@ -82,6 +82,7 @@ final class HttpTest extends MigrateTestCase {
    * Set up test environment.
    */
   public function setUp(): void {
+    parent::setUp();
     // Mock up a Basic authentication plugin that will be used in requests.
     $basic_authenticator = $this->createMock(Basic::class);
 

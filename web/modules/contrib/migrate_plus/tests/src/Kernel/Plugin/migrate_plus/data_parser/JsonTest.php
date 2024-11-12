@@ -59,7 +59,7 @@ final class JsonTest extends KernelTestBase {
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    * @throws \Exception
    */
-  public function testMissingProperties($file, array $ids, array $fields, array $expected): void {
+  public function testMissingProperties(string $file, array $ids, array $fields, array $expected): void {
     $url = $this->path . '/tests/data/' . $file;
 
     $conf = [
@@ -88,7 +88,7 @@ final class JsonTest extends KernelTestBase {
    * @return array
    *   The test cases.
    */
-  public function providerTestMissingProperties(): array {
+  public static function providerTestMissingProperties(): array {
     return [
       'missing properties' => [
         'file' => 'missing_properties.json',
@@ -136,7 +136,7 @@ final class JsonTest extends KernelTestBase {
    *
    * @dataProvider providerItemSelector
    */
-  public function testItemSelector($item_selector, $fields, $expected): void {
+  public function testItemSelector(mixed $item_selector, array $fields, array $expected): void {
     $url = $this->path . '/tests/data/item_selector.json';
 
     $conf = [
@@ -165,7 +165,7 @@ final class JsonTest extends KernelTestBase {
    * @return array
    *   The test cases.
    */
-  public function providerItemSelector(): array {
+  public static function providerItemSelector(): array {
     $fields = [
       [
         'name' => 'id',
@@ -202,16 +202,7 @@ final class JsonTest extends KernelTestBase {
       'item_selector not available' => [
         'item_selector' => '/data_unavailable',
         'fields' => $fields,
-        'expected' => [
-          [
-            'id' => '',
-            'title' => '',
-          ],
-          [
-            'id' => '',
-            'title' => '',
-          ],
-        ],
+        'expected' => [],
       ],
       'item_selector 2nd level' => [
         'item_selector' => '/data/0/items',

@@ -32,7 +32,7 @@ class MigrateTableIncrementTest extends MigrateTestBase {
    *
    * @var int
    */
-  protected int $batchSize = 1;
+  protected static int $batchSize = 1;
 
   /**
    * {@inheritdoc}
@@ -76,7 +76,7 @@ class MigrateTableIncrementTest extends MigrateTestBase {
    * @return array
    *   The migration definition.
    */
-  public function tableDestinationMigration(): array {
+  public static function tableDestinationMigration(): array {
     return [
       'dummy table' => [
         [
@@ -105,7 +105,7 @@ class MigrateTableIncrementTest extends MigrateTestBase {
           'destination' => [
             'plugin' => 'table',
             'table_name' => static::TABLE_NAME,
-            'batch_size' => $this->batchSize,
+            'batch_size' => static::$batchSize,
             'id_fields' => [
               'id' => [
                 'type' => 'integer',

@@ -47,7 +47,7 @@ class ImageLinkFormatterTest extends ImageFormatterTest {
    * @see \Drupal\Tests\responsive_image_link_formatter\Kernel\ResponsiveImageLinkFormatterTest::testImageLinkFormatterUrlOptions()
    */
   public function testImageLinkFormatterUrlOptions() {
-    // @TODO: Remove the following line of code when DO-3064751 is fixed:
+    // @todo Remove the following line of code when DO-3064751 is fixed:
     // The $link_attribute_options parameter should be moved to trait's method
     // 'doTestImageLinkFormatterUrlOptions' to stay fixed for any test case
     // using the trait. But since it currently breaks the Kernel tests for

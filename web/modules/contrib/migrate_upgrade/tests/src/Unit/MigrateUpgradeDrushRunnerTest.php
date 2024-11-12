@@ -27,11 +27,11 @@ class MigrateUpgradeDrushRunnerTest extends MigrateTestCase {
    *
    * @dataProvider getData
    */
-  public function testIdSubstitution(array $source, array $expected): void {
+  public function testIdSubstitution(array $source_data, array $expected_result): void {
     $loggerProphet = $this->prophesize(LoggerInterface::class);
     $runner = new TestMigrateUpgradeDrushRunner($loggerProphet->reveal());
-    $results = $runner->substituteIds($source);
-    $this->assertSame($expected, $results);
+    $results = $runner->substituteIds($source_data);
+    $this->assertSame($expected_result, $results);
   }
 
   /**
@@ -40,7 +40,7 @@ class MigrateUpgradeDrushRunnerTest extends MigrateTestCase {
    * @return array
    *   The test data.
    */
-  public function getData(): array {
+  public static function getData(): array {
     return [
       'Single Migration Lookup' => [
         'source_data' => [

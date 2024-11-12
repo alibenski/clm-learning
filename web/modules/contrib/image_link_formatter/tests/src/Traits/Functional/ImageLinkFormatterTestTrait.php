@@ -125,9 +125,8 @@ trait ImageLinkFormatterTestTrait {
    *   The name of the formatter to be tested. A module can implement multiple
    *   formatters and could need different test classes or methods.
    * @param array $expected_result
-   *   An associative array keyed by drupal versions for tests with ('link') or
-   *   without ('no_link') a link, containing the HTML result the formatter is
-   *   expected to output.
+   *   An associative array for tests with ('link') or without ('no_link') a
+   *   link, containing the HTML result the formatter is expected to output.
    *
    * @see \Drupal\Tests\image_link_formatter\Functional\ImageLinkFormatterTest::testImageLinkFormatterWrappedImage()
    * @see \Drupal\Tests\responsive_image_link_formatter\Functional\ResponsiveImageLinkFormatterTest::testResponsiveImageLinkFormatterWrappedImage()
@@ -138,6 +137,7 @@ trait ImageLinkFormatterTestTrait {
     $image_field_name = strtolower($this->randomMachineName());
     $this->createImageField(
       $image_field_name,
+      'node',
       'article',
       ['uri_scheme' => 'public'],
       ['alt_field_required' => 0]
@@ -178,15 +178,14 @@ trait ImageLinkFormatterTestTrait {
    * Helper function to assert the correct display of the image link formatter.
    *
    * The rendered output is compared to the expected result, with or without a
-   * link, for system's current Drupal core version, since the output of the
-   * 'image' formatter might evolve.
+   * link.
    *
    * @param string $rendered_output
    *   The output of the field formatter's rendering process.
    * @param array $expected_result
-   *   An associative array keyed by drupal versions for tests with ('link' key)
-   *   or without ('no_link' key) a link, containing the HTML result the
-   *   formatter is expected to generate.
+   *   An associative array keyed for tests with ('link' key) or without
+   *   ('no_link' key) a link, containing the HTML result the formatter is
+   *   expected to generate.
    * @param string $file_url
    *   The URL of the image file.
    * @param bool $show_link
@@ -203,20 +202,8 @@ trait ImageLinkFormatterTestTrait {
     // Determine whether we're testing the output with a 'link' or 'no_link'.
     $show_link = ($show_link) ? 'link' : 'no_link';
 
-    // Determine which Drupal version should be expected for the test.
-    $drupal_version = 'all';
-
-    // Currently three cases: below < 9.1 < 9.4 (defaults to recent).
-    if (floatval(\Drupal::VERSION) < 9.1) {
-      // For core versions below 9.1.
-      $drupal_version = '9.1';
-    }
-    elseif (floatval(\Drupal::VERSION) < 9.4) {
-      // Moving forward, attribute 'loading' added by default, see #3173719.
-      $drupal_version = '9.4';
-    }
     // Compare the rendered output with the expected result for this case.
-    $this->assertEquals($rendered_output, new FormattableMarkup($expected_result[$drupal_version][$show_link], ["@file_url" => $file_url]));
+    $this->assertSame($rendered_output, (string) new FormattableMarkup($expected_result[$show_link], ["@file_url" => $file_url]));
   }
 
 }

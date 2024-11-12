@@ -19,14 +19,17 @@ class NodeRss extends DefaultRow {
    * {@inheritdoc}
    */
   public function prepareDisplayOptions(array &$display_options) {
-    $rowOptions = $display_options['row_options'];
+    $rowOptions = $display_options['row_options'] ?? [];
     $display_options['row'] = [
       'type' => $display_options['row_plugin'],
-      'options' => [
-        'relationship' => $rowOptions['relationship'],
-        'view_mode' => $rowOptions['item_length'],
-      ],
+      'options' => [],
     ];
+    if (isset($rowOptions['relationship'])) {
+      $display_options['row']['options']['relationship'] = $rowOptions['relationship'];
+    }
+    if (isset($rowOptions['item_length'])) {
+      $display_options['row']['options']['view_mode'] = $rowOptions['item_length'];
+    }
     unset($display_options['row_plugin'], $display_options['row_options']);
     parent::prepareDisplayOptions($display_options);
   }

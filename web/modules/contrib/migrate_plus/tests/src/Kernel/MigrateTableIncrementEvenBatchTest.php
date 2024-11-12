@@ -16,6 +16,6 @@ final class MigrateTableIncrementEvenBatchTest extends MigrateTableIncrementTest
    *
    * @var int
    */
-  protected int $batchSize = 3;
+  protected static int $batchSize = 3;
 
 }

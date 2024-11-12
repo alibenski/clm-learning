@@ -4,7 +4,9 @@ namespace Drupal\job_scheduler;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Queue\QueueFactory;
+use Drupal\Core\Utility\Error;
 use Drupal\job_scheduler\Entity\JobSchedule;
+use Psr\Log\LoggerInterface;
 
 /**
  * Manage scheduled jobs.
@@ -33,6 +35,13 @@ class JobScheduler implements JobSchedulerInterface {
   protected $queue;
 
   /**
+   * The logger service.
+   *
+   * @var \Psr\Log\LoggerInterface|null
+   */
+  protected $logger;
+
+  /**
    * Constructs a object.
    *
    * @param \Drupal\job_scheduler\JobSchedulerCronTabDecoratorInterface $crontab_decorator
@@ -41,11 +50,14 @@ class JobScheduler implements JobSchedulerInterface {
    *   The entity type manager service.
    * @param \Drupal\Core\Queue\QueueFactory $queue
    *   The queue factory.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   The logger.
    */
-  public function __construct(JobSchedulerCronTabDecoratorInterface $crontab_decorator, EntityTypeManagerInterface $entityTypeManager, QueueFactory $queue) {
+  public function __construct(JobSchedulerCronTabDecoratorInterface $crontab_decorator, EntityTypeManagerInterface $entityTypeManager, QueueFactory $queue, LoggerInterface $logger) {
     $this->crontabDecorator = $crontab_decorator;
     $this->jobScheduleStorage = $entityTypeManager->getStorage('job_schedule');
     $this->queue = $queue;
+    $this->logger = $logger;
   }
 
   /**
@@ -250,7 +262,7 @@ class JobScheduler implements JobSchedulerInterface {
           $this->dispatch($job);
         }
         catch (\Exception $e) {
-          watchdog_exception('job_scheduler', $e);
+          Error::logException($this->logger, $e);
           $failed++;
           // Drop jobs that have caused exceptions.
           $job->delete();

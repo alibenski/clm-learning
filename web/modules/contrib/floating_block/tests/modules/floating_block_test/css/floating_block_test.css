@@ -11,7 +11,7 @@ body {
   float: left;
   width: 300px;
   height: 600px;
-  background-color: #FED499;
+  background-color: #fed499;
 }
 
 .fb-menu {
@@ -19,7 +19,7 @@ body {
   width: 270px;
   height: 100px;
   padding: 0;
-  background-color: #B5FCB8;
+  background-color: #b5fcb8;
 }
 
 .fb-container::after {
@@ -30,5 +30,9 @@ body {
 
 .fb-footer {
   height: 400px;
-  background: linear-gradient(180deg, rgba(150,115,240,1) 0%, rgba(295,170,240,1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(150, 115, 240, 1) 0%,
+    rgba(295, 170, 240, 1) 100%
+  );
 }

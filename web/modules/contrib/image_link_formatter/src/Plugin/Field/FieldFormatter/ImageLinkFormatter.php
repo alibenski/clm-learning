@@ -9,10 +9,12 @@ namespace Drupal\image_link_formatter\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\File\FileUrlGeneratorInterface;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\image\Plugin\Field\FieldFormatter\ImageFormatter;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -23,20 +25,16 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * 'ImageLinkFormatterTrait' which extends formatter's methods to allow wrapping
  * a link from a custom field around the image field formatter's output.
  *
- * @FieldFormatter(
- *   id = "image_link_formatter",
- *   label = @Translation("Image wrapped within link field"),
- *   field_types = {
- *     "image"
- *   },
- *   quickedit = {
- *     "editor" = "image"
- *   }
- * )
- *
  * @see \Drupal\image\Plugin\Field\FieldFormatter\ImageFormatter
  * @see \Drupal\image_link_formatter\Plugin\Field\FieldFormatter\ImageLinkFormatterTrait
  */
+#[FieldFormatter(
+  id: 'image_link_formatter',
+  label: new TranslatableMarkup('Image wrapped within link field'),
+  field_types: [
+    'image',
+  ],
+)]
 class ImageLinkFormatter extends ImageFormatter implements ContainerFactoryPluginInterface {
 
   use ImageLinkFormatterTrait;
@@ -67,7 +65,7 @@ class ImageLinkFormatter extends ImageFormatter implements ContainerFactoryPlugi
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
    *   The entity field manager service.
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, AccountInterface $current_user, EntityStorageInterface $image_style_storage, FileUrlGeneratorInterface $file_url_generator, EntityFieldManagerInterface $entity_field_manager) {
+  final public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, AccountInterface $current_user, EntityStorageInterface $image_style_storage, FileUrlGeneratorInterface $file_url_generator, EntityFieldManagerInterface $entity_field_manager) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings, $current_user, $image_style_storage, $file_url_generator);
     $this->entityFieldManager = $entity_field_manager;
   }

@@ -24,4 +24,11 @@ abstract class DataFetcherPluginBase extends PluginBase implements DataFetcherPl
     return new static($configuration, $plugin_id, $plugin_definition);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getNextUrls(string $url): array {
+    return [];
+  }
+
 }

@@ -1,4 +1,4 @@
-name: Drupal Upgrade
+name: Migrate Upgrade
 type: module
 description: 'Drush support for direct upgrades from older Drupal versions.'
 package: Migration
@@ -8,7 +8,7 @@ dependencies:
   - drupal:migrate_drupal
   - migrate_plus:migrate_plus
 
-# Information added by Drupal.org packaging script on 2022-12-28
-version: '4.0.1'
+# Information added by Drupal.org packaging script on 2024-06-25
+version: '4.0.2'
 project: 'migrate_upgrade'
-datestamp: 1672260599
+datestamp: 1719350602

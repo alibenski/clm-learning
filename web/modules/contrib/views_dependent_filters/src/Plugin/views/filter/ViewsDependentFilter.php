@@ -95,7 +95,7 @@ class ViewsDependentFilter extends FilterPluginBase {
         continue;
       }
       // Skip other instances of this filter.
-      if ($handler->definition['handler'] == 'views_dependent_filter') {
+      if (array_key_exists('handler', $handler->definition) && $handler->definition['handler'] == 'views_dependent_filter') {
         continue;
       }
       $label = $filter_id;
@@ -116,6 +116,7 @@ class ViewsDependentFilter extends FilterPluginBase {
       case 'dependent':
         return $filters_dependent;
     }
+    return [];
   }
 
   /**
@@ -313,7 +314,7 @@ class ViewsDependentFilter extends FilterPluginBase {
     // $this->filters_disable();
     // ...alternatively, leave them there so their form is shown, but prevent
     // them from collecting input.
-    // This means the form element can be subject to CTools dependent visiblity
+    // This means the form element can be subject to CTools dependent visibility
     // and means the user can refine their filtering without an interim
     // submission of the form.
     // @todo Allow this as an option, ie have a 'no js' version which would
@@ -324,9 +325,12 @@ class ViewsDependentFilter extends FilterPluginBase {
     // Only way to do this is to register an #after_build on the whole form
     // which lives in module code rather than in this handler.
     // Add our settings to the form state as an array, as we need to account
-    // for the possiblity that more than one copy of this handler may be
+    // for the possibility that more than one copy of this handler may be
     // playing at once!
     $form_state->dependent_exposed_filters[] = $dependency_info;
+    $dependent_exposed_filters = $form_state->get('dependent_exposed_filters') ?? [];
+    $dependent_exposed_filters[] = $dependency_info;
+    $form_state->set('dependent_exposed_filters', $dependent_exposed_filters);
     $form['#after_build'] = ['views_dependent_filters_exposed_form_after_build'];
     // Some clean-up for things that come later.
     // Mark ourselves not being exposed now we've done our work. This isn't

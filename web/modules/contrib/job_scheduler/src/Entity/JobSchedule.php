@@ -15,6 +15,8 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *   label = @Translation("Job Schedule"),
  *   handlers = {
  *     "storage_schema" = "Drupal\job_scheduler\JobScheduleStorageSchema",
+ *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
+ *     "views_data" = "Drupal\views\EntityViewsData",
  *   },
  *   base_table = "job_schedule",
  *   entity_keys = {

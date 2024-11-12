@@ -31,7 +31,7 @@ final class HttpTest extends KernelTestBase {
    * @return array
    *   The test cases
    */
-  public function headerDataProvider(): array {
+  public static function headerDataProvider(): array {
     return [
       'dummy headers specified' => [
         'definition' => [

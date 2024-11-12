@@ -60,7 +60,6 @@ final class EntityValueTest extends KernelTestBase {
   protected function setUp(): void {
     parent::setUp();
     ConfigurableLanguage::createFromLangcode('es')->save();
-    $this->installSchema('system', ['sequences']);
     $this->installSchema('node', 'node_access');
     $this->installEntitySchema('user');
     $this->installEntitySchema('node');
@@ -181,7 +180,7 @@ final class EntityValueTest extends KernelTestBase {
    * @covers ::__construct
    * @dataProvider entityValueFailureConfigData
    */
-  public function testEntityValueConfig($config): void {
+  public function testEntityValueConfig(array $config): void {
     $this->expectException(\InvalidArgumentException::class);
     \Drupal::service('plugin.manager.migrate.process')
       ->createInstance('entity_value', $config);
@@ -192,7 +191,7 @@ final class EntityValueTest extends KernelTestBase {
    *
    *   The data.
    */
-  public function entityValueFailureConfigData(): array {
+  public static function entityValueFailureConfigData(): array {
     return [
       [
         [

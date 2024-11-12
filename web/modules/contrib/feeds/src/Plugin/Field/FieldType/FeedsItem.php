@@ -22,6 +22,11 @@ use Drupal\feeds\FeedsItemInterface;
  *   no_ui = TRUE,
  *   list_class = "\Drupal\feeds\Plugin\Field\FieldType\FeedsItemList",
  * )
+ *
+ * @property int $imported
+ * @property string $url
+ * @property string $guid
+ * @property string $hash
  */
 class FeedsItem extends EntityReferenceItem implements FeedsItemInterface {
 
@@ -36,7 +41,7 @@ class FeedsItem extends EntityReferenceItem implements FeedsItemInterface {
    * {@inheritdoc}
    */
   public function setValue($values, $notify = TRUE) {
-    if (isset($values['url']) && empty($values['url'])) {
+    if (isset($values) && is_array($values) && isset($values['url']) && empty($values['url'])) {
       // Set url explicitly to NULL to prevent validation errors.
       $values['url'] = NULL;
     }

@@ -3,6 +3,7 @@
 namespace Drupal\job_scheduler\Plugin\QueueWorker;
 
 use Drupal\Core\Queue\QueueWorkerBase;
+use Drupal\Core\Utility\Error;
 use Drupal\job_scheduler\Entity\JobSchedule;
 
 /**
@@ -28,11 +29,19 @@ class JobSchedulerQueue extends QueueWorkerBase {
   protected $scheduler;
 
   /**
+   * The logger service.
+   *
+   * @var \Psr\Log\LoggerInterface|null
+   */
+  protected $logger;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->scheduler = \Drupal::service('job_scheduler.manager');
+    $this->logger = \Drupal::service('logger.channel.job_scheduler');
   }
 
   /**
@@ -45,7 +54,7 @@ class JobSchedulerQueue extends QueueWorkerBase {
       $scheduler->execute($job);
     }
     catch (\Exception $e) {
-      watchdog_exception('job_scheduler', $e);
+      Error::logException($this->logger, $e);
       // Drop jobs that have caused exceptions.
       $job->delete();
     }

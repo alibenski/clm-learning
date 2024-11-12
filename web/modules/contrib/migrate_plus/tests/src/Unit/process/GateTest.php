@@ -44,7 +44,7 @@ final class GateTest extends MigrateProcessTestCase {
   /**
    * Row and plugin configuration for tests.
    */
-  public function gateProvider(): array {
+  public static function gateProvider(): array {
     return [
       'Gate does not unlock' => [
         [
@@ -163,7 +163,7 @@ final class GateTest extends MigrateProcessTestCase {
   /**
    * Provider for bad configuration.
    */
-  public function badConfigurationProvider(): array {
+  public static function badConfigurationProvider(): array {
     return [
       'Missing use_as_key' => [
         [

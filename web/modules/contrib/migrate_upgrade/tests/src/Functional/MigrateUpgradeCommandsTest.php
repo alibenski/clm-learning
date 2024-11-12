@@ -5,7 +5,7 @@ namespace Drupal\Tests\migrate_upgrade\Functional;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\KernelTests\FileSystemModuleDiscoveryDataProviderTrait;
 use Drupal\migrate\Plugin\MigrationInterface;
-use Drupal\migrate_plus\Entity\Migration;
+use Drupal\migrate_plus\Entity\Migration as MigratePlus;
 use Drupal\Tests\migrate_drupal_ui\Functional\MigrateUpgradeTestBase;
 use Drush\TestTraits\DrushTestTrait;
 
@@ -37,6 +37,14 @@ class MigrateUpgradeCommandsTest extends MigrateUpgradeTestBase {
       'simpletest',
       'migrate_drupal_multilingual',
       'entity_reference',
+      'sdc',
+      'statistics',
+      'help_topics',
+      'tracker',
+      'book',
+      'action',
+      'forum',
+      'tour',
     ]);
     parent::setUp();
   }
@@ -49,9 +57,10 @@ class MigrateUpgradeCommandsTest extends MigrateUpgradeTestBase {
    *
    * @dataProvider majorDrupalVersionsDataProvider
    */
-  public function testDrupalConfigureUpgrade($drupal_version): void {
+  public function testDrupalConfigureUpgrade(int $drupal_version): void {
     $migrate_drupal_path = \Drupal::service('extension.list.module')->getPath('migrate_drupal');
     $this->loadFixture($migrate_drupal_path . "/tests/fixtures/drupal{$drupal_version}.php");
+    $migrations = $this->getMigrations($this->sourceDatabase->getKey(), $drupal_version);
     $prefix = 'upgrade_legacy_';
     $this->executeMigrateUpgrade([
       'configure-only' => NULL,
@@ -62,22 +71,11 @@ class MigrateUpgradeCommandsTest extends MigrateUpgradeTestBase {
         'original' => 'action_settings',
         'generated' => "{$prefix}action_settings",
       ],
-      "{$prefix}book_settings" => [
-        'original' => 'book_settings',
-        'generated' => "{$prefix}book_settings",
-      ],
     ];
     // Replacement for assertArraySubset that was deprecated.
     $this->assertEquals($this->getOutputFromJSON(), array_replace_recursive($expected, $this->getOutputFromJSON()));
-    $migrate_plus_migrations = Migration::loadMultiple();
-    $migrations = $this->getMigrations($this->sourceDatabase->getKey(), $drupal_version);
+    $migrate_plus_migrations = MigratePlus::loadMultiple();
     $this->assertMigrations($prefix, $migrations, $migrate_plus_migrations);
-    $optional = array_flip(
-      $migrate_plus_migrations["{$prefix}d{$drupal_version}_url_alias"]
-        ->toArray()['migration_dependencies']['optional']
-    );
-    $node_migrations = array_intersect_key(["{$prefix}d{$drupal_version}_node_translation_page" => TRUE, "{$prefix}d{$drupal_version}_node_complete_page" => TRUE], $optional);
-    $this->assertNotEmpty($node_migrations);
   }
 
   /**
@@ -86,9 +84,8 @@ class MigrateUpgradeCommandsTest extends MigrateUpgradeTestBase {
    * @return array
    *   The major version.
    */
-  public function majorDrupalVersionsDataProvider(): array {
+  public static function majorDrupalVersionsDataProvider(): array {
     $version = [];
-    $version['drupal 6'] = [6];
     $version['drupal 7'] = [7];
     return $version;
   }
@@ -129,13 +126,20 @@ class MigrateUpgradeCommandsTest extends MigrateUpgradeTestBase {
   protected function assertMigrations($prefix, array $migrations, array $migrate_plus_migrations): void {
     // This filters to remove duplicate migrations that have an embedded data
     // source and therefore are always available.
-    $available_migrations = array_flip(array_map(static function (MigrationInterface $migration) use ($prefix) {
-      if ((strpos($migration->id(), $prefix) === 0)) {
+    $available_migrations = array_values(array_map(static function (MigrationInterface $migration) use ($prefix) {
+      if ((str_starts_with($migration->id(), $prefix))) {
         return $migration->id();
       }
       return $prefix . str_replace(PluginBase::DERIVATIVE_SEPARATOR, '_', $migration->id());
     }, $migrations));
-    $this->assertEmpty(array_diff_key($available_migrations, $migrate_plus_migrations));
+    $migrate_plus_migrations = array_values(array_map(static function (MigratePlus $migration) {
+      return $migration->id();
+    }, $migrate_plus_migrations));
+    sort($available_migrations);
+    sort($migrate_plus_migrations);
+    $differences = array_diff($available_migrations, $migrate_plus_migrations);
+    $this->assertEmpty($differences, sprintf('Differences: (%s)', implode(', ', $differences)));
+    $this->assertGreaterThan(100, $migrate_plus_migrations);
   }
 
   /**
@@ -148,12 +152,14 @@ class MigrateUpgradeCommandsTest extends MigrateUpgradeTestBase {
    *   The DB URL.
    */
   protected function convertDbSpecUrl(array $db_spec): string {
+    $array = explode('\\', $db_spec['driver']);
+    $driver = end($array);
     // If it's a sqlite database, pick the database path and we're done.
-    if ($db_spec['driver'] === 'sqlite') {
+    if ($driver === 'sqlite') {
       return 'sqlite://' . $db_spec['database'];
     }
     // Ex. mysql://username:password@localhost:3306/databasename#table_prefix.
-    $url = $db_spec['driver'] . '://' . $db_spec['username'] . ':' . $db_spec['password'] . '@' . $db_spec['host'];
+    $url = $driver . '://' . $db_spec['username'] . ':' . $db_spec['password'] . '@' . $db_spec['host'];
     if (isset($db_spec['port'])) {
       $url .= ':' . $db_spec['port'];
     }

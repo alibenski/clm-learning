@@ -2,18 +2,18 @@
 
 namespace Drupal\taxonomy_manager\Element;
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\Query\QueryException;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element\FormElement;
-use Drupal\Component\Utility\Html;
+use Drupal\Core\Render\Element\FormElementBase;
 use Drupal\taxonomy\Entity\Term;
 
 /**
  * Taxonomy Manager Tree Form Element.
  *
- * @FormElement("taxonomy_manager_tree")
+ * @FormElementBase("taxonomy_manager_tree")
  */
-class TaxonomyManagerTree extends FormElement {
+class TaxonomyManagerTree extends FormElementBase {
 
   /**
    * {@inheritdoc}
@@ -103,7 +103,7 @@ class TaxonomyManagerTree extends FormElement {
       // This site is still using the pre-Drupal 8.5 database schema, where
       // https://www.drupal.org/project/drupal/issues/2543726 was not yet
       // committed to Drupal core.
-      // @todo: Remove both the try/catch wrapper and the code below the catch-
+      // @todo Remove both the try/catch wrapper and the code below the catch-
       // statement once the taxonomy_manager module only supports Drupal 8.5 or
       // newer.
     }
@@ -139,7 +139,8 @@ class TaxonomyManagerTree extends FormElement {
   /**
    * Helper function that transforms a flat taxonomy tree in a nested array.
    */
-  public static function getNestedList($tree = [], $max_depth = NULL, $parent = 0, $parents_index = [], $depth = 0) {
+  public static function getNestedList($tree = [], $max_depth = NULL, $parent = 0, $parents_index = [], $depth = 0): array {
+    $return = [];
     foreach ($tree as $term) {
       foreach ($term->parents as $term_parent) {
         if ($term_parent == $parent) {
@@ -239,7 +240,7 @@ class TaxonomyManagerTree extends FormElement {
   /**
    * Returns partial tree for a given path.
    */
-  public function getPartialTree($path, $depth = 0) {
+  public static function getPartialTree($path, $depth = 0) {
     $tree = [];
     $parent = $path[$depth];
     $children = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadChildren($parent->id());

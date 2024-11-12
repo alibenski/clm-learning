@@ -62,7 +62,7 @@ Therefore, to alter core `image` formatter's settings form, the only options
 would be to either override the `class` in its plugin definition (like it's done for
 [SVG image][9]) or create a new formatter.
 
-To avoid potential conflicts with other formatters overridding plugin's class,
+To avoid potential conflicts with other formatters overriding plugin's class,
 we opted for the second option: the module adds the new image field formatter
 `image_link_formatter` which also corresponds to how it worked on D7.
 
@@ -87,7 +87,7 @@ contributed modules such as [Paragraphs][12].
 ### With other image formatters
 
 Since this module adds its own image formatter called `image_link_formatter`, it
-avoids any potential conflicts with [other formatters that could be overridding or
+avoids any potential conflicts with [other formatters that could be overriding or
 extending core formatter's class][15].\
 However, unless it becomes possible to dynamically extend formatter classes,
 unfortunately, at the moment, it doesn't seem possible to _"combine"_ several
@@ -122,6 +122,84 @@ one to wrap formatter's display output within a link provided by a field.
 formatter is a recurring topic).
 - Another solution would be to use the [Linked Field][19] module which pretty
 much allows linking any field to custom URL targets with Token patterns.
+
+## Extending plugin classes
+
+To satisfy PhpStan code quality checks of the plugin classes
+`ImageLinkFormatter` and/or `ResponsiveImageLinkFormatter`, their constructor
+methods was made `final`, preventing child classes from overriding their
+`_construct` methods and thus disallowing their dependencies from being changed
+the typical Drupal way.\
+However, it is still possible to add new dependencies in a child class by using
+a `create()` method with the following pattern example:
+
+````php
+  /**
+  * {@inheritdoc}
+  */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    /** @var static $plugin */
+    $plugin = parent::create(
+      $container,
+      $configuration,
+      $plugin_id,
+      $plugin_definition
+    );
+    $plugin->currentUser = $container->get('current_user');
+    return $plugin;
+  }
+````
+
+Better yet, instead of using a direct assignment to inject a dependency, it is
+recommended to add a set of `set` and `get` methods for the corresponding
+service in the extending plugin class, modifying our example above with the
+following pattern:
+
+````php
+  /**
+   * Returns the current user to use for this plugin.
+   *
+   * @return \Drupal\Core\Session\AccountProxyInterface
+   *   The current user.
+   */
+  public function getCurrentUser() {
+    return $this->currentUser ?: \Drupal::currentUser();
+  }
+
+  /**
+   * Sets the current user to use for this plugin.
+   *
+   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
+   *   The current user to use for this plugin.
+   *
+   * @return $this
+   */
+  public function setCurrentUser(AccountProxyInterface $current_user) {
+    $this->currentUser = $current_user;
+    return $this;
+  }
+
+  /**
+  * {@inheritdoc}
+  */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    /** @var static $plugin */
+    $plugin = parent::create(
+      $container,
+      $configuration,
+      $plugin_id,
+      $plugin_definition
+    );
+    $plugin->setCurrentUser($container->get('current_user'));
+    return $plugin;
+  }
+
+````
+
+This allows the child class to be able to utilize the parent `create()` method
+while also adding new dependencies to the child class without calling or
+overwriting the constructor of the parent class.\
+For more information on this particular issue, see ticket #3412951.
 
 ## Support and maintenance
 

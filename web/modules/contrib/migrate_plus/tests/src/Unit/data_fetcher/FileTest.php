@@ -77,6 +77,7 @@ final class FileTest extends MigrateTestCase {
    * Set up test environment.
    */
   public function setUp(): void {
+    parent::setUp();
     $this->baseDir = vfsStream::setup(self::BASE_DIRECTORY);
   }
 

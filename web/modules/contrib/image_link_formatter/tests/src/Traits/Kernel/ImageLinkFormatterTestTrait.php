@@ -134,7 +134,7 @@ trait ImageLinkFormatterTestTrait {
     // Generate the render array to verify URL options are as expected.
     $build = $this->display->build($entity);
 
-    // @TODO: Uncomment the following line of code when DO-3064751 is fixed:
+    // @todo Uncomment the following line of code when DO-3064751 is fixed:
     // Remove $link_attribute_options as an argument from the function so it
     // can be fixed in method and run the same for all tests using the trait.
     // $link_attribute_options = ['data-attributes-test' => 'test123'];

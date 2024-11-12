@@ -9,9 +9,11 @@ namespace Drupal\responsive_image_link_formatter\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Utility\LinkGeneratorInterface;
 use Drupal\image_link_formatter\Plugin\Field\FieldFormatter\ImageLinkFormatterTrait;
 use Drupal\responsive_image\Plugin\Field\FieldFormatter\ResponsiveImageFormatter;
@@ -25,20 +27,16 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * allow wrapping a link from a custom field around the image field formatter's
  * output.
  *
- * @FieldFormatter(
- *   id = "responsive_image_link_formatter",
- *   label = @Translation("Responsive image wrapped within link field"),
- *   field_types = {
- *     "image"
- *   },
- *   quickedit = {
- *     "editor" = "image"
- *   }
- * )
- *
  * @see \Drupal\responsive_image\Plugin\Field\FieldFormatter\ResponsiveImageFormatter
  * @see \Drupal\image_link_formatter\Plugin\Field\FieldFormatter\ImageLinkFormatterTrait
  */
+#[FieldFormatter(
+  id: 'responsive_image_link_formatter',
+  label: new TranslatableMarkup('Responsive image wrapped within link field'),
+  field_types: [
+    'image',
+  ],
+)]
 class ResponsiveImageLinkFormatter extends ResponsiveImageFormatter implements ContainerFactoryPluginInterface {
 
   use ImageLinkFormatterTrait;
@@ -71,7 +69,7 @@ class ResponsiveImageLinkFormatter extends ResponsiveImageFormatter implements C
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
    *   The entity field manager service.
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, EntityStorageInterface $responsive_image_style_storage, EntityStorageInterface $image_style_storage, LinkGeneratorInterface $link_generator, AccountInterface $current_user, EntityFieldManagerInterface $entity_field_manager) {
+  final public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, EntityStorageInterface $responsive_image_style_storage, EntityStorageInterface $image_style_storage, LinkGeneratorInterface $link_generator, AccountInterface $current_user, EntityFieldManagerInterface $entity_field_manager) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings, $responsive_image_style_storage, $image_style_storage, $link_generator, $current_user);
     $this->entityFieldManager = $entity_field_manager;
   }

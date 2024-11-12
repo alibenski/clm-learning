@@ -61,6 +61,15 @@ use Drupal\migrate\Row;
  *       search: 'b'
  *       replace: 'strong'
  *     -
+ *       plugin: dom_str_replace
+ *       mode: attribute
+ *       xpath: //a
+ *       attribute_options:
+ *         name: href
+ *       regex: true
+ *       search: '/foo-(\d+)/'
+ *       replace: 'bar-$1'
+ *     -
  *       plugin: dom
  *       method: export
  * @endcode

@@ -51,4 +51,17 @@ interface DataFetcherPluginInterface {
    */
   public function getResponse(string $url): ResponseInterface;
 
+  /**
+   * Collect next urls from the metadata of a paged response.
+   *
+   * Examples of this include HTTP headers and file naming conventions.
+   *
+   * @param string $url
+   *   URL of the resource to check for pager metadata.
+   *
+   * @return array
+   *   Array of URIs.
+   */
+  public function getNextUrls(string $url): array;
+
 }

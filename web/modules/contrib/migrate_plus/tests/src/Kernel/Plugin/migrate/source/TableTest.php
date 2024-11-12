@@ -72,7 +72,7 @@ final class TableTest extends MigrateDrupal7TestBase {
    *
    * @dataProvider badConfigurationProvider
    */
-  public function testTableBadConfiguration($configuration, string $message): void {
+  public function testTableBadConfiguration(array $configuration, string $message): void {
     $this->expectException(\InvalidArgumentException::class);
     $this->expectExceptionMessage($message);
     $configuration['plugin'] = 'table';
@@ -86,7 +86,7 @@ final class TableTest extends MigrateDrupal7TestBase {
    *
    *   Plugin configurations and messages.
    */
-  public function badConfigurationProvider(): array {
+  public static function badConfigurationProvider(): array {
     return [
       'Missing table_name' => [
         [],

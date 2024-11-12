@@ -5,6 +5,8 @@
  * Job scheduler module.
  */
 
+use Drupal\Core\Utility\Error;
+
 /**
  * Collects and returns scheduler info.
  *
@@ -78,7 +80,8 @@ function job_scheduler_cron() {
     }
   }
   catch (Exception $e) {
-    watchdog_exception('job_scheduler', $e);
+    $logger = \Drupal::logger('job_scheduler');
+    Error::logException($logger, $e);
   }
 }
 

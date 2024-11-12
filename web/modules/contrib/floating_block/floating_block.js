@@ -18,9 +18,9 @@
     attach(context, settings) {
       settings = settings.floatingBlock.blocks;
 
-      // If this behaviour is being called as part of processing an ajax
+      // If this behavior is being called as part of processing an ajax
       // callback.
-      if (jQuery.isFunction(context.parent)) {
+      if (typeof context.parent === 'function') {
         context = context.parent();
       }
 
@@ -38,12 +38,13 @@
             const blockInfo = [];
             blockInfo.original_css = [];
             blockInfo.original_css.left = Drupal.blockFloatCleanCssValue(
-              $(block).css('left'),
+              window.getComputedStyle(block).left,
             );
             blockInfo.original_css.top = Drupal.blockFloatCleanCssValue(
-              $(block).css('top'),
+              window.getComputedStyle(block).top,
             );
-            blockInfo.original_css.position = $(block).css('position');
+            blockInfo.original_css.position =
+              window.getComputedStyle(block).position;
             blockInfo.floating = false;
             blockInfo.reset = true;
             blockInfo.original_identifier = `blockFloat-${
@@ -128,7 +129,7 @@
       blockInfo.minOffset =
         blockInfo.original_offset.top - blockInfo.padding_top;
 
-      // Calulate the maxOffset which depends on whether or not a container is
+      // Calculate the maxOffset which depends on whether or not a container is
       // defined. Otherwise use the scrollHeight.
       if (blockInfo.container) {
         blockInfo.maxOffset =
@@ -173,7 +174,7 @@
 
       blockInfo.floating = true;
     } else {
-      // Put the block back in it's original postion
+      // Put the block back in its original position.
       Drupal.blockFloatResetPosition(block, blockInfo);
     }
   };

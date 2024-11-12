@@ -266,6 +266,7 @@ class Book extends TargetBase implements ConfigurableTargetInterface, ContainerF
       case 'path':
       case 'uuid':
       case 'feeds_item':
+      case 'email':
         return TRUE;
 
       default:
@@ -450,7 +451,7 @@ class Book extends TargetBase implements ConfigurableTargetInterface, ContainerF
     $delta = 0;
     foreach ($form_state->getValues() as $key => $value) {
       if (strpos($key, 'target-settings-') === 0) {
-        list(, , $delta) = explode('-', $key);
+        [, , $delta] = explode('-', $key);
         break;
       }
     }
@@ -502,6 +503,8 @@ class Book extends TargetBase implements ConfigurableTargetInterface, ContainerF
    * {@inheritdoc}
    */
   public function getSummary() {
+    $summary = [];
+
     $options = $this->getPotentialFields();
 
     $reference_prefixes = ['book', 'parent'];

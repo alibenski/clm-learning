@@ -85,7 +85,7 @@ final class DomApplyStylesTest extends MigrateProcessTestCase {
   /**
    * Dataprovider for testValidateRules().
    */
-  public function providerTestConfig(): array {
+  public static function providerTestConfig(): array {
     $cases = [
       'format-empty' => [
         ['format' => ''],

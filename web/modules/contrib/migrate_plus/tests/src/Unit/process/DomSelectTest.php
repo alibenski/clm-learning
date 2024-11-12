@@ -21,7 +21,7 @@ final class DomSelectTest extends MigrateProcessTestCase {
    *
    * @dataProvider providerTestTransform
    */
-  public function testTransform($input_string, $configuration, $output_array): void {
+  public function testTransform(string $input_string, array $configuration, array $output_array): void {
     $value = Html::load($input_string);
     $elements = (new DomSelect($configuration, 'dom_select', []))
       ->transform($value, $this->migrateExecutable, $this->row, 'destinationproperty');
@@ -31,7 +31,7 @@ final class DomSelectTest extends MigrateProcessTestCase {
   /**
    * Dataprovider for testTransform().
    */
-  public function providerTestTransform(): array {
+  public static function providerTestTransform(): array {
     $lists = '<ul><li>Item 1</li><li>Item 2</li><li><ul><li>Item 3.1</li><li>Item 3.2</li></ul></li><li>Item 4</li><li>Item 5</li></ul>';
     $image = '<p>A broken image: <img src="https://www.example.com/img/foo.jpg" alt="metasyntactic image" /></p>';
     $cases = [

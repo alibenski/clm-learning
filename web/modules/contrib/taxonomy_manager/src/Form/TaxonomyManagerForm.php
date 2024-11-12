@@ -13,7 +13,6 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Path\CurrentPathStack;
-use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\UrlGeneratorInterface;
 use Drupal\Core\Url;
 use Drupal\taxonomy\VocabularyInterface;
@@ -24,13 +23,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Taxonomy manager class.
  */
 class TaxonomyManagerForm extends FormBase {
-
-  /**
-   * The config factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
 
   /**
    * The form builder.
@@ -51,7 +43,7 @@ class TaxonomyManagerForm extends FormBase {
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $taxonomyTypeManager;
+  protected $entityTypeManager;
 
   /**
    * Current path.
@@ -81,7 +73,7 @@ class TaxonomyManagerForm extends FormBase {
    *   The factory for configuration objects.
    * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
    *   The form builder.
-   * @param \Drupal\Core\Entity\EntityFormBuilderInterface $form_builder
+   * @param \Drupal\Core\Entity\EntityFormBuilderInterface $entity_form_builder
    *   The entity form builder.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
@@ -96,7 +88,7 @@ class TaxonomyManagerForm extends FormBase {
     $this->configFactory = $config_factory;
     $this->formBuilder = $form_builder;
     $this->entityFormBuilder = $entity_form_builder;
-    $this->taxonomyTypeManager = $entity_type_manager->getStorage('taxonomy_term');
+    $this->entityTypeManager = $entity_type_manager;
     $this->currentPath = $current_path;
     $this->urlGenerator = $url_generator;
     $this->taxonomyManagerHelper = $taxonomy_manager_helper;
@@ -127,7 +119,7 @@ class TaxonomyManagerForm extends FormBase {
   /**
    * Returns the title for the whole page.
    *
-   * @param string $taxonomy_vocabulary
+   * @param object $taxonomy_vocabulary
    *   The name of the vocabulary.
    *
    * @return string
@@ -154,7 +146,8 @@ class TaxonomyManagerForm extends FormBase {
    *   The form structure.
    */
   public function buildForm(array $form, FormStateInterface $form_state, VocabularyInterface $taxonomy_vocabulary = NULL) {
-    $current_user = \Drupal::currentUser();
+    $current_user = $this->currentUser();
+    $voc_list = [];
     $form['voc'] = [
       '#type' => 'value',
       "#value" => $taxonomy_vocabulary,
@@ -209,7 +202,7 @@ class TaxonomyManagerForm extends FormBase {
     $form['toolbar']['export'] = [
       '#type' => 'submit',
       '#name' => 'export',
-      '#value' => $this->t('Export'),
+      '#value' => $this->t('Export CSV'),
       '#ajax' => [
         'callback' => '::exportFormCallback',
       ],
@@ -218,21 +211,21 @@ class TaxonomyManagerForm extends FormBase {
     $form['toolbar']['miniexport'] = [
       '#type' => 'submit',
       '#name' => 'export',
-      '#value' => $this->t('Export all'),
+      '#value' => $this->t('Export list'),
       '#ajax' => [
         'callback' => '::exportListFormCallback',
       ],
     ];
 
     /* Vocabulary switcher */
-    $vocabularies = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadMultiple();
+    $vocabularies = $this->entityTypeManager->getStorage('taxonomy_vocabulary')->loadMultiple();
     foreach ($vocabularies as $voc) {
-      if (\Drupal::entityTypeManager()->getAccessControlHandler('taxonomy_term')->createAccess($voc->id())) {
+      if ($this->entityTypeManager->getAccessControlHandler('taxonomy_term')->createAccess($voc->id())) {
         $voc_list[$voc->id()] = $voc->label();
       }
     }
 
-    $current_path = \Drupal::service('path.current')->getPath();
+    $current_path = $this->currentPath->getPath();
     $url_parts = explode('/', $current_path);
     $voc_id = end($url_parts);
     $form['toolbar']['vocabulary_switcher'] = [
@@ -243,7 +236,7 @@ class TaxonomyManagerForm extends FormBase {
       '#weight' => -1,
     ];
 
-    $form['toolbar']['search_button'] =[
+    $form['toolbar']['search_button'] = [
       '#type' => 'button',
       '#value' => $this->t('Search'),
       '#attributes' => ['class' => ['taxonomy-manager-search-button']],
@@ -305,7 +298,7 @@ class TaxonomyManagerForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function taxonomy_term_submit_handler(array &$form, FormStateInterface $form_state) {
+  public function taxonomyTermSubmitHandler(array &$form, FormStateInterface $form_state) {
     $tid = $form_state->getValue(['search_terms']);
     $url = Url::fromRoute('entity.taxonomy_term.edit_form', [
       'taxonomy_term' => $tid,
@@ -349,7 +342,7 @@ class TaxonomyManagerForm extends FormBase {
    * AJAX callback handler for export terms from a given vocabulary.
    */
   public function exportFormCallback($form, FormStateInterface $form_state) {
-    return $this->modalHelper($form_state, 'Drupal\taxonomy_manager\Form\ExportTermsForm', 'taxonomy_manager.admin_vocabulary.export', $this->t('Export terms'));
+    return $this->modalHelper($form_state, 'Drupal\taxonomy_manager\Form\ExportTermsForm', 'taxonomy_manager.admin_vocabulary.export', $this->t('Export CSV'));
   }
 
   /**
@@ -360,55 +353,38 @@ class TaxonomyManagerForm extends FormBase {
   }
 
   /**
-   * AJAX callback handler for export terms from a given vocabulary.
-   */
-  public function exportCsvFormCallback($form, FormStateInterface $form_state) {
-    return $this->modalHelper($form_state, 'Drupal\taxonomy_manager\Form\ExportTermsMiniForm', 'taxonomy_manager.admin_vocabulary.exportlist', $this->t('Export terms (CSV)'));
-  }
-
-  /**
    * AJAX callback handler for the term data form.
    */
   public function termDataCallback($form, FormStateInterface $form_state) {
-    $taxonomy_term = $this->taxonomyTypeManager->load($form_state->getValue('load-term-data'));
-
-    $term_form = $this->entityFormBuilder->getForm($taxonomy_term, 'default');
-
-    // Move the term data form into a fieldset.
-    $term_form['fieldset']['#type'] = 'fieldset';
-    $term_form['fieldset']['#title'] = Html::escape($taxonomy_term->getName()) . ' (' . $taxonomy_term->id() . ')';
-    $term_form['fieldset']['#attributes'] = [];
-    foreach (Element::children($term_form) as $key) {
-      if ($key != 'fieldset') {
-        $term_form['fieldset'][$key] = $term_form[$key];
-        unset($term_form[$key]);
-      }
-    }
+    $taxonomy_term = $this->entityTypeManager->getStorage('taxonomy_term')->load($form_state->getValue('load-term-data'));
+    $term_form = $this->entityFormBuilder->getForm($taxonomy_term, 'taxonomy_manager');
 
     $term_form['#prefix'] = '<div id="taxonomy-term-data-form">';
     $term_form['#suffix'] = '</div>';
-    $current_path = $this->currentPath->getPath();
-    // Change the form action url form the current site to the add form.
+
     $term_form['#action'] = $this->urlGenerator
       ->generateFromRoute(
-        'entity.taxonomy_term.edit_form',
-        ['taxonomy_term' => $taxonomy_term->id()],
+        'taxonomy_manager.taxonomy_term.edit',
+        [
+          'taxonomy_term' => $taxonomy_term->id(),
+        ],
         [
           'query' => [
-            'destination' => $current_path,
+            'destination' => $this->urlGenerator->generateFromRoute('<current>'),
           ],
         ]
       );
 
     $response = new AjaxResponse();
     $response->addCommand(new ReplaceCommand('#taxonomy-term-data-form', $term_form));
+
     return $response;
   }
 
   /**
    * Term data submit handler.
    *
-   * @todo: redirect to taxonomy manager
+   * @todo redirect to taxonomy manager
    */
   public static function termDataFormSubmit($form, FormStateInterface $form_state) {
 
@@ -430,10 +406,29 @@ class TaxonomyManagerForm extends FormBase {
    *   The ajax response.
    */
   protected function modalHelper(FormStateInterface $form_state, $class_name, $route_name, $title) {
+    return self::modalHelperStatic($form_state, $class_name, $route_name, $title);
+  }
+
+  /**
+   * Static helper function to generate a modal form within an AJAX callback.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state of the current (parent) form.
+   * @param string $class_name
+   *   The class name of the form to embed in the modal.
+   * @param string $route_name
+   *   The route name the form is located.
+   * @param string $title
+   *   The modal title.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   The ajax response.
+   */
+  public static function modalHelperStatic(FormStateInterface $form_state, $class_name, $route_name, $title) {
     $taxonomy_vocabulary = $form_state->getValue('voc');
     $selected_terms = $form_state->getValue(['taxonomy', 'manager', 'tree']);
 
-    $del_form = $this->formBuilder->getForm($class_name, $taxonomy_vocabulary, $selected_terms);
+    $del_form = \Drupal::formBuilder()->getForm($class_name, $taxonomy_vocabulary, $selected_terms);
     $del_form['#attached']['library'][] = 'core/drupal.dialog.ajax';
 
     // Change the form action url form the current site to the current form.

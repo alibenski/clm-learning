@@ -154,12 +154,14 @@ class DefaultFilter extends MigrateViewsHandlerPluginBase {
           }
         }
         else {
-          $database = \Drupal::database();
-          $query = $database->select('taxonomy_term_field_data', 'tfd');
-          $query->fields('tfd', ['vid']);
-          $query->condition('tid', $handler_config['value'], 'IN');
-          $handler_config['vid'] = $query->execute()->fetchField();
-          $handler_config['vid'] = substr($handler_config['vid'], 0, 30);
+          if (!empty($handler_config['value'])) {
+            $database = \Drupal::database();
+            $query = $database->select('taxonomy_term_field_data', 'tfd');
+            $query->fields('tfd', ['vid']);
+            $query->condition('tid', $handler_config['value'], 'IN');
+            $handler_config['vid'] = $query->execute()->fetchField();
+            $handler_config['vid'] = substr($handler_config['vid'], 0, 30);
+          }
         }
       }
     }

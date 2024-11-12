@@ -18,6 +18,7 @@
         "source": "https://git.drupalcode.org/project/image_link_formatter"
     },
     "require": {
-        "drupal/core": "^9.3 || ^10"
+        "drupal/core": "^10.3 || ^11",
+        "php": ">=8.0.0"
     }
 }

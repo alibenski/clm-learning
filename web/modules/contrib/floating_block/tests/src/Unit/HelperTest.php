@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\floating_block\Unit;
 
-use Drupal\floating_block\Helper;
 use Drupal\Tests\UnitTestCase;
+use Drupal\floating_block\Helper;
 
 /**
  * @coversDefaultClass \Drupal\floating_block\Helper

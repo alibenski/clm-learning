@@ -111,7 +111,7 @@ class MigrateTableTest extends MigrateTestBase {
    * @return array
    *   The migration definition.
    */
-  public function tableDestinationMigration() {
+  public static function tableDestinationMigration(): array {
     return [
       'dummy table' => [
         [

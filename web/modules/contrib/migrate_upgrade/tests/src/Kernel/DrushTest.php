@@ -6,10 +6,10 @@ namespace Drupal\Tests\migrate_upgrade\Kernel {
   use Drupal\KernelTests\FileSystemModuleDiscoveryDataProviderTrait;
   use Drupal\migrate_drupal\MigrationConfigurationTrait;
   use Drupal\migrate_plus\Entity\Migration;
-  use Drupal\migrate_upgrade\Commands\MigrateUpgradeCommands;
-  use Drupal\Tests\DeprecatedModulesTestTrait;
+  use Drupal\migrate_upgrade\Drush\Commands\MigrateUpgradeCommands;
   use Drupal\Tests\migrate_drupal\Kernel\MigrateDrupalTestBase;
   use Drupal\Tests\migrate_drupal\Traits\CreateMigrationsTrait;
+  use Drush\Log\DrushLoggerManager;
 
   /**
    * Tests the drush command runner for migrate upgrade.
@@ -33,7 +33,7 @@ namespace Drupal\Tests\migrate_upgrade\Kernel {
     /**
      * The Migrate Upgrade Command drush service.
      *
-     * @var \Drupal\migrate_upgrade\Commands\MigrateUpgradeCommands
+     * @var \Drupal\migrate_upgrade\Drush\Commands\MigrateUpgradeCommands
      */
     protected $commands;
 
@@ -46,7 +46,7 @@ namespace Drupal\Tests\migrate_upgrade\Kernel {
         'migrate_plus',
         'migrate_upgrade',
       ]);
-      self::$modules = array_diff(self::$modules, ['block_place']);
+      self::$modules = array_diff(self::$modules, ['block_place', 'action', 'sdc']);
       parent::setUp();
       $this->installConfig(self::$modules);
       $this->installEntitySchema('migration_group');
@@ -57,11 +57,10 @@ namespace Drupal\Tests\migrate_upgrade\Kernel {
       // Mocks the logger channel and factory because drush is not available
       // to use directly, and the Drupal loggers do not implement the "ok"
       // level.
-      $loggerProphet = $this->prophesize('\Drush\Log\Logger');
-      $loggerFactoryProphet = $this->prophesize('\Drupal\Core\Logger\LoggerChannelFactoryInterface');
-      $loggerFactoryProphet->get('drush')->willReturn($loggerProphet->reveal());
+      $loggerProphet = $this->prophesize(DrushLoggerManager::class);
 
-      $this->commands = new MigrateUpgradeCommands($this->state, $loggerFactoryProphet->reveal());
+      $this->commands = new MigrateUpgradeCommands($this->state);
+      $this->commands->setlogger($loggerProphet->reveal());
     }
 
     /**
@@ -69,6 +68,7 @@ namespace Drupal\Tests\migrate_upgrade\Kernel {
      */
     public function testD6Migrations(): void {
       $this->drupal6Migrations();
+      $migrations = $this->getMigrations($this->sourceDatabase->getKey(), 6);
       $options = [
         'configure-only' => TRUE,
         'legacy-db-key' => $this->sourceDatabase->getKey(),
@@ -76,7 +76,6 @@ namespace Drupal\Tests\migrate_upgrade\Kernel {
       $this->commands->upgrade($options);
 
       $migrate_plus_migrations = Migration::loadMultiple();
-      $migrations = $this->getMigrations($this->sourceDatabase->getKey(), 6);
       $this->assertMigrations($migrations, $migrate_plus_migrations);
       $optional = array_flip($migrate_plus_migrations['upgrade_d6_url_alias']->toArray()['migration_dependencies']['optional']);
       $node_migrations = array_intersect_key(['upgrade_d6_node_translation_page' => TRUE, 'upgrade_d6_node_complete_page' => TRUE], $optional);
@@ -88,6 +87,7 @@ namespace Drupal\Tests\migrate_upgrade\Kernel {
      */
     public function testD7Migrations(): void {
       $this->drupal7Migrations();
+      $migrations = $this->getMigrations($this->sourceDatabase->getKey(), 7);
       $this->sourceDatabase->update('system')
         ->fields(['status' => 1])
         ->condition('name', 'profile')
@@ -99,7 +99,6 @@ namespace Drupal\Tests\migrate_upgrade\Kernel {
       $this->commands->upgrade($options);
 
       $migrate_plus_migrations = Migration::loadMultiple();
-      $migrations = $this->getMigrations($this->sourceDatabase->getKey(), 7);
       $this->assertMigrations($migrations, $migrate_plus_migrations);
       $optional = array_flip($migrate_plus_migrations['upgrade_d7_url_alias']->toArray()['migration_dependencies']['optional']);
       $node_migrations = array_intersect_key(['upgrade_d7_node_translation_page' => TRUE, 'upgrade_d7_node_complete_page' => TRUE], $optional);
@@ -115,7 +114,7 @@ namespace Drupal\Tests\migrate_upgrade\Kernel {
      *   The migrate plus config entities.
      */
     protected function assertMigrations(array $migrations, array $migrate_plus_migrations): void {
-      foreach ($migrations as $id => $migration) {
+      foreach ($migrations as $migration) {
         $migration_id = 'upgrade_' . str_replace(PluginBase::DERIVATIVE_SEPARATOR, '_', $migration->id());
         $this->assertArrayHasKey($migration_id, $migrate_plus_migrations);
       }

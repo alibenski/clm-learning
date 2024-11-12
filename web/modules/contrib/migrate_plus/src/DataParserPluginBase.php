@@ -82,8 +82,7 @@ abstract class DataParserPluginBase extends PluginBase implements DataParserPlug
   /**
    * {@inheritdoc}
    */
-  #[\ReturnTypeWillChange]
-  public function rewind() {
+  public function rewind(): void {
     $this->activeUrl = NULL;
     $this->next();
   }
@@ -91,8 +90,7 @@ abstract class DataParserPluginBase extends PluginBase implements DataParserPlug
   /**
    * {@inheritdoc}
    */
-  #[\ReturnTypeWillChange]
-  public function next() {
+  public function next(): void {
     $this->currentItem = $this->currentId = NULL;
     if (is_null($this->activeUrl)) {
       if (!$this->nextSource()) {
@@ -153,6 +151,9 @@ abstract class DataParserPluginBase extends PluginBase implements DataParserPlug
       }
 
       if ($this->openSourceUrl($this->urls[$this->activeUrl])) {
+        if (!empty($this->configuration['pager'])) {
+          $this->addNextUrls($this->activeUrl);
+        }
         // We have a valid source.
         return TRUE;
       }
@@ -162,10 +163,39 @@ abstract class DataParserPluginBase extends PluginBase implements DataParserPlug
   }
 
   /**
+   * Add next page of source data following the active URL.
+   *
+   * @param int $activeUrl
+   *   The index within the source URL array to insert the next URL resource.
+   *   This is parameterized to enable custom plugins to control the ordering of
+   *   next URLs injected into the source URL backlog.
+   */
+  protected function addNextUrls(int $activeUrl = 0): void {
+    $next_urls = $this->getNextUrls($this->urls[$this->activeUrl]);
+
+    if (!empty($next_urls)) {
+      array_splice($this->urls, $activeUrl + 1, 0, $next_urls);
+      $this->urls = array_values(array_unique($this->urls));
+    }
+  }
+
+  /**
+   * Collected the next urls from a paged response.
+   *
+   * @param string $url
+   *   URL of the currently active source.
+   *
+   * @return array
+   *   Array of URLs representing next paged resources.
+   */
+  protected function getNextUrls(string $url): array {
+    return $this->getDataFetcherPlugin()->getNextUrls($url);
+  }
+
+  /**
    * {@inheritdoc}
    */
-  #[\ReturnTypeWillChange]
-  public function current() {
+  public function current(): mixed {
     return $this->currentItem;
   }
 
@@ -181,24 +211,21 @@ abstract class DataParserPluginBase extends PluginBase implements DataParserPlug
   /**
    * {@inheritdoc}
    */
-  #[\ReturnTypeWillChange]
-  public function key() {
+  public function key(): ?array {
     return $this->currentId;
   }
 
   /**
    * {@inheritdoc}
    */
-  #[\ReturnTypeWillChange]
-  public function valid() {
+  public function valid(): bool {
     return !empty($this->currentItem);
   }
 
   /**
    * {@inheritdoc}
    */
-  #[\ReturnTypeWillChange]
-  public function count() {
+  public function count(): int {
     return iterator_count($this);
   }
 

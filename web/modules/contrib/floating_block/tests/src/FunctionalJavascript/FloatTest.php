@@ -1,5 +1,7 @@
 <?php
 
+// phpcs:disable Drupal.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
+
 namespace Drupal\Tests\floating_block\FunctionalJavascript;
 
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
@@ -66,7 +68,7 @@ class FloatTest extends WebDriverTestBase {
     $this->assertElementYPosition(50, $fb_content_xpath);
 
     // Now scroll down to below the container's height and ensure that the
-    // element is stil floating.
+    // element is still floating.
     $this->scrollTo(0, 750);
     $this->assertElementYPosition(750, $fb_menu_xpath);
   }
@@ -233,7 +235,11 @@ class FloatTest extends WebDriverTestBase {
    *   Data about the element's location, including the X and Y position.
    */
   protected function getElementPosition(string $xpath): array {
-    return $this->getSession()->getDriver()->getWebDriverSession()->element('xpath', $xpath)->location();
+    return $this->getSession()
+      ->getDriver()
+      ->getWebDriverSession()
+      ->element('xpath', $xpath)
+      ->rect();
   }
 
 }

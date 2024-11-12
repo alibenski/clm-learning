@@ -3,6 +3,7 @@
 namespace Drupal\floating_block\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\floating_block\HelperInterface;
@@ -25,11 +26,13 @@ final class SettingsForm extends ConfigFormBase {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
+   * @param \Drupal\Core\Config\TypedConfigManagerInterface|null $typedConfigManager
+   *   The typed config manager.
    * @param \Drupal\floating_block\HelperInterface $helper
    *   The Floating Block helper service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, HelperInterface $helper) {
-    parent::__construct($config_factory);
+  public function __construct(ConfigFactoryInterface $config_factory, TypedConfigManagerInterface $typedConfigManager, HelperInterface $helper) {
+    parent::__construct($config_factory, $typedConfigManager);
     $this->helper = $helper;
   }
 
@@ -39,6 +42,7 @@ final class SettingsForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
+      $container->get('config.typed'),
       $container->get('floating_block')
     );
   }
