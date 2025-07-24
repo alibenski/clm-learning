@@ -107,9 +107,23 @@ div#main.container {
 */
 .view-mt-features img {
     /* width:100%; */
+    height:inherit;
     object-fit:cover;
 }
 
+.view-mt-features .transition-wrapper {
+    position:relative;
+    overflow: hidden;
+}
+
+.view-mt-features .transition-wrapper img {
+    transition: all .2s ease-in-out;
+}
+
+.view-mt-features .transition-wrapper:hover img {
+    transform: scale(1.1);
+    transition: all .2s ease-in-out;
+}
 /* 
     Frontpage Right Sidebar "moodleblock"
 */
@@ -1159,7 +1173,7 @@ table tr th {
     -ms-transition: all 0.5s ease-in-out;
     transition: all 0.5s ease-in-out;
 }
-.view-id-exams_slideshow.view-display-id-block_1  .exam-content .initial-overlay-content a {
+.view-id-exams_slideshow.view-display-id-block_1  .exam-content .initial-overlay-content {
     font-size: 15px;
     bottom: 15px;
     color: #fff;
