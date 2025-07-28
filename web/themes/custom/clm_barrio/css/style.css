@@ -401,42 +401,6 @@ blockquote:after {
   }
 }
 
-.sidebar .block {
-    border-radius: 3px;
-    border: 1px solid #e9e9e9;
-    margin-bottom: 30px;
-    padding: 0 0 10px 0;
-}
-
-.sidebar .block .field-content, .sidebar .block p {
-  padding: 5px 5px 10px 5px;
-}
-
-/* .sidebar .block h2.title:before {
-    content: '\f00c';
-    font-family: 'fontAwesome';
-    margin-right: 5px;    
-} */
-
-.sidebar .block h2.title, .sidebar h2#block-clm-barrio-sidemenu-menu {
-    text-transform: capitalize;
-    position: relative;
-    text-align: left;
-    padding: 18px 18px 18px 30px;
-    border-bottom: 2px solid #2989d8;
-    font-weight: 400;
-    color: #fff;
-    font-size: 18px;
-    background: #2989d8;
-    margin: 0 0 10px 0;
-}
-
-.sidebar .block .more-link {
-    border-bottom: none;
-    margin-left: 25px;
-    padding-left: 30px;
-}
-
 /* M&C and Events Node Pages*/
 .css-gen-info .views-row {
   border-bottom: none;

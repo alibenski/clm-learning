@@ -1,0 +1,81 @@
+/**
+ * @file
+ * Visual styles for CLM_Barrio's blocks.
+ */
+.block {
+  padding: 0 0 25px 0;
+}
+.block.block-page-title-block {
+  padding: 0;
+}
+.sidebar .block {
+    border-radius: 3px;
+    border: 1px solid #e9e9e9;
+    margin-bottom: 30px;
+    padding: 0 0 10px 0;
+}
+.sidebar .block h4 {
+    padding: 0 0 10px 10px;
+}
+.sidebar .block .field-content, .sidebar .block p {
+  padding: 5px 10px 10px 10px;
+}
+/* .sidebar .block h2.title:before {
+    content: '\f00c';
+    font-family: 'fontAwesome';
+    margin-right: 5px;    
+} */
+.sidebar .block h2.title, .sidebar h2#block-clm-barrio-sidemenu-menu {
+    text-transform: capitalize;
+    position: relative;
+    text-align: left;
+    padding: 18px 18px 18px 30px;
+    border-bottom: 2px solid #2989d8;
+    font-weight: 400;
+    color: #fff;
+    font-size: 18px;
+    background: #2989d8;
+    margin: 0 0 10px 0;
+}
+.sidebar .block .more-link {
+    border-bottom: none;
+    margin-left: 25px;
+    padding-left: 30px;
+}
+.header-top-area .block:first-child:last-child,
+.header-top-area .block {
+  padding: 10px 0;
+}
+.header-top-area .block:first-child {
+  padding: 20px 0 10px;
+}
+.header-top-area .block:last-child {
+  padding: 10px 0 20px;
+}
+.block-system-main-block,
+#block-highlightedtabs .block,
+#block-googlemap,
+.block-system-breadcrumb-block,
+.block-views-blockmt-slideshow-boxed-width-block-1 {
+  padding: 0;
+}
+#block-highlightedtabs {
+  clear: both;
+}
+.footer-area .block,
+.subfooter-area .block {
+  padding: 10px 0;
+}
+.sidebar .block {
+  padding: 0 0 40px 0;
+}
+.internal-banner-block {
+  margin-bottom: -75px;
+}
+@media (min-width:768px) {
+  .block-superfish,
+  .main-navigation .block-menu,
+  .header-top-area .block-menu {
+    padding: 0 !important;
+  }
+}
