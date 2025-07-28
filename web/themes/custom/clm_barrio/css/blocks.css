@@ -18,7 +18,8 @@
     padding: 0 0 10px 10px;
 }
 .sidebar .block .field-content, .sidebar .block p {
-  padding: 5px 10px 10px 10px;
+    padding: 5px 10px 10px 10px;
+    margin-bottom: 0rem;
 }
 /* .sidebar .block h2.title:before {
     content: '\f00c';
@@ -67,7 +68,15 @@
   padding: 10px 0;
 }
 .sidebar .block {
-  padding: 0 0 40px 0;
+  padding: 0 0 10px 0;
+}
+.sidebar .block ul {
+  padding-left:2rem;
+  margin: 0;
+  list-style: circle;
+}
+.sidebar .block li {
+  margin-bottom: 5px;
 }
 .internal-banner-block {
   margin-bottom: -75px;
