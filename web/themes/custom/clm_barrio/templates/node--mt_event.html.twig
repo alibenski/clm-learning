@@ -1,0 +1,54 @@
+{#
+/**
+ * @file
+ * CLM Barrio's theme implementation to display an Event node.
+ */
+#}
+{% extends "node.html.twig" %}
+{% block content %}
+{{ dump() }}
+  <div class="event-content-wrapper clearfix">
+    {% if view_mode=='full' %}
+      <div class="event-info"> 
+        {% if view_mode=='full' %}
+         {{ content.field_mt_event_date[0]  }}
+        {% endif %}
+        {% if event_date %}
+          <div class="event-date-wrapper">
+            <div class="event-date">
+              <div class="month">{{ event_date_month }}</div>
+              <div class="day">{{ event_date_day }}</div>
+            </div>
+          </div>
+          <div class="event-duration">
+            <i class="fa fa-clock-o"></i>
+            {{ event_date_custom }}
+          </div>
+        {% endif %}
+        {% if content.field_mt_event_location|render %}
+          <div class="event-place">
+            <i class="fa fa-map-marker"></i>
+            {{ content.field_mt_event_location }}
+          </div>
+        {% endif %}
+        {% if content.field_mt_event_latitude|render and content.field_mt_event_longitude|render %}
+          {{ attach_library('scholarly/google-maps-init') }}
+          <div class="google-map-canvas"
+            data-attribute-mt-latitude="{{node.field_mt_event_latitude.value}}"
+            data-attribute-mt-longitude="{{node.field_mt_event_longitude.value}}"
+            data-attribute-mt-map-zoom="10">
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+    <div class="event-content {{ view_mode=='full' ? 'custom-width' : 'full-width' }}">
+      <div class="node--main-content">
+        <div{{ content_attributes }}>
+          {{ content | without('field_mt_event_latitude', 'field_mt_event_longitude', 'group_mt_event_details','comment','field_mt_event_date')}}
+        </div>
+      </div>
+    </div>
+    {{ content.group_mt_event_details }}
+    {{ content.comment }}
+  </div>
+{% endblock %}
