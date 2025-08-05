@@ -5,6 +5,7 @@
  * Protected Pages install file.
  */
 
+use Drupal\Core\Database\Database;
 use Drupal\Core\Url;
 
 /**
@@ -31,6 +32,12 @@ function protected_pages_schema() {
         'length' => '255',
         'not null' => TRUE,
       ],
+      'title' => [
+        'type' => 'varchar',
+        'description' => 'The admin label of the protected page.',
+        'length' => '255',
+        'not null' => FALSE,
+      ],
     ],
     'indexes' => [
       'path' => ['path'],
@@ -49,4 +56,18 @@ function protected_pages_install() {
     '@permissions' => Url::fromUri('internal:/admin/people/permissions', ['fragment' => 'module-protected_pages'])->toString(),
   ]);
   \Drupal::messenger()->addMessage($message);
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function protected_pages_update_9003(&$sandbox): void {
+  $spec = [
+    'type' => 'varchar',
+    'description' => 'The admin label of the protected page.',
+    'length' => '255',
+    'not null' => FALSE,
+  ];
+  $schema = Database::getConnection()->schema();
+  $schema->addField('protected_pages', 'title', $spec);
 }

@@ -11,7 +11,7 @@ use Drupal\backup_migrate\Core\File\BackupFileReadableInterface;
 use Drupal\backup_migrate\Core\File\ReadableStreamBackupFile;
 
 /**
- *
+ * A destination that is a directory.
  *
  * @package Drupal\backup_migrate\Core\Destination
  */
@@ -249,7 +249,7 @@ class DirectoryDestination extends DestinationBase implements ListableDestinatio
       return $files;
     }
 
-    if ($handle = opendir($dir)) {
+    if (is_dir($dir) && ($handle = opendir($dir))) {
       while (FALSE !== ($file = readdir($handle))) {
         $filepath = $dir . '/' . $file;
         // Don't show hidden, unreadable or metadata files.

@@ -4,7 +4,7 @@ description: "Views Dependent Filters' original d8 module name was incorrect. Ru
 core_version_requirement: ^8.8 || ^9 || ^10
 hidden: true
 
-# Information added by Drupal.org packaging script on 2024-05-31
-version: '8.x-1.2'
+# Information added by Drupal.org packaging script on 2025-03-07
+version: '8.x-1.3'
 project: 'views_dependent_filters'
-datestamp: 1717127339
+datestamp: 1741354318

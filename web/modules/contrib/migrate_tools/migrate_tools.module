@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @file Module file for Migrate Tools.
+ * @file
+ * Module file for Migrate Tools.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
  * @file
@@ -22,7 +23,6 @@ use Drupal\migrate_tools\Form\MigrationEditForm;
 use Drupal\migrate_tools\Form\MigrationGroupAddForm;
 use Drupal\migrate_tools\Form\MigrationGroupDeleteForm;
 use Drupal\migrate_tools\Form\MigrationGroupEditForm;
-use Drupal\migrate_tools\MigrateTools;
 
 /**
  * Implements hook_entity_type_build().
@@ -88,7 +88,7 @@ function migrate_tools_migration_plugins_alter(array &$migrations): void {
  * @see \Drupal\migrate\Plugin\migrate\source\SourcePluginBase::next()
  */
 function migrate_tools_migrate_prepare_row(Row $row, MigrateSourceInterface $source, MigrationInterface $migration): void {
-  /** @var MigrateTools $migrateTools */
+  /** @var \Drupal\migrate_tools\MigrateTools $migrateTools */
   $migrateTools = \Drupal::service('migrate_tools.migrate_tools');
   // Act on migrations that have a Sync source, and that are currently in the
   // phase of Syncing their IDs.
@@ -96,6 +96,36 @@ function migrate_tools_migrate_prepare_row(Row $row, MigrateSourceInterface $sou
     // Keep track of all source rows here, as SourcePluginBase::next() might
     // skip some rows, and we need them all to detect missing items in source to
     // delete in destination.
-    $migrateTools->addToSyncSourceIds($migration->getPluginId(), $row->getSourceIdValues());
+    $migrateTools->addToSyncSourceIds($migration, $row->getSourceIdValues());
+  }
+}
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function migrate_tools_entity_type_alter(array &$entity_types): void {
+  /** @var \Drupal\Core\Config\Entity\ConfigEntityType $entity_type */
+  if (isset($entity_types['migration']) && ($entity_type = $entity_types['migration'])) {
+    $entity_type->set(
+      'config_export',
+      array_merge($entity_type->get('config_export'), ['include'])
+    );
+  }
+}
+
+/**
+ * Implements hook_config_schema_info_alter().
+ */
+function migrate_tools_config_schema_info_alter(array &$definitions): void {
+  if (isset($definitions['migrate_plus.migration.*'])) {
+    $definitions['migrate_plus.migration.*']['mapping']['include'] = [
+      'type' => 'sequence',
+      'label' => 'Included migration configuration',
+      'nullable' => TRUE,
+      'sequences' => [
+        'type' => 'string',
+        'label' => 'Included shared configuration entry',
+      ],
+    ];
   }
 }

@@ -25,6 +25,13 @@ class InstallUninstallTest extends BrowserTestBase {
   protected $defaultTheme = 'stark';
 
   /**
+   * User object.
+   *
+   * @var object
+   */
+  protected $adminUser;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp() : void {
@@ -36,8 +43,8 @@ class InstallUninstallTest extends BrowserTestBase {
     ];
 
     // User to set up entity_update.
-    $this->admin_user = $this->drupalCreateUser($permissions);
-    $this->drupalLogin($this->admin_user);
+    $this->adminUser = $this->drupalCreateUser($permissions);
+    $this->drupalLogin($this->adminUser);
   }
 
   /**
@@ -78,7 +85,7 @@ class InstallUninstallTest extends BrowserTestBase {
     $this->drupalGet('admin/modules/uninstall');
     $this->submitForm($edit, 'Uninstall');
     $assert->pageTextContains('Entity Update');
-    $this->submitForm(NULL, 'Uninstall');
+    $this->submitForm([], 'Uninstall');
     $assert->pageTextContains('The selected modules have been uninstalled.');
 
     // Re test if site opens with no errors.

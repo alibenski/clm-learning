@@ -33,10 +33,10 @@ class EntityUpdateProgUpTest extends BrowserTestBase {
    * {@inheritdoc}
    */
   protected function setUp() : void {
-    // Initialisation process.
+    // Initialization process.
     parent::setUp();
 
-    // Set initial fields status (1 enebale, 1 disable).
+    // Set initial fields status (1 enable, 1 disable).
     EntityUpdateTestHelper::fieldDisable('name');
     EntityUpdateTestHelper::fieldEnable('description');
     EntityUpdateTestHelper::fieldSetType('type', NULL);
@@ -63,7 +63,7 @@ class EntityUpdateProgUpTest extends BrowserTestBase {
     // Entity checking process : Get current entities list.
     $ids_old = \Drupal::entityQuery('entity_update_tests_cnt')->accessCheck(FALSE)->execute();
 
-    // Make Update Using full methode.
+    // Make Update Using full method.
     if ($res = EntityUpdate::safeUpdateMain()) {
       // Your codes if update success.
     }
@@ -100,7 +100,7 @@ class EntityUpdateProgUpTest extends BrowserTestBase {
     // Entity checking process : Get current entities list.
     $ids_old = \Drupal::entityQuery('entity_update_tests_cnt')->accessCheck(FALSE)->execute();
 
-    // Make Update Using full methode.
+    // Make Update Using full method.
     if ($res = EntityUpdate::safeUpdateMain()) {
       // Your codes if update success.
     }

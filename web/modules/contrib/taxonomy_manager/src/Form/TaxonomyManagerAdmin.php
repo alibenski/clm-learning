@@ -2,10 +2,10 @@
 
 namespace Drupal\taxonomy_manager\Form;
 
-use Drupal\content_translation\ContentTranslationManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\content_translation\ContentTranslationManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -86,7 +86,7 @@ class TaxonomyManagerAdmin extends ConfigFormBase {
         '#default_value' => $config->get('taxonomy_manager_translations'),
         '#description' => $this->t('Translatable term fields will display values side by side for each enabled language. Make sure to configure content translation first.'),
         '#attributes' => [
-          'disabled' => $this->contentTranslationManager->isEnabled('taxonomy_term'),
+          'disabled' => !$this->contentTranslationManager->isEnabled('taxonomy_term'),
         ],
       ];
     }

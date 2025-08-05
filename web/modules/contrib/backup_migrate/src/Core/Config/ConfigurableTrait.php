@@ -128,24 +128,36 @@ trait ConfigurableTrait {
 
         // Check if it's required.
         if (!empty($field['required']) && empty($value)) {
-          $out[] = new ValidationError($key, $this->t('%title is required.'), ['%title' => $field['title']]);
+          $out[] = new ValidationError($key, $this->t('%title is required.'), [
+            '%title' => $field['title'],
+          ]);
         }
 
         // Check it for length.
         if (!empty($field['min_length']) && strlen($value) < $field['min_length']) {
-          $out[] = new ValidationError($key, $this->t('%title must be at least %count characters.'), ['%title' => $field['title'], '%count' => $field['min_length']]);
+          $out[] = new ValidationError($key, $this->t('%title must be at least %count characters.'), [
+            '%title' => $field['title'],
+            '%count' => $field['min_length'],
+          ]);
         }
         if (!empty($field['max_length']) && strlen($value) > $field['max_length']) {
-          $out[] = new ValidationError($key, $this->t('%title must be at no more than %count characters.'), ['%title' => $field['title'], '%count' => $field['max_length']]);
+          $out[] = new ValidationError($key, $this->t('%title must be at no more than %count characters.'), [
+            '%title' => $field['title'],
+            '%count' => $field['max_length'],
+          ]);
         }
 
         // Check for the regular expression match.
         if (!empty($field['must_match']) && !preg_match($field['must_match'], $value)) {
           if (!empty($field['must_match_error'])) {
-            $out[] = new ValidationError($key, $field['must_match_error'], ['%title' => $field['title']]);
+            $out[] = new ValidationError($key, $field['must_match_error'], [
+              '%title' => $field['title'],
+            ]);
           }
           else {
-            $out[] = new ValidationError($key, $this->t('%title contains invalid characters.'), ['%title' => $field['title']]);
+            $out[] = new ValidationError($key, $this->t('%title contains invalid characters.'), [
+              '%title' => $field['title'],
+            ]);
           }
         }
       }

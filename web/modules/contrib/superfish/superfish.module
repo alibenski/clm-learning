@@ -14,9 +14,8 @@ use Drupal\Core\Routing\RouteMatchInterface;
  * Implements hook_block_view_BASE_BLOCK_ID_alter().
  */
 function superfish_block_view_superfish_alter(array &$build, BlockPluginInterface $block) {
-  $menu_name = $block->getDerivativeId();
   $build['#contextual_links']['menu'] = [
-    'route_parameters' => ['menu' => $menu_name],
+    'route_parameters' => ['menu' => $block->getDerivativeId()],
   ];
 }
 
@@ -206,31 +205,33 @@ function superfish_library_path($library = 'drupal-superfish') {
       return $directory;
     }
   }
-  // Otherwise use the default directory.
+  // Otherwise, use the default directory.
   if (\Drupal::hasContainer()) {
     $profile = \Drupal::installProfile();
   }
   else {
     $profile = BootstrapConfigStorageFactory::getDatabaseStorage()->read('core.extension')['profile'];
   }
-  if (file_exists('profiles/' . $profile . '/libraries/' . $library)) {
-    $directory = 'profiles/' . $profile . '/libraries/' . $library;
+
+  $profile_library_sub_path = $profile . '/libraries/' . $library;
+  $paths = [
+    'profiles/' . $profile_library_sub_path,
+    'profiles/contrib/' . $profile_library_sub_path,
+    'profiles/custom/' . $profile_library_sub_path,
+    'libraries/' . $library,
+    'sites/all/libraries/' . $library,
+    'sites/default/libraries/' . $library,
+  ];
+
+  // Convert relative paths to absolute real paths and check existence.
+  foreach ($paths as $relative_path) {
+    $absolute_path = DRUPAL_ROOT . '/' . $relative_path;
+    if (file_exists($absolute_path)) {
+      $directory = $absolute_path;
+      break;
+    }
   }
-  elseif (file_exists('profiles/contrib/' . $profile . '/libraries/' . $library)) {
-    $directory = 'profiles/contrib/' . $profile . '/libraries/' . $library;
-  }
-  elseif (file_exists('profiles/custom/' . $profile . '/libraries/' . $library)) {
-    $directory = 'profiles/custom/' . $profile . '/libraries/' . $library;
-  }
-  elseif (file_exists('libraries/' . $library)) {
-    $directory = 'libraries/' . $library;
-  }
-  elseif (file_exists('sites/all/libraries/' . $library)) {
-    $directory = 'sites/all/libraries/' . $library;
-  }
-  elseif (file_exists('sites/default/libraries/' . $library)) {
-    $directory = 'sites/default/libraries/' . $library;
-  }
+
   if (!$directory && Unicode::ucfirst($library) !== $library) {
     $directory = superfish_library_path(Unicode::ucfirst($library));
   }
@@ -255,15 +256,13 @@ function superfish_library_version() {
   // Get the library version.
   if (($directory = superfish_library_path()) && file_exists($directory . '/VERSION')) {
     $version = file_get_contents($directory . '/VERSION');
-    if ($version === FALSE) {
-      return NULL;
+    if ($version !== FALSE) {
+      // Removing blank lines and white spaces.
+      $version = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", trim($version));
+      if (!empty($version)) {
+        return $version;
+      }
     }
-    // Removing blank lines and white spaces.
-    $version = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", trim($version));
-    if (!empty($version)) {
-      return $version;
-    }
-    return FALSE;
   }
   return FALSE;
 }
@@ -311,6 +310,36 @@ function superfish_effects() {
       'easeInBack_vertical' => 'easeInBack (' . t('Vertical') . ')',
       'easeInBack_horizontal' => 'easeInBack (' . t('Horizontal') . ')',
       'easeInBack_diagonal' => 'easeInBack (' . t('Diagonal') . ')',
+      'easeOutSine_vertical' => 'easeOutSine (' . t('Vertical') . ')',
+      'easeOutSine_horizontal' => 'easeOutSine (' . t('Horizontal') . ')',
+      'easeOutSine_diagonal' => 'easeOutSine (' . t('Diagonal') . ')',
+      'easeOutQuint_vertical' => 'easeOutQuint (' . t('Vertical') . ')',
+      'easeOutQuint_horizontal' => 'easeOutQuint (' . t('Horizontal') . ')',
+      'easeOutQuint_diagonal' => 'easeOutQuint (' . t('Diagonal') . ')',
+      'easeOutQuart_vertical' => 'easeOutQuart (' . t('Vertical') . ')',
+      'easeOutQuart_horizontal' => 'easeOutQuart (' . t('Horizontal') . ')',
+      'easeOutQuart_diagonal' => 'easeOutQuart (' . t('Diagonal') . ')',
+      'easeOutQuad_vertical' => 'easeOutQuad (' . t('Vertical') . ')',
+      'easeOutQuad_horizontal' => 'easeOutQuad (' . t('Horizontal') . ')',
+      'easeOutQuad_diagonal' => 'easeOutQuad (' . t('Diagonal') . ')',
+      'easeOutExpo_vertical' => 'easeOutExpo (' . t('Vertical') . ')',
+      'easeOutExpo_horizontal' => 'easeOutExpo (' . t('Horizontal') . ')',
+      'easeOutExpo_diagonal' => 'easeOutExpo (' . t('Diagonal') . ')',
+      'easeOutElastic_vertical' => 'easeOutElastic (' . t('Vertical') . ')',
+      'easeOutElastic_horizontal' => 'easeOutElastic (' . t('Horizontal') . ')',
+      'easeOutElastic_diagonal' => 'easeOutElastic (' . t('Diagonal') . ')',
+      'easeOutCubic_vertical' => 'easeOutCubic (' . t('Vertical') . ')',
+      'easeOutCubic_horizontal' => 'easeOutCubic (' . t('Horizontal') . ')',
+      'easeOutCubic_diagonal' => 'easeOutCubic (' . t('Diagonal') . ')',
+      'easeOutCirc_vertical' => 'easeOutCirc (' . t('Vertical') . ')',
+      'easeOutCirc_horizontal' => 'easeOutCirc (' . t('Horizontal') . ')',
+      'easeOutCirc_diagonal' => 'easeOutCirc (' . t('Diagonal') . ')',
+      'easeOutBounce_vertical' => 'easeOutBounce (' . t('Vertical') . ')',
+      'easeOutBounce_horizontal' => 'easeOutBounce (' . t('Horizontal') . ')',
+      'easeOutBounce_diagonal' => 'easeOutBounce (' . t('Diagonal') . ')',
+      'easeOutBack_vertical' => 'easeOutBack (' . t('Vertical') . ')',
+      'easeOutBack_horizontal' => 'easeOutBack (' . t('Horizontal') . ')',
+      'easeOutBack_diagonal' => 'easeOutBack (' . t('Diagonal') . ')',
     ];
     $output = array_merge($output, $easing_types);
   }

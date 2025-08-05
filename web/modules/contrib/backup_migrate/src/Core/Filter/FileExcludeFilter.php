@@ -70,11 +70,11 @@ class FileExcludeFilter extends PluginBase {
       // Convert Glob wildcards to a regex.
       // @see http://php.net/manual/en/function.fnmatch.php#71725
       $this->patterns[] = "#^" . strtr(preg_quote($pattern, '#'), [
-          '\*' => '.*',
-          '\?' => '.',
-          '\[' => '[',
-          '\]' => ']',
-        ]) . "$#i";
+        '\*' => '.*',
+        '\?' => '.',
+        '\[' => '[',
+        '\]' => ']',
+      ]) . "$#i";
     }
     return $this->patterns;
   }

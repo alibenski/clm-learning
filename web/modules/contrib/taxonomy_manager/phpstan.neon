@@ -6,5 +6,3 @@ parameters:
     - "#^Unsafe usage of new static#"
     # Core ignores this as well.
     - "#^Class .* extends @internal class#"
-    # Until the class is refactored more.
-    - "#^Static call to instance method .*getPartialTree\\(\\)#"

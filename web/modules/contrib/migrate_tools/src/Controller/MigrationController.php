@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\migrate_tools\Controller;
 
@@ -9,40 +9,27 @@ use Drupal\Component\Utility\Xss;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
-use Drupal\Core\Url;
-use Drupal\migrate\MigrateMessage;
 use Drupal\migrate\Plugin\MigrationPluginManagerInterface;
 use Drupal\migrate_plus\Entity\MigrationGroupInterface;
 use Drupal\migrate_plus\Entity\MigrationInterface;
-use Drupal\migrate_tools\MigrateBatchExecutable;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Returns responses for migrate_tools migration view routes.
+ *
+ * @phpstan-consistent-constructor
  */
 class MigrationController extends ControllerBase implements ContainerInjectionInterface {
 
-  protected MigrationPluginManagerInterface $migrationPluginManager;
-  protected CurrentRouteMatch $currentRouteMatch;
-
-  /**
-   * Constructs a new MigrationController object.
-   *
-   * @param \Drupal\migrate\Plugin\MigrationPluginManagerInterface $migration_plugin_manager
-   *   The plugin manager for config entity-based migrations.
-   * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
-   *   The current route match.
-   */
-  public function __construct(MigrationPluginManagerInterface $migration_plugin_manager, CurrentRouteMatch $currentRouteMatch) {
-    $this->migrationPluginManager = $migration_plugin_manager;
-    $this->currentRouteMatch = $currentRouteMatch;
-  }
+  public function __construct(
+    protected MigrationPluginManagerInterface $migrationPluginManager,
+    protected CurrentRouteMatch $currentRouteMatch,
+  ) {}
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container): self {
+  public static function create(ContainerInterface $container): static {
     return new static(
       $container->get('plugin.manager.migration'),
       $container->get('current_route_match')
@@ -78,8 +65,7 @@ class MigrationController extends ControllerBase implements ContainerInjectionIn
       '#markup' => Xss::filterAdmin($migration->label()),
       '#type' => 'item',
     ];
-    $migration_plugin = $this->migrationPluginManager->createInstance($migration->id(), $migration->toArray());
-    $migration_dependencies = $migration_plugin->getMigrationDependencies();
+    $migration_dependencies = $this->getMigrationPlugin($migration)->getMigrationDependencies();
     if (!empty($migration_dependencies['required'])) {
       $build['overview']['dependencies'] = [
         '#title' => $this->t('Migration Dependencies') ,
@@ -122,7 +108,7 @@ class MigrationController extends ControllerBase implements ContainerInjectionIn
         'id' => 'migration-detail-source',
       ],
     ];
-    $migration_plugin = $this->migrationPluginManager->createInstance($migration->id(), $migration->toArray());
+    $migration_plugin = $this->getMigrationPlugin($migration);
     $source = $migration_plugin->getSourcePlugin();
     $build['source']['query'] = [
       '#type' => 'item',
@@ -161,7 +147,7 @@ class MigrationController extends ControllerBase implements ContainerInjectionIn
    */
   public function process(MigrationGroupInterface $migration_group, MigrationInterface $migration): array {
     $build = [];
-    $migration_plugin = $this->migrationPluginManager->createInstance($migration->id(), $migration->toArray());
+    $migration_plugin = $this->getMigrationPlugin($migration);
 
     // Process information.
     $build['process'] = [
@@ -230,7 +216,7 @@ class MigrationController extends ControllerBase implements ContainerInjectionIn
    */
   public function destination(MigrationGroupInterface $migration_group, MigrationInterface $migration): array {
     $build = [];
-    $migration_plugin = $this->migrationPluginManager->createInstance($migration->id(), $migration->toArray());
+    $destination = $this->getMigrationPlugin($migration)->getDestinationPlugin();
 
     // Destination field information.
     $build['destination'] = [
@@ -243,7 +229,6 @@ class MigrationController extends ControllerBase implements ContainerInjectionIn
         'id' => 'migration-detail-destination',
       ],
     ];
-    $destination = $migration_plugin->getDestinationPlugin();
     $build['destination']['type'] = [
       '#type' => 'item',
       '#title' => $this->t('Type'),
@@ -267,6 +252,19 @@ class MigrationController extends ControllerBase implements ContainerInjectionIn
     ];
 
     return $build;
+  }
+
+  /**
+   * Return an instance of a migration plugin.
+   *
+   * @param \Drupal\migrate_plus\Entity\MigrationInterface $migration
+   *   The $migration.
+   *
+   * @return object
+   *   A fully configured plugin instance.
+   */
+  protected function getMigrationPlugin(MigrationInterface $migration) {
+    return $this->migrationPluginManager->createInstance($migration->id());
   }
 
 }

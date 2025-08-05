@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\migrate_tools;
 
@@ -24,19 +24,11 @@ class SourceFilter extends \FilterIterator implements MigrateSourceInterface {
    * The accept() method removes an item from this when it successfully filters
    * a value.
    */
-  protected array $idList;
-
-  /**
-   * SourceFilter constructor.
-   *
-   * @param \Drupal\migrate\Plugin\MigrateSourceInterface $source
-   *   The ID map.
-   * @param array $id_list
-   *   The id list to use in the filter.
-   */
-  public function __construct(MigrateSourceInterface $source, array $id_list) {
+  public function __construct(
+    MigrateSourceInterface $source,
+    protected array $idList,
+  ) {
     parent::__construct($source);
-    $this->idList = $id_list;
     $this->filterSourceIds = !empty($this->idList);
   }
 

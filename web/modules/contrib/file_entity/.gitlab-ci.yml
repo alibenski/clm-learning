@@ -50,9 +50,7 @@ include:
 ################
 variables:
   _PHPUNIT_CONCURRENT: "1"
-  _PHPUNIT_EXTRA: --suppress-deprecations
-  OPT_IN_TEST_NEXT_MINOR: '1'
-
+  OPT_IN_TEST_PREVIOUS_MINOR: '1'
 
 ###################################################################################
 #

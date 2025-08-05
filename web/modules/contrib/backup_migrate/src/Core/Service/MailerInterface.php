@@ -10,6 +10,8 @@ namespace Drupal\backup_migrate\Core\Service;
 interface MailerInterface {
 
   /**
+   * @param string $key
+   *   The key of the email the will be sent.
    * @param string|array $to
    *   An RFC 2822 formatted to string or an array of them.
    * @param string $subject
@@ -22,6 +24,6 @@ interface MailerInterface {
    *   Additional headers to be added to the email if any.
    * @return mixed
    */
-  public function send($to, $subject, $body, array $replacements = [], array $additional_headers = []);
+  public function send($key, $to, $subject, $body, array $replacements = [], array $additional_headers = []);
 
 }

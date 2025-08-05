@@ -5,7 +5,7 @@ namespace Drupal\backup_migrate\Core\Destination;
 use Drupal\backup_migrate\Core\File\BackupFileInterface;
 
 /**
- * Interface ReadableDestinationInterface.
+ * An interface for managing destinations that are readable.
  *
  * @package Drupal\backup_migrate\Core\Destination
  */

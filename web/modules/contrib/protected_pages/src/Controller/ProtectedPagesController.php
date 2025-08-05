@@ -65,6 +65,7 @@ class ProtectedPagesController extends ControllerBase {
     $headers = [
       $this->t('#'),
       $this->t('Relative Path'),
+      $this->t('Admin Title'),
       $this->t('Operations'),
     ];
     $count = 1;
@@ -97,6 +98,7 @@ class ProtectedPagesController extends ControllerBase {
         [
           $count,
           Html::escape($page->path),
+          Html::escape($page->title),
           $operations,
         ],
       ];

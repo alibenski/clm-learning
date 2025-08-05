@@ -73,7 +73,7 @@ abstract class DatabaseSource extends PluginBase implements DatabaseSourceInterf
       return $this->getRawTableNames();
     }
     catch (\Exception $e) {
-      // Todo: Log this exception.
+      // @todo Log this exception.
       return [];
     }
   }
@@ -90,7 +90,7 @@ abstract class DatabaseSource extends PluginBase implements DatabaseSourceInterf
       return $this->getRawTables();
     }
     catch (\Exception $e) {
-      // Todo: Log this exception.
+      // @todo Log this exception.
       return [];
     }
   }

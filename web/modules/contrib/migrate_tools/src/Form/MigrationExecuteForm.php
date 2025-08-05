@@ -1,12 +1,14 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\migrate_tools\Form;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\migrate\MigrateMessage;
 use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\Plugin\MigrationPluginManagerInterface;
@@ -16,34 +18,29 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * This form is specifically for configuring process pipelines.
+ *
+ * @phpstan-consistent-constructor
  */
 class MigrationExecuteForm extends FormBase {
 
-  /**
-   * Plugin manager for migration plugins.
-   */
-  protected MigrationPluginManagerInterface $migrationPluginManager;
-
-  /**
-   * Constructs a new MigrationExecuteForm object.
-   *
-   * @param \Drupal\migrate\Plugin\MigrationPluginManagerInterface $migration_plugin_manager
-   *   The plugin manager for config entity-based migrations.
-   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
-   *   The current route match.
-   */
-  public function __construct(MigrationPluginManagerInterface $migration_plugin_manager, RouteMatchInterface $route_match) {
-    $this->migrationPluginManager = $migration_plugin_manager;
-    $this->routeMatch = $route_match;
-  }
+  public function __construct(
+    protected MigrationPluginManagerInterface $migrationPluginManager,
+    protected $routeMatch,
+    protected KeyValueFactoryInterface $keyValue,
+    protected TimeInterface $time,
+    protected TranslationInterface $translation,
+  ) {}
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container): self {
+  public static function create(ContainerInterface $container): static {
     return new static(
       $container->get('plugin.manager.migration'),
-      $container->get('current_route_match')
+      $container->get('current_route_match'),
+      $container->get('keyvalue'),
+      $container->get('datetime.time'),
+      $container->get('string_translation'),
     );
   }
 
@@ -166,7 +163,11 @@ class MigrationExecuteForm extends FormBase {
       '#description' => $this->t('Comma-separated list of IDs to process.'),
       '#states' => [
         'enabled' => [
-          ':input[name="operation"]' => [['value' => 'import'], 'or', ['value' => 'rollback']],
+          ':input[name="operation"]' => [
+            ['value' => 'import'],
+            'or',
+            ['value' => 'rollback'],
+          ],
         ],
       ],
     ];
@@ -182,23 +183,39 @@ class MigrationExecuteForm extends FormBase {
     if ($migration) {
       $migration_id = $migration->id();
       /** @var \Drupal\migrate\Plugin\MigrationInterface $migration_plugin */
-      $migration_plugin = $this->migrationPluginManager->createInstance($migration_id, $migration->toArray());
+      $migration_plugin = $this->migrationPluginManager->createInstance($migration_id);
       $migrateMessage = new MigrateMessage();
 
       switch ($form_state->getValue('operation')) {
         case 'import':
-          $executable = new MigrateBatchExecutable($migration_plugin, $migrateMessage, $this->buildOptions($form_state));
+          $executable = new MigrateBatchExecutable(
+            $migration_plugin,
+            $migrateMessage,
+            $this->keyValue,
+            $this->time,
+            $this->translation,
+            $this->migrationPluginManager,
+            $this->buildOptions($form_state),
+          );
           $executable->batchImport();
           break;
 
         case 'rollback':
-          $executable = new MigrateBatchExecutable($migration_plugin, $migrateMessage, $this->buildOptions($form_state));
+          $executable = new MigrateBatchExecutable(
+            $migration_plugin,
+            $migrateMessage,
+            $this->keyValue,
+            $this->time,
+            $this->translation,
+            $this->migrationPluginManager,
+            $this->buildOptions($form_state),
+          );
           $status = $executable->rollback();
           if ($status === MigrationInterface::RESULT_COMPLETED) {
             $this->messenger()->addStatus($this->t('Rollback completed', ['@id' => $migration_id]));
           }
           else {
-            $this->messenger()->addError($this->t('Rollback of !name migration failed.', ['!name' => $migration_id]));
+            $this->messenger()->addError($this->t('Rollback of @name migration failed.', ['@name' => $migration_id]));
           }
           break;
 

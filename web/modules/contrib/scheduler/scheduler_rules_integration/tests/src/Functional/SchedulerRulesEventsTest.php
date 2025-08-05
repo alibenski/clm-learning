@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\scheduler_rules_integration\Functional;
 
-use Drupal\rules\Context\ContextConfig;
 use Drupal\Tests\scheduler\Functional\SchedulerBrowserTestBase;
+use Drupal\rules\Context\ContextConfig;
 
 /**
  * Tests the six events that Scheduler provides for use in Rules module.
@@ -117,7 +117,7 @@ class SchedulerRulesEventsTest extends SchedulerBrowserTestBase {
    *   The ids of the messages that should be showing on the current page. All
    *   other messages should not be displayed.
    */
-  public function checkMessages(string $entityTypeId = NULL, array $expectedMessages = []) {
+  public function checkMessages(?string $entityTypeId = NULL, array $expectedMessages = []) {
     // Add the required entity offset to each message id in the expected array.
     $offset = ['node' => 0, 'media' => 6, 'commerce_product' => 12, 'taxonomy_term' => 18];
     array_walk($expectedMessages, function (&$item) use ($offset, $entityTypeId) {
@@ -139,7 +139,7 @@ class SchedulerRulesEventsTest extends SchedulerBrowserTestBase {
   /**
    * Tests that no events are triggered when there are no scheduling dates.
    *
-   * @dataProvider dataStandardEntityTypes()
+   * @dataProvider dataStandardEntityTypes
    */
   public function testRulesEventsNone($entityTypeId, $bundle) {
     // Add and save an entity without any scheduled dates and check that no
@@ -160,7 +160,7 @@ class SchedulerRulesEventsTest extends SchedulerBrowserTestBase {
   /**
    * Tests the three events related to publishing an entity.
    *
-   * @dataProvider dataStandardEntityTypes()
+   * @dataProvider dataStandardEntityTypes
    */
   public function testRulesEventsPublish($entityTypeId, $bundle) {
     // Allow dates in the past.
@@ -195,7 +195,7 @@ class SchedulerRulesEventsTest extends SchedulerBrowserTestBase {
   /**
    * Tests the three events related to unpublishing an entity.
    *
-   * @dataProvider dataStandardEntityTypes()
+   * @dataProvider dataStandardEntityTypes
    */
   public function testRulesEventsUnpublish($entityTypeId, $bundle) {
     // Create an entity with an unpublish-on date, and check that only event 4
@@ -228,7 +228,7 @@ class SchedulerRulesEventsTest extends SchedulerBrowserTestBase {
   /**
    * Tests all six events related to publishing and unpublishing an entity.
    *
-   * @dataProvider dataStandardEntityTypes()
+   * @dataProvider dataStandardEntityTypes
    */
   public function testRulesEventsBoth($entityTypeId, $bundle) {
     // Allow dates in the past.

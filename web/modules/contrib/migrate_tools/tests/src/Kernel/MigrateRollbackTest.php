@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\migrate_tools\Kernel;
 
@@ -29,6 +29,9 @@ final class MigrateRollbackTest extends MigrateTestBase {
     'user',
   ];
 
+  /**
+   * {@inheritdoc}
+   */
   protected $collectMessages = TRUE;
 
   /**
@@ -74,7 +77,13 @@ final class MigrateRollbackTest extends MigrateTestBase {
     $vocabulary_id_map = $vocabulary_migration->getIdMap();
 
     // Import and validate vocabulary config entities were created.
-    $executable = new MigrateExecutable($vocabulary_migration, $this, []);
+    $executable = new MigrateExecutable(
+      $vocabulary_migration,
+      $this,
+      $this->container->get('keyvalue'),
+      $this->container->get('datetime.time'),
+      $this->container->get('string_translation'),
+    );
     $executable->import();
     foreach ($vocabulary_data_rows as $row) {
       /** @var \Drupal\taxonomy\Entity\Vocabulary $vocabulary */
@@ -85,7 +94,14 @@ final class MigrateRollbackTest extends MigrateTestBase {
     }
 
     // Test id list rollback.
-    $rollback_executable = new MigrateExecutable($vocabulary_migration, $this, ['idlist' => 1]);
+    $rollback_executable = new MigrateExecutable(
+      $vocabulary_migration,
+      $this,
+      $this->container->get('keyvalue'),
+      $this->container->get('datetime.time'),
+      $this->container->get('string_translation'),
+      ['idlist' => 1],
+    );
     $rollback_executable->rollback();
     /** @var \Drupal\taxonomy\Entity\Vocabulary $vocabulary */
     $vocabulary = Vocabulary::load(1);

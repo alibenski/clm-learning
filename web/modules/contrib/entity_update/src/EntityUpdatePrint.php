@@ -2,6 +2,7 @@
 
 namespace Drupal\entity_update;
 
+use Drupal\Core\Logger\RfcLogLevel;
 use Drush\Drush;
 
 /**
@@ -57,7 +58,7 @@ class EntityUpdatePrint {
   /**
    * Check is CLI then run drush_log.
    */
-  public static function drushLog($message, $type = LogLevel::NOTICE, $error = [], $ui_print = FALSE) {
+  public static function drushLog($message, $type = RfcLogLevel::NOTICE, $error = [], $ui_print = FALSE) {
     if (php_sapi_name() == 'cli') {
       self::echoPrint($message);
     }
@@ -109,13 +110,13 @@ class EntityUpdatePrint {
       return;
     }
 
-    // Find width of terminal window. First try 'tput'
+    // Find width of terminal window. First try 'tput'.
     exec('tput cols 2>&1', $exec_output, $result_code);
     if ($result_code === 0) {
       $cols = $exec_output[0];
     }
     else {
-      // tput failed; try 'stty;
+      // When tput failed; try 'stty;.
       unset($exec_output);
       exec('stty size 2>&1', $exec_output, $result_code);
       if ($result_code === 0) {
@@ -151,7 +152,7 @@ class EntityUpdatePrint {
           $idx++;
         }
       }
-      // Remove temporerly added header.
+      // Remove temporarily added header.
       if ($header) {
         unset($rows['header']);
       }

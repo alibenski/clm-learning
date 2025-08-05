@@ -1,0 +1,15 @@
+bkpdel
+csizes
+doclinks
+entitytype
+iwsp
+karthik
+mustrun
+nobackup
+nuwantha
+sqlc
+stty
+summ
+upec
+varchar
+wans

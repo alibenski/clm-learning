@@ -19,6 +19,10 @@
  * into a Drupal\scheduler\Event namespace, with all event files being stored in
  * a src/Event folder. These two aliases, for the original node events, ensure
  * that any existing event subscribers will continue work unchanged.
+ *
+ * This is an extra precaution on top of the class_alias calls in the .module
+ * file because sometimes the module file is not loaded first.
+ * See https://www.drupal.org/project/scheduler/issues/3498553
  */
 
-class_alias('Drupal\scheduler\Event\SchedulerEvent', 'Drupal\scheduler\SchedulerEvent');
+@class_alias('Drupal\scheduler\Event\SchedulerEvent', 'Drupal\scheduler\SchedulerEvent');

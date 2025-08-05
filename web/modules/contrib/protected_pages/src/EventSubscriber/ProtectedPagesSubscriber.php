@@ -2,18 +2,18 @@
 
 namespace Drupal\protected_pages\EventSubscriber;
 
-use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Drupal\Core\PageCache\ResponsePolicy\KillSwitch;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Routing\RedirectDestination;
 use Drupal\Core\Session\AccountProxy;
 use Drupal\Core\Url;
-use Drupal\path_alias\AliasManager;
+use Drupal\path_alias\AliasManagerInterface;
 use Drupal\protected_pages\ProtectedPagesStorage;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -24,7 +24,7 @@ class ProtectedPagesSubscriber implements EventSubscriberInterface {
   /**
    * The path alias manager.
    *
-   * @var \Drupal\path_alias\AliasManager
+   * @var \Drupal\path_alias\AliasManagerInterface
    */
   protected $aliasManager;
 
@@ -73,7 +73,7 @@ class ProtectedPagesSubscriber implements EventSubscriberInterface {
   /**
    * Constructs a new ProtectedPagesSubscriber.
    *
-   * @param \Drupal\path_alias\AliasManager $aliasManager
+   * @param \Drupal\path_alias\AliasManagerInterface $aliasManager
    *   The path alias manager.
    * @param \Drupal\Core\Session\AccountProxy $currentUser
    *   The account proxy service.
@@ -88,7 +88,7 @@ class ProtectedPagesSubscriber implements EventSubscriberInterface {
    * @param \Drupal\Core\PageCache\ResponsePolicy\KillSwitch $pageCacheKillSwitch
    *   The cache kill switch service.
    */
-  public function __construct(AliasManager $aliasManager, AccountProxy $currentUser, CurrentPathStack $currentPathStack, RedirectDestination $destination, RequestStack $requestStack, ProtectedPagesStorage $protectedPagesStorage, KillSwitch $pageCacheKillSwitch) {
+  public function __construct(AliasManagerInterface $aliasManager, AccountProxy $currentUser, CurrentPathStack $currentPathStack, RedirectDestination $destination, RequestStack $requestStack, ProtectedPagesStorage $protectedPagesStorage, KillSwitch $pageCacheKillSwitch) {
     $this->aliasManager = $aliasManager;
     $this->currentUser = $currentUser;
     $this->currentPath = $currentPathStack;
@@ -125,7 +125,7 @@ class ProtectedPagesSubscriber implements EventSubscriberInterface {
           $this->sendAccessDenied($pid);
         }
       }
-        return;
+      return;
     }
     $response = new Response();
     $response->setStatusCode(Response::HTTP_NO_CONTENT);
@@ -135,7 +135,7 @@ class ProtectedPagesSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     $events[KernelEvents::RESPONSE][] = ['checkProtectedPage'];
     return $events;
   }

@@ -14,6 +14,7 @@ Drush commands supported include:
  -   migrate-stop - Cleanly stops a running operation.
  -   migrate-reset-status - Sets a migration status to Idle if it's
     gotten stuck.
+ -   migrate-disable - Disables a migration.
  -   migrate-messages - Lists any messages associated with a migration
     import.
 

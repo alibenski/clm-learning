@@ -259,7 +259,7 @@ class MergeTermsForm extends MergeTerms {
    * {@inheritdoc}
    */
   protected function getTermOptions(VocabularyInterface $vocabulary) {
-    // Parrent method is overridden with a faster implementation.
+    // Parent method is overridden with a faster implementation.
     // @see \Drupal\taxonomy_manager\Form\MergeTermsForm::getSelectedOrAllTermOptions()
     return [];
   }

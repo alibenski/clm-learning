@@ -35,7 +35,7 @@ class EntityUpdateFunctionsTest extends BrowserTestBase {
   protected function setUp() : void {
     parent::setUp();
 
-    // Detele the entity created by install.
+    // Delete the entity created by install.
     if ($entity = EntityUpdateTestsContentEntity::load(100)) {
       $entity->delete();
     }
@@ -67,7 +67,7 @@ class EntityUpdateFunctionsTest extends BrowserTestBase {
     // Has one field to update.
     $this->assertTrue(count($list) === 1, 'Has only one entity type to update.');
 
-    // Analyse Entity to update.
+    // Analyze Entity to update.
     $first_item = reset($list);
     $first_key = key($list);
     $this->assertEquals($first_key, 'entity_update_tests_cnt', 'The first key is "entity_update_tests_cnt".');
@@ -264,7 +264,7 @@ class EntityUpdateFunctionsTest extends BrowserTestBase {
 
     // Check entity count.
     $ids = \Drupal::entityQuery('entity_update_tests_cnt')->accessCheck(FALSE)->execute();
-    $this->assertEquals(count($ids), 1, 'After updates, Hase one entity.');
+    $this->assertEquals(count($ids), 1, 'After updates, has one entity.');
 
     // Check entity count.
     $ids = \Drupal::entityQuery('entity_update_tests_cnt')->accessCheck(FALSE)->execute();

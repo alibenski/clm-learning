@@ -181,6 +181,13 @@ class ViewsDependentFilter extends FilterPluginBase {
   /**
    * {@inheritdoc}
    */
+  public function validate() {
+    // The parent validate only checks for exposed form stuff. We don't need it.
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function validateOptionsForm(&$form, FormStateInterface $form_state) {
     $filters = $this->view->display_handler->getHandlers('filter');
     $controller_filter = $this->options['controller_filter'];
@@ -327,7 +334,6 @@ class ViewsDependentFilter extends FilterPluginBase {
     // Add our settings to the form state as an array, as we need to account
     // for the possibility that more than one copy of this handler may be
     // playing at once!
-    $form_state->dependent_exposed_filters[] = $dependency_info;
     $dependent_exposed_filters = $form_state->get('dependent_exposed_filters') ?? [];
     $dependent_exposed_filters[] = $dependency_info;
     $form_state->set('dependent_exposed_filters', $dependent_exposed_filters);

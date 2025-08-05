@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\migrate_tools\Functional;
 
@@ -56,7 +56,7 @@ final class DrushCommandsGeneratorTest extends BrowserTestBase {
     $this->sourceData = <<<'EOD'
 vid,name,description,hierarchy,weight
 tags,Tags,Use tags to group articles,0,0
-forums,Sujet de discussion,Forum navigation vocabulary,1,0
+forums,Subject of discussion,Forum navigation vocabulary,1,0
 test_vocabulary,Test Vocabulary,This is the vocabulary description,1,0
 genre,Genre,Genre description,1,0
 EOD;

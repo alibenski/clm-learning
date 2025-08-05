@@ -40,7 +40,7 @@ class EntityUpdateTestSettings extends FormBase {
       '#suffix' => '</div>',
     ];
 
-    // Unstall / Uninstall fields.
+    // Install / Uninstall fields.
     $fields = self::getConfigurableFields('install');
     foreach ($fields as $field_key => $field_name) {
       $form['fields'][$field_key] = [

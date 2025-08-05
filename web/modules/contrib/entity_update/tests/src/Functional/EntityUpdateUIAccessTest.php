@@ -26,6 +26,20 @@ class EntityUpdateUIAccessTest extends BrowserTestBase {
   protected $defaultTheme = 'stark';
 
   /**
+   * User object.
+   *
+   * @var object
+   */
+  protected $user;
+
+  /**
+   * User object.
+   *
+   * @var object
+   */
+  protected $adminUser;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp() : void {
@@ -38,7 +52,7 @@ class EntityUpdateUIAccessTest extends BrowserTestBase {
     // A simple user without any specific permissions.
     $this->user = $this->drupalCreateUser([]);
     // User to set up entity_update.
-    $this->admin_user = $this->drupalCreateUser($permissions);
+    $this->adminUser = $this->drupalCreateUser($permissions);
   }
 
   /**
@@ -67,7 +81,7 @@ class EntityUpdateUIAccessTest extends BrowserTestBase {
    */
   public function testAdminsAccess() {
     // Admin user login.
-    $this->drupalLogin($this->admin_user);
+    $this->drupalLogin($this->adminUser);
 
     // Run tests.
     $this->runPageAccess(200, 'testAdminsAccess');

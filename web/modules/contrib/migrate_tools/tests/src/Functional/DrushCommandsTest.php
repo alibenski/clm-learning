@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\migrate_tools\Functional;
 
@@ -101,6 +101,16 @@ final class DrushCommandsTest extends BrowserTestBase {
         'status' => 'Idle',
         'total' => 3,
         'unprocessed' => 3,
+        'message_count' => 0,
+        'last_imported' => '',
+      ],
+      [
+        'group' => 'Default (default)',
+        'id' => 'mixed_terms',
+        'imported' => 0,
+        'status' => 'Idle',
+        'total' => 4,
+        'unprocessed' => 4,
         'message_count' => 0,
         'last_imported' => '',
       ],
@@ -220,6 +230,34 @@ EOT;
     /** @var \Drupal\migrate\Plugin\MigrateIdMapInterface $id_map */
     $id_map = $this->container->get('plugin.manager.migration')->createInstance('fruit_terms')->getIdMap();
     $this->assertCount(3, $id_map);
+  }
+
+  /**
+   * Tests synced import with and without update enforced.
+   */
+  public function testSyncMixedKeysImport(): void {
+    $this->drush('mim', ['mixed_terms']);
+    $this->assertStringContainsString('1/4', $this->getErrorOutput());
+    $this->assertStringContainsString('4/4', $this->getErrorOutput());
+    $this->assertMatchesRegularExpression('/4\/4[^\n]+\[notice\][^\n]+Processed 4 items \(4 created, 0 updated, 0 failed, 0 ignored\) - done with \'mixed_terms\'/', $this->getErrorOutput());
+    $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load(1);
+    $this->assertEquals('1', $term->label());
+    $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load(2);
+    $this->assertEquals('2', $term->label());
+    $source = $this->container->get('config.factory')->getEditable('migrate_plus.migration.mixed_terms')->get('source');
+    $source['data_rows'][] = ['name' => 'Grape'];
+    $this->container->get('config.factory')->getEditable('migrate_plus.migration.mixed_terms')->set('source', $source)->save();
+    // Flush cache so the recently changed migration can be refreshed.
+    drupal_flush_all_caches();
+    $this->drush('mim', ['mixed_terms'], ['sync' => NULL, 'update' => NULL]);
+    $this->assertStringContainsString('1/5', $this->getErrorOutput());
+    $this->assertMatchesRegularExpression('/5\/5[^\n]+\[notice\][^\n]+Processed 5 items \(1 created, 4 updated, 0 failed, 0 ignored\) - done with \'mixed_terms\'/', $this->getErrorOutput());
+    $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadMultiple();
+    $this->assertEquals(5, count($terms));
+
+    // If keys are converted correctly terms should not get deleted and
+    // recreated, so we should still have IDs 1 to 5.
+    $this->assertEquals(range(1, 5), array_keys($terms));
   }
 
 }

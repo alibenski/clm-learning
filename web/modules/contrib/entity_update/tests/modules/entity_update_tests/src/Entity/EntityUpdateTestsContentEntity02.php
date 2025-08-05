@@ -57,7 +57,7 @@ class EntityUpdateTestsContentEntity02 extends ContentEntityBase {
       ->setDescription(t('The UUID of the entity Changed.'))
       ->setReadOnly(TRUE);
 
-    // Dynamic name field to simulation deletation and creation.
+    // Dynamic name field to simulate deletion and creation.
     if (EntityUpdateTestHelper::fieldStatus('city')) {
       $fields['city'] = BaseFieldDefinition::create('string')
         ->setLabel(t('City'))

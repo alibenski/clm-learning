@@ -15,7 +15,7 @@ class Mailer implements MailerInterface {
   /**
    * {@inheritdoc}
    */
-  public function send($to, $subject, $body, $replacements = [], $additional_headers = []) {
+  public function send($key, $to, $subject, $body, $replacements = [], $additional_headers = []) {
     // Combine the to objects.
     if (is_array($to)) {
       $to = implode(',', $to);
@@ -27,8 +27,11 @@ class Mailer implements MailerInterface {
       $body = strtr($body, $replacements);
     }
 
-    // Use the PHP mail function to send the message.
-    mail($to, $subject, $body, $additional_headers);
+    $langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+    \Drupal::service('plugin.manager.mail')->mail('backup_migrate', $key, $to, $langcode, [
+      'message' => $body,
+      'subject' => $subject,
+    ]);
   }
 
 }

@@ -55,14 +55,14 @@ class EntityUpdateTestsContentEntity extends ContentEntityBase {
       ->setLabel(t('Fix field.'))
       ->setSettings(['max_length' => 10, 'text_processing' => 0]);
 
-    // Dynamic name field to simulation deletation and creation.
+    // Dynamic name field to simulate deletion and creation.
     if (EntityUpdateTestHelper::fieldStatus('name')) {
       $fields['name'] = BaseFieldDefinition::create('string')
         ->setLabel(t('Name'))
         ->setSettings(['max_length' => 100, 'text_processing' => 0]);
     }
 
-    // Dynamic description field to simulation deletation and creation.
+    // Dynamic description field to simulate deletion and creation.
     if (EntityUpdateTestHelper::fieldStatus('description')) {
       $fields['description'] = BaseFieldDefinition::create('string_long')
         ->setLabel(t('Description'))

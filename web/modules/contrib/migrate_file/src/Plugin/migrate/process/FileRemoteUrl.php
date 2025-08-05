@@ -6,6 +6,7 @@ use Drupal\migrate\ProcessPluginBase;
 use Drupal\migrate\MigrateExecutableInterface;
 use Drupal\migrate\Row;
 use Drupal\file\Entity\File;
+use Drupal\file\FileInterface;
 
 /**
  * Create a file entity with a remote url without downloading the file.
@@ -69,7 +70,7 @@ class FileRemoteUrl extends ProcessPluginBase {
     $file = File::create([
       'uri' => $value,
       'uid' => $this->configuration['uid'],
-      'status' => FILE_STATUS_PERMANENT,
+      'status' => FileInterface::STATUS_PERMANENT,
     ]);
     $file->save();
 

@@ -26,7 +26,7 @@ entity_update.exec:
   requirements:
     _permission: 'administer software updates'
 
-# Show enbtities list.
+# Show entities list.
 entity_update.list:
   path: '/admin/config/development/entity-update/list/{entity_type_id}/{start}/{length}'
   defaults:

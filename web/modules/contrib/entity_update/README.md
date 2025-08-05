@@ -112,7 +112,7 @@ This command allow to show entities and entity types via drush.
 Drush command : entity-check
 Alias : upec
 
-1. Show The summery of an entity type.
+1. Show The summary of an entity type.
 drush upec node
 
 2. Show all entity types contains "block".

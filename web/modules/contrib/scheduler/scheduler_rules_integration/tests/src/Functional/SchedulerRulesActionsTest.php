@@ -3,8 +3,8 @@
 namespace Drupal\Tests\scheduler_rules_integration\Functional;
 
 use Drupal\Core\Logger\RfcLogLevel;
-use Drupal\rules\Context\ContextConfig;
 use Drupal\Tests\scheduler\Functional\SchedulerBrowserTestBase;
+use Drupal\rules\Context\ContextConfig;
 
 /**
  * Tests the six actions that Scheduler provides for use in Rules module.
@@ -50,7 +50,7 @@ class SchedulerRulesActionsTest extends SchedulerBrowserTestBase {
   /**
    * Tests the actions which set and remove the 'Publish On' date.
    *
-   * @dataProvider dataStandardEntityTypes()
+   * @dataProvider dataStandardEntityTypes
    */
   public function testPublishOnActions($entityTypeId, $enabledBundle) {
     $nonEnabledBundle = $this->entityTypeObject($entityTypeId, 'non-enabled')->id();
@@ -245,7 +245,7 @@ class SchedulerRulesActionsTest extends SchedulerBrowserTestBase {
   /**
    * Tests the actions which set and remove the 'Unpublish On' date.
    *
-   * @dataProvider dataStandardEntityTypes()
+   * @dataProvider dataStandardEntityTypes
    */
   public function testUnpublishOnActions($entityTypeId, $enabledBundle) {
     $nonEnabledBundle = $this->entityTypeObject($entityTypeId, 'non-enabled')->id();

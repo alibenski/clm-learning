@@ -43,7 +43,7 @@ class Settings extends ConfigFormBase {
     $form['excludes'] = [
       '#type' => 'checkboxes',
       '#title' => 'Entity types to exclude',
-      '#description' => $this->t('Selected entity types are exclude from deletation and recreation.'),
+      '#description' => $this->t('Selected entity types are exclude from deletion and recreation.'),
       '#options' => $options,
       '#default_value' => $config->get('excludes'),
     ];

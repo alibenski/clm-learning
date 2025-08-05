@@ -2,12 +2,12 @@
 
 namespace Drupal\Tests\captcha\Unit\Controller;
 
-use Drupal\captcha\Entity\CaptchaPoint;
-use Drupal\captcha\Entity\Controller\CaptchaPointListBuilder;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Tests\UnitTestCase;
+use Drupal\captcha\Entity\CaptchaPoint;
+use Drupal\captcha\Entity\Controller\CaptchaPointListBuilder;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -20,6 +20,41 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class CaptchaPointListBuilderTest extends UnitTestCase {
 
   use ProphecyTrait;
+
+  /**
+   * Module handler mock.
+   *
+   * @var \Prophecy\Prophecy\ProphecyInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * Container mock.
+   *
+   * @var \Prophecy\Prophecy\ProphecyInterface
+   */
+  protected $mockContainer;
+
+  /**
+   * Entity type mock.
+   *
+   * @var \Prophecy\Prophecy\ProphecyInterface
+   */
+  protected $mockEntityType;
+
+  /**
+   * Entity storage mock.
+   *
+   * @var \Prophecy\Prophecy\ProphecyInterface
+   */
+  protected $mockEntityStorage;
+
+  /**
+   * Captcha list builder.
+   *
+   * @var \Drupal\captcha\Entity\Controller\CaptchaPointListBuilder
+   */
+  protected $listBuilder;
 
   /**
    * Set up.

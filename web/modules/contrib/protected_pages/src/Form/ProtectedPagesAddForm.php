@@ -8,7 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\Password\PasswordInterface;
 use Drupal\Core\Path\PathValidatorInterface;
-use Drupal\path_alias\AliasManager;
+use Drupal\path_alias\AliasManagerInterface;
 use Drupal\protected_pages\ProtectedPagesStorage;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -48,7 +48,7 @@ class ProtectedPagesAddForm extends FormBase {
   /**
    * Path alias manager.
    *
-   * @var \Drupal\path_alias\AliasManager
+   * @var \Drupal\path_alias\AliasManagerInterface
    */
   protected $aliasManager;
 
@@ -66,7 +66,7 @@ class ProtectedPagesAddForm extends FormBase {
    * @param \Drupal\path_alias\AliasManager $aliasManager
    *   The path alias manager service.
    */
-  public function __construct(PathValidatorInterface $path_validator, PasswordInterface $password, ProtectedPagesStorage $protectedPagesStorage, Messenger $messenger, AliasManager $aliasManager) {
+  public function __construct(PathValidatorInterface $path_validator, PasswordInterface $password, ProtectedPagesStorage $protectedPagesStorage, Messenger $messenger, AliasManagerInterface $aliasManager) {
     $this->pathValidator = $path_validator;
     $this->password = $password;
     $this->protectedPagesStorage = $protectedPagesStorage;
@@ -111,6 +111,12 @@ class ProtectedPagesAddForm extends FormBase {
       '#title' => $this->t('Relative path'),
       '#description' => $this->t('Enter relative Drupal path. For example, "/node/5", "new-events" etc.'),
       '#required' => TRUE,
+    ];
+    $form['rules_list']['title'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Admin Title'),
+      '#description' =>
+      $this->t('Enter protected page title. This title is for reference only and is not user-facing.'),
     ];
     $form['rules_list']['password'] = [
       '#type' => 'password_confirm',
@@ -167,6 +173,7 @@ class ProtectedPagesAddForm extends FormBase {
 
     $page_data = [
       'password' => $this->password->hash(Html::escape($form_state->getValue('password'))),
+      'title' => Html::escape($form_state->getValue('title')),
       'path' => Html::escape($form_state->getValue('path')),
     ];
     $pid = $this->protectedPagesStorage->insertProtectedPage($page_data);

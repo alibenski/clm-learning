@@ -1,0 +1,6 @@
+# Configuration file for PHPStan static code checking, see https://phpstan.org .
+# PHPStan is triggered on Drupal CI in commit-code-check.sh.
+parameters:
+  level: 1
+  ignoreErrors:
+    - "#^Access to constant NOTICE on an unknown class#"

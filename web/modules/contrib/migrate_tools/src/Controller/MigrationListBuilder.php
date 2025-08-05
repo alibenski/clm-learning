@@ -1,14 +1,15 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\migrate_tools\Controller;
 
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
-use Drupal\Core\Entity\EntityHandlerInterface;
+use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Url;
 use Drupal\migrate\Plugin\MigrationPluginManagerInterface;
@@ -23,44 +24,35 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @package Drupal\migrate_tools\Controller
  *
  * @ingroup migrate_tools
+ *
+ * @phpstan-consistent-constructor
  */
-class MigrationListBuilder extends ConfigEntityListBuilder implements EntityHandlerInterface {
+class MigrationListBuilder extends ConfigEntityListBuilder {
 
-  protected CurrentRouteMatch $currentRouteMatch;
-  protected MigrationPluginManagerInterface $migrationPluginManager;
-  protected LoggerInterface $logger;
-
-  /**
-   * Constructs a new EntityListBuilder object.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
-   *   The entity type definition.
-   * @param \Drupal\Core\Entity\EntityStorageInterface $storage
-   *   The entity storage class.
-   * @param \Drupal\Core\Routing\CurrentRouteMatch $current_route_match
-   *   The current route match service.
-   * @param \Drupal\migrate\Plugin\MigrationPluginManagerInterface $migration_plugin_manager
-   *   The plugin manager for config entity-based migrations.
-   * @param \Psr\Log\LoggerInterface $logger
-   *   The logger service.
-   */
-  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, CurrentRouteMatch $current_route_match, MigrationPluginManagerInterface $migration_plugin_manager, LoggerInterface $logger) {
+  public function __construct(
+    EntityTypeInterface $entity_type,
+    EntityStorageInterface $storage,
+    protected readonly CurrentRouteMatch $currentRouteMatch,
+    protected readonly MigrationPluginManagerInterface $migrationPluginManager,
+    protected readonly LoggerInterface $logger,
+    protected readonly KeyValueFactoryInterface $keyValue,
+    protected readonly DateFormatterInterface $dateFormatter,
+  ) {
     parent::__construct($entity_type, $storage);
-    $this->currentRouteMatch = $current_route_match;
-    $this->migrationPluginManager = $migration_plugin_manager;
-    $this->logger = $logger;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type): self {
+  public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type): static {
     return new static(
       $entity_type,
       $container->get('entity_type.manager')->getStorage($entity_type->id()),
       $container->get('current_route_match'),
       $container->get('plugin.manager.migration'),
-      $container->get('logger.channel.migrate_tools')
+      $container->get('logger.channel.migrate_tools'),
+      $container->get('keyvalue'),
+      $container->get('date.formatter'),
     );
   }
 
@@ -180,36 +172,42 @@ class MigrationListBuilder extends ConfigEntityListBuilder implements EntityHand
           '#url' => Url::fromRoute("migrate_tools.messages", $route_parameters),
         ],
       ];
-      $migrate_last_imported_store = \Drupal::keyValue('migrate_last_imported');
+      $migrate_last_imported_store = $this->keyValue->get('migrate_last_imported');
       $last_imported = $migrate_last_imported_store->get($migration->id(), FALSE);
       if ($last_imported) {
-        /** @var \Drupal\Core\Datetime\DateFormatter $date_formatter */
-        $date_formatter = \Drupal::service('date.formatter');
-        $row['last_imported'] = $date_formatter->format((int) ($last_imported / 1000),
+        $row['last_imported'] = $this->dateFormatter->format((int) ($last_imported / 1000),
           'custom', 'Y-m-d H:i:s');
       }
       else {
         $row['last_imported'] = '';
       }
 
-      $row['operations']['data'] = [
-        '#type' => 'dropbutton',
-        '#links' => [
-          'simple_form' => [
-            'title' => $this->t('Execute'),
-            'url' => Url::fromRoute('migrate_tools.execute', [
-              'migration_group' => $migration_group,
-              'migration' => $migration->id(),
-            ]),
-          ],
-        ],
-      ];
+      $row['operations']['data'] = $this->buildOperations($entity);
     }
-    catch (\Throwable $throwable) {
+    catch (\Throwable) {
       $this->handleThrowable($row);
     }
 
     return $row;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDefaultOperations(EntityInterface $entity) {
+    $operations = parent::getDefaultOperations($entity);
+    $migration_group = $entity->get('migration_group');
+    if (!$migration_group) {
+      $migration_group = 'default';
+    }
+    $operations['execute'] = [
+      'title' => $this->t('Execute'),
+      'url' => Url::fromRoute('migrate_tools.execute', [
+        'migration_group' => $migration_group,
+        'migration' => $entity->id(),
+      ]),
+    ];
+    return $operations;
   }
 
   /**

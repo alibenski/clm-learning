@@ -84,7 +84,7 @@ TEXT;
 
     // Cleanup archives.
     if ($action == 'clean') {
-      // Run backuped entities cleanup.
+      // Run backed up entities cleanup.
       $form['submit_clean'] = [
         '#type' => 'submit',
         '#value' => $this->t('Cleanup'),
@@ -118,7 +118,8 @@ TEXT;
           '#title' => $this->t('The entity type id to update'),
           '#options' => $options,
         ];
-        // Update entity types with data. This action is not recomended from UI.
+        // Update entity types with data.
+        // This action is not recommended from UI.
         $form['action_entitytype']['submit_type'] = [
           '#type' => 'submit',
           '#value' => $this->t('Run Type Update'),
@@ -252,7 +253,7 @@ TEXT;
   }
 
   /**
-   * Run backuped entities cleanup.
+   * Run backed up entities cleanup.
    */
   public function submitFormClean(array &$form, FormStateInterface $form_state) {
     try {

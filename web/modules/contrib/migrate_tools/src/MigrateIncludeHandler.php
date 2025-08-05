@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\migrate_tools;
 
@@ -12,11 +12,9 @@ use Drupal\Component\Utility\NestedArray;
  */
 final class MigrateIncludeHandler {
 
-  private PluginManagerInterface $sharedConfiguration;
-
-  public function __construct(PluginManagerInterface $shared_config) {
-    $this->sharedConfiguration = $shared_config;
-  }
+  public function __construct(
+    private readonly PluginManagerInterface $sharedConfiguration,
+  ) {}
 
   /**
    * Include the shared configuration.

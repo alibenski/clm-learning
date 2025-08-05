@@ -38,7 +38,7 @@ class ProtectedPagesStorage {
    */
   public function insertProtectedPage(array $page_data) {
     $query = $this->connection->insert('protected_pages')
-      ->fields(['password', 'path'])
+      ->fields(['password', 'title', 'path'])
       ->values($page_data);
     $pid = $query->execute();
     return $pid;

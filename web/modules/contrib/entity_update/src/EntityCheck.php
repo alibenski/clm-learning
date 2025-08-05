@@ -19,7 +19,7 @@ class EntityCheck {
    *   The table (Renderer array).
    */
   public static function getEntityTypesList($type = NULL, $print = TRUE) {
-    $itmes_list = \Drupal::entityTypeManager()->getDefinitions();
+    $items_list = \Drupal::entityTypeManager()->getDefinitions();
 
     $table = [
       '#theme' => 'table',
@@ -29,13 +29,13 @@ class EntityCheck {
       '#rows' => [],
     ];
 
-    foreach ($itmes_list as $itme_name => $item_object) {
-      // Excluse if filtred by type.
-      if ($type && strstr($itme_name, $type) === FALSE) {
+    foreach ($items_list as $item_name => $item_object) {
+      // Exclude if filtered by type.
+      if ($type && strstr($item_name, $type) === FALSE) {
         continue;
       }
       $table['#rows'][] = [
-        $itme_name,
+        $item_name,
         $item_object->getGroup(),
         $item_object->getLabel(),
       ];
@@ -91,8 +91,8 @@ class EntityCheck {
       '#header' => ['ID', 'Label'],
       '#rows' => [],
     ];
-    foreach ($entities as $id => $entiy) {
-      $table['#rows'][] = [$id, $entiy->label()];
+    foreach ($entities as $id => $entity) {
+      $table['#rows'][] = [$id, $entity->label()];
     }
 
     // Print table.

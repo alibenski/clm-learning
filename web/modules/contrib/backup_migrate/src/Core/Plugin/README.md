@@ -34,7 +34,7 @@ The plugin manager is a registry that stores each of the installed plugins and c
 * Specifying the configuration of the plugin
 * Specifying the source and destination for a backup or restore
 
-The consuming application accesses the plugin manager only to add plugins. It may do so by adding the plugins before passing the plugin manager to the `BackupMigrate` object or by callign `plugins()` on the BackupMigrate object:
+The consuming application accesses the plugin manager only to add plugins. It may do so by adding the plugins before passing the plugin manager to the `BackupMigrate` object or by calling `plugins()` on the BackupMigrate object:
 
 	$backup_migrate->plugins()->add('demoplugin', new MyPlugin());
 	
@@ -89,7 +89,7 @@ By default plugins are not given access to the plugin manager. However, if a plu
 	}
 
 ### Accessing Services ###
-If a plugin requires the use of a cache, logger, state storage, mailer or any other backing service it must have the service injected into it by the plugin manager. To make a service available to the plugin manager it may be added to an object which implenents `ServiceManagerInterface`. That service locater may be passed to the plugin manager though the constructor or it can be passed in later using `setServiceManager()`.
+If a plugin requires the use of a cache, logger, state storage, mailer or any other backing service it must have the service injected into it by the plugin manager. To make a service available to the plugin manager it may be added to an object which implements `ServiceManagerInterface`. That service locater may be passed to the plugin manager though the constructor or it can be passed in later using `setServiceManager()`.
 
 Any service provided by the service locator will be injected into a plugin when it is added to the plugin manager if the name of the service matches a setter present in the plugin. For example: if a plugin has a method called `setLogger` and the service locator has a service called 'Logger' then the logger service will be injected via the `setLogger` method:
 

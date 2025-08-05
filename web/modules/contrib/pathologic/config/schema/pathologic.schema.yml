@@ -5,8 +5,8 @@ pathologic.settings:
       type: sequence
       label: 'Scheme allow list'
       sequence:
-        - type: string
-          label: 'Scheme'
+        type: string
+        label: 'Scheme'
     protocol_style:
       type: string
       label: 'Protocol style'

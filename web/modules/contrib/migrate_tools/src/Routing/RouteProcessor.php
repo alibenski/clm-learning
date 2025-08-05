@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\migrate_tools\Routing;
 
@@ -14,19 +14,18 @@ use Symfony\Component\Routing\Route;
  */
 class RouteProcessor implements OutboundRouteProcessorInterface {
 
-  private EntityTypeManagerInterface $entityTypeManager;
-
-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
-    $this->entityTypeManager = $entity_type_manager;
-  }
+  public function __construct(
+    private readonly EntityTypeManagerInterface $entityTypeManager,
+  ) {}
 
   /**
    * {@inheritdoc}
    */
-  public function processOutbound($route_name, Route $route, array &$parameters, BubbleableMetadata $bubbleable_metadata = NULL): void {
+  public function processOutbound($route_name, Route $route, array &$parameters, ?BubbleableMetadata $bubbleable_metadata = NULL): void {
     if ($route->hasDefault('_migrate_group')) {
       $parameters['migration_group'] = 'default';
       if ($this->entityTypeManager->hasHandler('migration', 'storage')) {
+        /** @var \Drupal\migrate_plus\Entity\MigrationInterface */
         $migration = $this->entityTypeManager
           ->getStorage('migration')
           ->load($parameters['migration']);

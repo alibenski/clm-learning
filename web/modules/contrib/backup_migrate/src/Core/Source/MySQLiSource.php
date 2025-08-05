@@ -7,7 +7,6 @@ use Drupal\backup_migrate\Core\File\BackupFileReadableInterface;
 use Drupal\backup_migrate\Core\File\BackupFileWritableInterface;
 use Drupal\backup_migrate\Core\Plugin\PluginCallerTrait;
 use Drupal\backup_migrate\Core\Plugin\PluginCallerInterface;
-use PDO;
 use Drupal\backup_migrate\Drupal\File\DrupalTempFileAdapter;
 use Drupal\backup_migrate\Core\File\TempFileManager;
 
@@ -140,15 +139,15 @@ class MySQLiSource extends DatabaseSource implements PluginCallerInterface {
       $pdo_config = $this->confGet('pdo');
 
       $ssl_config = [
-        'key' => (!empty($pdo_config[PDO::MYSQL_ATTR_SSL_KEY])) ? $pdo_config[PDO::MYSQL_ATTR_SSL_KEY] : NULL,
-        'cert' => (!empty($pdo_config[PDO::MYSQL_ATTR_SSL_CERT])) ? $pdo_config[PDO::MYSQL_ATTR_SSL_CERT] : NULL,
-        'ca' => (!empty($pdo_config[PDO::MYSQL_ATTR_SSL_CA])) ? $pdo_config[PDO::MYSQL_ATTR_SSL_CA] : NULL,
-        'capath' => (!empty($pdo_config[PDO::MYSQL_ATTR_SSL_CAPATH])) ? $pdo_config[PDO::MYSQL_ATTR_SSL_CAPATH] : NULL,
-        'cypher' => (!empty($pdo_config[PDO::MYSQL_ATTR_SSL_CIPHER])) ? $pdo_config[PDO::MYSQL_ATTR_SSL_CIPHER] : NULL,
+        'key' => (!empty($pdo_config[\PDO::MYSQL_ATTR_SSL_KEY])) ? $pdo_config[\PDO::MYSQL_ATTR_SSL_KEY] : NULL,
+        'cert' => (!empty($pdo_config[\PDO::MYSQL_ATTR_SSL_CERT])) ? $pdo_config[\PDO::MYSQL_ATTR_SSL_CERT] : NULL,
+        'ca' => (!empty($pdo_config[\PDO::MYSQL_ATTR_SSL_CA])) ? $pdo_config[\PDO::MYSQL_ATTR_SSL_CA] : NULL,
+        'capath' => (!empty($pdo_config[\PDO::MYSQL_ATTR_SSL_CAPATH])) ? $pdo_config[\PDO::MYSQL_ATTR_SSL_CAPATH] : NULL,
+        'cypher' => (!empty($pdo_config[\PDO::MYSQL_ATTR_SSL_CIPHER])) ? $pdo_config[\PDO::MYSQL_ATTR_SSL_CIPHER] : NULL,
       ];
 
       if (defined('PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT')) {
-        $ssl_config['verify_server_cert'] = (isset($pdo_config[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT])) ? $pdo_config[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] : TRUE;
+        $ssl_config['verify_server_cert'] = (isset($pdo_config[\PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT])) ? $pdo_config[\PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] : TRUE;
       }
       else {
         $ssl_config['verify_server_cert'] = TRUE;

@@ -22,7 +22,7 @@ entity_update.exec.clean:
   route_parameters:
     action: 'clean'
 
-# Rescue backuped entities.
+# Rescue backed up entities.
 entity_update.exec.rescue:
   route_name: entity_update.exec
   base_route: entity_update.exec

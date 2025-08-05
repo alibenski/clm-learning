@@ -1,7 +1,9 @@
 {
   "name": "drupal/views_dependent_filters",
+  "description": "A Drupal module that provides dependent filters for views.",
   "require": {
     "drupal/core": "^8.8 || ^9 || ^10 || ^11"
   },
-  "type": "drupal-module"
+  "type": "drupal-module",
+  "license": "GPL-2.0-or-later"
 }

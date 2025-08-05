@@ -1,17 +1,24 @@
 <?php
 
 /**
+ * @file
+ * Holds install and update hooks for the Migrate Tools module.
+ */
+
+declare(strict_types=1);
+
+/**
  * Implements hook_schema().
  */
 function migrate_tools_schema(): array {
   $schema['migrate_tools_sync_source_ids'] = [
     'description' => 'Table storing SyncSourceIds entries for the --sync option.',
     'fields' => [
-      'id' => array(
+      'id' => [
         'description' => 'Primary Key: Unique ID.',
         'type' => 'serial',
         'not null' => TRUE,
-      ),
+      ],
       'migration_id' => [
         'description' => 'The migration ID.',
         'type' => 'varchar',
@@ -42,7 +49,14 @@ function migrate_tools_schema(): array {
  */
 function migrate_tools_update_10000(): void {
   $schema = migrate_tools_schema();
-  foreach($schema as $tableName => $schemaDefinition) {
+  foreach ($schema as $tableName => $schemaDefinition) {
     \Drupal::database()->schema()->createTable($tableName, $schemaDefinition);
   }
+}
+
+/**
+ * Remove the old migrate_tools_sync state entry.
+ */
+function migrate_tools_update_10001(): void {
+  \Drupal::state()->delete('migrate_tools_sync');
 }

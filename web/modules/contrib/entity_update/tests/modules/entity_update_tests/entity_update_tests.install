@@ -20,7 +20,7 @@ function entity_update_tests_update_8001() {
 
   // Get entity type.
   $entity_type = \Drupal::entityTypeManager()->getStorage('entity_update_tests_cnt');
-  // Make Update Using safeUpdateMain methode.
+  // Make Update Using safeUpdateMain method.
   if (!EntityUpdate::safeUpdateMain($entity_type->getEntityType())) {
     // Your codes if update failed.
     throw new UpdateException('Entity update failed.');
@@ -40,14 +40,14 @@ function entity_update_tests_update_8001() {
 }
 
 /**
- * Update 02 - Example for Add fields (Not recomended, do one by one).
+ * Update 02 - Example for Add fields (Not recommended, do one by one).
  */
 function entity_update_tests_update_8002() {
 
   // Entity checking process : Get current entities list.
   $ids_old = \Drupal::entityQuery('entity_update_tests_cnt')->accessCheck(FALSE)->execute();
 
-  // Make Update Using full methode.
+  // Make Update Using full method.
   if (!EntityUpdate::safeUpdateMain()) {
     // Your codes if update failed.
     throw new UpdateException('Entity update failed.');
@@ -67,14 +67,14 @@ function entity_update_tests_update_8002() {
 }
 
 /**
- * Update 03 - Example for Remove fields (Not recomended, do one by one).
+ * Update 03 - Example for Remove fields (Not recommended, do one by one).
  */
 function entity_update_tests_update_8003() {
 
   // Entity checking process : Get current entities list.
   $ids_old = \Drupal::entityQuery('entity_update_tests_cnt')->accessCheck(FALSE)->execute();
 
-  // Make Update Using full methode.
+  // Make Update Using full method.
   if (!EntityUpdate::safeUpdateMain()) {
     // Your codes if update failed.
     throw new UpdateException('Entity update failed.');

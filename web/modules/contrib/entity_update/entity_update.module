@@ -73,7 +73,7 @@ This command allow to show entities and entity types via drush.<br>
 Drush command : <b>entity:check</b><br>
 Alias : <b>upec</b><br>
 <br><br>
-1. Show The summery of an entity type.<br>
+1. Show The summary of an entity type.<br>
 <code>drush upec node</code><br>
 <br>
 2. Show all entity types contains "block".<br>

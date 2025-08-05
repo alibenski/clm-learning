@@ -68,7 +68,7 @@ class EntityUpdateTestHelper {
   }
 
   /**
-   * Check a database table fields list and match with privided list.
+   * Check a database table fields list and match with provided list.
    *
    * @return bool|array
    *   TRUE if has correct fields list. FALSE if exception. Array if different.
@@ -84,7 +84,7 @@ class EntityUpdateTestHelper {
     $con = Database::getConnection();
 
     // Add table prefix.
-    if ($table_prefix = $con->tablePrefix()) {
+    if ($table_prefix = $con->getPrefix()) {
       $table = $table_prefix . $table;
     }
 
@@ -94,7 +94,7 @@ class EntityUpdateTestHelper {
         $fields_curr[$field->Field] = $field->Field;
       }
 
-      // Check differents.
+      // Check differences.
       $array_diff = array_diff($fields_must, $fields_curr);
       if (empty($array_diff)) {
         $array_diff = array_diff($fields_curr, $fields_must);

@@ -15,7 +15,7 @@ class EntityUpdate {
    * Update all empty entities.
    */
   public static function basicUpdate($force = FALSE) {
-    // Check all updateble entities are empty.
+    // Check all updatable entities are empty.
     $flgOK = TRUE;
     try {
       $list = self::getEntityTypesToUpdate();
@@ -59,11 +59,11 @@ class EntityUpdate {
    * @return bool
    *   Update is done or FAIL
    */
-  public static function safeUpdateMain(EntityTypeInterface $entity_type = NULL) {
+  public static function safeUpdateMain(?EntityTypeInterface $entity_type = NULL) {
 
-    // Get entitiy types to update.
-    $entity_change_summerys = self::getEntityTypesToUpdate();
-    if (empty($entity_change_summerys)) {
+    // Get entity types to update.
+    $entity_change_summaries = self::getEntityTypesToUpdate();
+    if (empty($entity_change_summaries)) {
       EntityUpdatePrint::drushLog('No entities to update.', 'cancel');
       return TRUE;
     }
@@ -71,14 +71,14 @@ class EntityUpdate {
     // Check entity type to update.
     if ($entity_type) {
       $entity_type_id = $entity_type->id();
-      foreach ($entity_change_summerys as $type_id => $entity_type_changes) {
+      foreach ($entity_change_summaries as $type_id => $entity_type_changes) {
         if ($type_id !== $entity_type_id) {
-          unset($entity_change_summerys[$type_id]);
+          unset($entity_change_summaries[$type_id]);
         }
       }
 
       // Check update for $entity_type_id.
-      if (empty($entity_change_summerys)) {
+      if (empty($entity_change_summaries)) {
         EntityUpdatePrint::drushLog("No updates for $entity_type_id", 'cancel');
         return TRUE;
       }
@@ -89,12 +89,12 @@ class EntityUpdate {
       return FALSE;
     }
 
-    // Flags to select install / uninstall methode.
+    // Flags to select install / uninstall method.
     $flg_has_updated = FALSE;
     $flg_has_install = FALSE;
 
     // Select the method to use.
-    foreach ($entity_change_summerys as $entity_type_changes) {
+    foreach ($entity_change_summaries as $entity_type_changes) {
       foreach ($entity_type_changes as $entity_change_summ) {
         if (strstr($entity_change_summ, "updated")) {
           $flg_has_updated = TRUE;
@@ -119,7 +119,7 @@ class EntityUpdate {
       return FALSE;
     }
     elseif ($flg_has_updated) {
-      return self::safeUpdateFields($entity_change_summerys);
+      return self::safeUpdateFields($entity_change_summaries);
     }
     elseif ($flg_has_install) {
       return self::safeUpdateInstallFields();
@@ -135,12 +135,12 @@ class EntityUpdate {
    * @return bool
    *   Update is done or FAIL
    */
-  private static function safeUpdateFields($entity_change_summerys) {
+  private static function safeUpdateFields($entity_change_summaries) {
 
     // Read and backup data into entity_update entity..
     EntityUpdatePrint::drushPrint("Read and backup data");
     // Backup and delete entities has data, get the data flag.
-    $flg_has_data = self::entityUpdateDataBackupDel($entity_change_summerys);
+    $flg_has_data = self::entityUpdateDataBackupDel($entity_change_summaries);
 
     // Exec Update.
     EntityUpdatePrint::drushPrint("Update entity Schema");
@@ -152,7 +152,7 @@ class EntityUpdate {
 
       EntityUpdatePrint::drushLog('Entities update success', 'ok');
     }
-    catch (Exception $ex) {
+    catch (\Exception $ex) {
       EntityUpdatePrint::drushLog($ex->getMessage(), 'warning');
     }
 
@@ -177,11 +177,11 @@ class EntityUpdate {
    * @return bool
    *   Has Entity data
    */
-  public static function entityUpdateDataBackupDel($entity_change_summerys, $force_type = NULL) {
+  public static function entityUpdateDataBackupDel($entity_change_summaries, $force_type = NULL) {
 
     // Force a type to backup and delete even no updates.
-    if (empty($entity_change_summerys) && $force_type) {
-      $entity_change_summerys[$force_type] = 1;
+    if (empty($entity_change_summaries) && $force_type) {
+      $entity_change_summaries[$force_type] = 1;
     }
     // Get Database connection.
     $con = Database::getConnection();
@@ -190,7 +190,7 @@ class EntityUpdate {
     $flg_has_data = FALSE;
     // Read and backup data into entity_update entity..
     EntityUpdatePrint::drushPrint("Read and backup data");
-    foreach ($entity_change_summerys as $entity_type_id => $entity_type_changes) {
+    foreach ($entity_change_summaries as $entity_type_id => $entity_type_changes) {
 
       // Check entity types excludes.
       if (empty($excludes[$entity_type_id])) {
@@ -293,8 +293,8 @@ class EntityUpdate {
    */
   private static function safeUpdateEntityType(EntityTypeInterface $entity_type) {
 
-    // Get entity change summerys.
-    $entity_change_summerys = self::getEntityTypesToUpdate($entity_type->id());
+    // Get entity change summaries.
+    $entity_change_summaries = self::getEntityTypesToUpdate($entity_type->id());
 
     $flg_done = FALSE;
     try {
@@ -314,9 +314,9 @@ class EntityUpdate {
 
           // Check if has a field to install.
           $flg_has_install = FALSE;
-          foreach ($entity_change_summerys[$entity_type_id] as $entity_change_summ) {
+          foreach ($entity_change_summaries[$entity_type_id] as $entity_change_summ) {
             if (strstr($entity_change_summ, "uninstalled")) {
-              // Has fields to un install (Nothig todo at the moment).
+              // Has fields to un install (Nothing to do at the moment).
             }
             else {
               $flg_has_install = TRUE;
@@ -325,8 +325,8 @@ class EntityUpdate {
 
           // Backup and delete entities data if no fields to install.
           if (!$flg_has_install) {
-            $entity_change_summerys = [$entity_type_id => 1];
-            $flg_has_data = self::entityUpdateDataBackupDel($entity_change_summerys);
+            $entity_change_summaries = [$entity_type_id => 1];
+            $flg_has_data = self::entityUpdateDataBackupDel($entity_change_summaries);
           }
           else {
             $flg_has_data = FALSE;
@@ -360,7 +360,7 @@ class EntityUpdate {
         }
       }
     }
-    catch (Exception $e) {
+    catch (\Exception $e) {
       EntityUpdatePrint::drushLog($e->getMessage(), 'error');
       return FALSE;
     }
@@ -392,9 +392,9 @@ class EntityUpdate {
 
     $list = entity_update_get_entity_changes();
 
-    foreach ($list as $entity_type_id => $entity_change_summery) {
+    foreach ($list as $entity_type_id => $entity_change_summary) {
       if (!$type_id || $type_id == $entity_type_id) {
-        $list[$entity_type_id] = $entity_change_summery;
+        $list[$entity_type_id] = $entity_change_summary;
       }
     }
 

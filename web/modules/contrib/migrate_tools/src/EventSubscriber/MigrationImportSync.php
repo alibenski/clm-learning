@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\migrate_tools\EventSubscriber;
 
-use Drupal\Core\State\StateInterface;
 use Drupal\migrate\Event\MigrateEvents;
 use Drupal\migrate\Event\MigrateImportEvent;
 use Drupal\migrate\Event\MigrateRollbackEvent;
@@ -20,19 +19,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class MigrationImportSync implements EventSubscriberInterface {
 
-  protected EventDispatcherInterface $dispatcher;
-  protected MigrateTools $migrateTools;
-
-  /**
-   * MigrationImportSync constructor.
-   *
-   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
-   *   The event dispatcher.
-   */
-  public function __construct(EventDispatcherInterface $dispatcher, MigrateTools $migrateTools) {
-    $this->dispatcher = $dispatcher;
-    $this->migrateTools = $migrateTools;
-  }
+  public function __construct(
+    protected EventDispatcherInterface $dispatcher,
+    protected MigrateTools $migrateTools,
+  ) {}
 
   /**
    * {@inheritdoc}

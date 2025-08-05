@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\scheduler_rules_integration\Functional;
 
-use Drupal\rules\Context\ContextConfig;
 use Drupal\Tests\scheduler\Functional\SchedulerBrowserTestBase;
+use Drupal\rules\Context\ContextConfig;
 
 /**
  * Tests the four conditions that Scheduler provides for use in Rules module.
@@ -45,7 +45,7 @@ class SchedulerRulesConditionsTest extends SchedulerBrowserTestBase {
   /**
    * Tests the conditions for whether an entity type is enabled for Scheduler.
    *
-   * @dataProvider dataStandardEntityTypes()
+   * @dataProvider dataStandardEntityTypes
    */
   public function testEntityTypeEnabledConditions($entityTypeId, $bundle) {
 
@@ -171,7 +171,7 @@ class SchedulerRulesConditionsTest extends SchedulerBrowserTestBase {
   /**
    * Tests the conditions for whether an entity is scheduled.
    *
-   * @dataProvider dataStandardEntityTypes()
+   * @dataProvider dataStandardEntityTypes
    */
   public function testEntityIsScheduledConditions($entityTypeId, $bundle) {
     // The legacy rules condition ids for nodes remain as:

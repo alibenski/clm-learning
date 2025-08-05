@@ -4,6 +4,7 @@ namespace Drupal\Tests\entity_update\Functional;
 
 error_reporting(0);
 use Drupal\entity_update\EntityUpdate;
+use Drupal\entity_update\EntityUpdatePrint;
 use Drupal\entity_update_tests\Entity\EntityUpdateTestsContentEntity;
 use Drupal\entity_update_tests\EntityUpdateTestHelper;
 use Drupal\Tests\BrowserTestBase;
@@ -29,14 +30,21 @@ class EntityUpdateUIFunctionsTest extends BrowserTestBase {
   protected $defaultTheme = 'stark';
 
   /**
+   * User object.
+   *
+   * @var object
+   */
+  protected $adminUser;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp() : void {
     parent::setUp();
 
     $permissions = ['administer software updates'];
-    $this->admin_user = $this->drupalCreateUser($permissions);
-    $this->drupalLogin($this->admin_user);
+    $this->adminUser = $this->drupalCreateUser($permissions);
+    $this->drupalLogin($this->adminUser);
 
     // Disable drush print.
     EntityUpdatePrint::setEchoPrintEnable(FALSE);
@@ -212,7 +220,8 @@ class EntityUpdateUIFunctionsTest extends BrowserTestBase {
     $res = EntityUpdate::basicUpdate(TRUE);
     $this->assertTrue($res, 'Entity schema is updated (Uninstall + data).');
     $edit['confirm'] = TRUE;
-    $this->drupalPostForm($path, $edit, 'Run Entity Rescue');
+    $this->drupalGet($path);
+    $this->submitForm($edit, 'Run Entity Rescue');
     // @todo Create a correct test.
   }
 

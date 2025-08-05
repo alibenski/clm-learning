@@ -99,22 +99,25 @@ class EntityUpdatesCommands extends DrushCommands implements SiteAliasManagerAwa
    *
    * @throws \Exception
    */
-  public function entityUpdates($type = '', array $options = [
-    'basic' => FALSE,
-    'all' => FALSE,
-    'bkpdel' => FALSE,
-    'show' => FALSE,
-    'clean' => FALSE,
-    'rescue' => FALSE,
-    'cache-clear' => FALSE,
-    'nobackup' => TRUE,
-  ]) {
+  public function entityUpdates(
+    string $type = '',
+    array $options = [
+      'basic' => FALSE,
+      'all' => FALSE,
+      'bkpdel' => FALSE,
+      'show' => FALSE,
+      'clean' => FALSE,
+      'rescue' => FALSE,
+      'cache-clear' => FALSE,
+      'nobackup' => TRUE,
+    ],
+  ) {
     $caution_message = '
     - If you use this module, you are conscience what you are doing. You are the responsible of your work.
     - Please backup your database before any action.
     - Please Read the documentation before any action.
     - Do not use this module on multi sites.
-    - Before a new update, Remove old backuped data if any (Using : drush upe --clean).
+    - Before a new update, Remove old backed up data if any (Using : drush upe --clean).
     ';
 
     $all = $options['all'];
@@ -216,7 +219,7 @@ class EntityUpdatesCommands extends DrushCommands implements SiteAliasManagerAwa
           return;
         }
       }
-      catch (Exception $e) {
+      catch (\Exception $e) {
         $this->io()->error($e->getMessage());
       }
       $this->io()->error("Entity type update Error : $type");
@@ -244,7 +247,7 @@ class EntityUpdatesCommands extends DrushCommands implements SiteAliasManagerAwa
    * @usage drush upec --show
    *
    * @usage drush upec node
-   *  Show The entity summery.
+   *  Show The entity summary.
    * @usage drush upec --types
    *  Show all entity types list.
    * @usage drush upec block --types
@@ -260,11 +263,14 @@ class EntityUpdatesCommands extends DrushCommands implements SiteAliasManagerAwa
    *
    * @throws \Exception
    */
-  public function entityCheck($type = '', array $options = [
-    'start' => 0,
-    'length' => 0,
-    'show' => FALSE,
-  ]) {
+  public function entityCheck(
+    string $type = '',
+    array $options = [
+      'start' => 0,
+      'length' => 0,
+      'show' => FALSE,
+    ],
+  ) {
     // Options which hasn't need to have entity type.
     if (!empty($options['types'])) {
       // Display entity types list.

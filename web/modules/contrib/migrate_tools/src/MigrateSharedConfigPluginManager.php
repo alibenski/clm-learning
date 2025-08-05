@@ -1,12 +1,11 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\migrate_tools;
 
 use Drupal\Component\Plugin\Discovery\DiscoveryInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\Plugin\Discovery\YamlDiscovery;
 use Drupal\Core\Plugin\Factory\ContainerFactory;
@@ -47,9 +46,11 @@ final class MigrateSharedConfigPluginManager extends DefaultPluginManager {
     'class' => MigrateSharedConfigDefault::class,
   ];
 
-  public function __construct(ModuleHandlerInterface $module_handler, CacheBackendInterface $cache_backend) {
+  public function __construct(
+    protected $moduleHandler,
+    CacheBackendInterface $cache_backend,
+  ) {
     $this->factory = new ContainerFactory($this);
-    $this->moduleHandler = $module_handler;
     $this->alterInfo('migrate_shared_configuration_info');
     $this->setCacheBackend($cache_backend, 'migrate_shared_configuration_plugins');
   }

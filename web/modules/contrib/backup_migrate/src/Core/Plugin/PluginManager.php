@@ -163,7 +163,7 @@ class PluginManager implements PluginManagerInterface, ConfigurableInterface {
     // If this plugin can be configured, then pass in the configuration.
     if ($plugin instanceof ConfigurableInterface) {
       // Configure the plugin with the appropriate subset of the configuration.
-      $config = (array)$this->confGet($id);
+      $config = (array) $this->confGet($id);
 
       // Set the config for the plugin.
       $plugin->setConfig(new Config($config));

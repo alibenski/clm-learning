@@ -4,4 +4,4 @@ fields:
   name: FALSE
   description: FALSE
   city: FALSE
-  type: booblean
+  type: boolean

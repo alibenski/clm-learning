@@ -1,9 +1,12 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\migrate_tools;
 
+use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\migrate\MigrateMessage;
 use Drupal\migrate\MigrateMessageInterface;
 use Drupal\migrate\Plugin\MigrationInterface;
@@ -11,6 +14,8 @@ use Drupal\migrate\Plugin\MigrationPluginManagerInterface;
 
 /**
  * Defines a migrate executable class for batch migrations through UI.
+ *
+ * @phpstan-consistent-constructor
  */
 class MigrateBatchExecutable extends MigrateExecutable {
 
@@ -40,16 +45,39 @@ class MigrateBatchExecutable extends MigrateExecutable {
    */
   protected string $idlistExpression = '';
 
+  /**
+   * Sync source and destination.
+   *
+   * @var bool
+   */
   protected bool $syncSource = FALSE;
+
+  /**
+   * The batch context for messenger listeners.
+   *
+   * @var array|\DrushBatchContext|null
+   */
   protected $batchContext;
+
+  /**
+   * The migration configuration.
+   *
+   * @var array
+   */
   protected array $configuration = [];
-  protected MigrationPluginManagerInterface $migrationPluginManager;
 
   /**
    * {@inheritdoc}
    */
-  public function __construct(MigrationInterface $migration, MigrateMessageInterface $message, array $options = []) {
-
+  public function __construct(
+    MigrationInterface $migration,
+    MigrateMessageInterface $message,
+    KeyValueFactoryInterface $keyValue,
+    TimeInterface $time,
+    TranslationInterface $translation,
+    protected MigrationPluginManagerInterface $migrationPluginManager,
+    array $options = [],
+  ) {
     if (isset($options['update'])) {
       $this->updateExistingRows = $options['update'];
     }
@@ -70,9 +98,7 @@ class MigrateBatchExecutable extends MigrateExecutable {
       $this->idlistExpression = $options['idlist'];
     }
 
-    parent::__construct($migration, $message, $options);
-
-    $this->migrationPluginManager = \Drupal::getContainer()->get('plugin.manager.migration');
+    parent::__construct($migration, $message, $keyValue, $time, $translation, $options);
   }
 
   /**
@@ -203,21 +229,29 @@ class MigrateBatchExecutable extends MigrateExecutable {
     // Prepare the migration executable.
     $message = new MigrateMessage();
     /** @var \Drupal\migrate\Plugin\MigrationInterface $migration */
-    $migration = \Drupal::getContainer()->get('plugin.manager.migration')->createInstance($migration_id, $options['configuration'] ?? []);
+    $migration = \Drupal::service('plugin.manager.migration')->createInstance($migration_id, $options['configuration'] ?? []);
     unset($options['configuration']);
 
     // Each batch run we need to reinitialize the counter for the migration.
-    if (!empty($options['limit']) && isset($context['results'][$migration->id()]['@numitems'])) {
-      $options['limit'] -= $context['results'][$migration->id()]['@numitems'];
+    if (!empty($options['limit']) && isset($context['results'][$migration->id()]['@numItems'])) {
+      $options['limit'] -= $context['results'][$migration->id()]['@numItems'];
     }
 
-    $executable = new static($migration, $message, $options);
+    $executable = new static(
+      $migration,
+      $message,
+      \Drupal::service('keyvalue'),
+      \Drupal::time(),
+      \Drupal::service('string_translation'),
+      \Drupal::service('plugin.manager.migration'),
+      $options,
+    );
 
     if (empty($context['sandbox']['total'])) {
       $context['sandbox']['total'] = $executable->getSource()->count();
       $context['sandbox']['batch_limit'] = $executable->calculateBatchLimit($context);
       $context['results'][$migration->id()] = [
-        '@numitems' => 0,
+        '@numItems' => 0,
         '@created' => 0,
         '@updated' => 0,
         '@failures' => 0,
@@ -237,7 +271,7 @@ class MigrateBatchExecutable extends MigrateExecutable {
 
     // Store the result; will need to combine the results of all our iterations.
     $context['results'][$migration->id()] = [
-      '@numitems' => $context['results'][$migration->id()]['@numitems'] + $executable->getProcessedCount(),
+      '@numItems' => $context['results'][$migration->id()]['@numItems'] + $executable->getProcessedCount(),
       '@created' => $context['results'][$migration->id()]['@created'] + $executable->getCreatedCount(),
       '@updated' => $context['results'][$migration->id()]['@updated'] + $executable->getUpdatedCount(),
       '@failures' => $context['results'][$migration->id()]['@failures'] + $executable->getFailedCount(),
@@ -250,7 +284,7 @@ class MigrateBatchExecutable extends MigrateExecutable {
       $context['finished'] = 1;
     }
     else {
-      $context['sandbox']['counter'] = $context['results'][$migration->id()]['@numitems'];
+      $context['sandbox']['counter'] = $context['results'][$migration->id()]['@numItems'];
       if ($context['sandbox']['counter'] <= $context['sandbox']['total']) {
         $context['finished'] = ((float) $context['sandbox']['counter'] / (float) $context['sandbox']['total']);
         $context['message'] = t('Importing %migration (@percent%).', [
@@ -274,10 +308,10 @@ class MigrateBatchExecutable extends MigrateExecutable {
    */
   public static function batchFinishedImport(bool $success, array $results, array $operations): void {
     if ($success) {
-      foreach ($results as $migration_id => $result) {
+      foreach ($results as $result) {
         $singular_message = "Processed 1 item (@created created, @updated updated, @failures failed, @ignored ignored) - done with '@name'";
-        $plural_message = "Processed @numitems items (@created created, @updated updated, @failures failed, @ignored ignored) - done with '@name'";
-        \Drupal::messenger()->addStatus(\Drupal::translation()->formatPlural($result['@numitems'],
+        $plural_message = "Processed @numItems items (@created created, @updated updated, @failures failed, @ignored ignored) - done with '@name'";
+        \Drupal::messenger()->addStatus(\Drupal::translation()->formatPlural($result['@numItems'],
           $singular_message,
           $plural_message,
           $result));

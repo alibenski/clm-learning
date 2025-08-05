@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\migrate_tools\EventSubscriber;
 
@@ -16,7 +16,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class MigrationDrushCommandProgress implements EventSubscriberInterface {
 
-  protected LoggerInterface $logger;
+  /**
+   * Progress bar.
+   */
   protected ?ProgressBar $symfonyProgressBar = NULL;
 
   /**
@@ -25,9 +27,9 @@ class MigrationDrushCommandProgress implements EventSubscriberInterface {
    * @param \Psr\Log\LoggerInterface $logger
    *   The logger service.
    */
-  public function __construct(LoggerInterface $logger) {
-    $this->logger = $logger;
-  }
+  public function __construct(
+    protected LoggerInterface $logger,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -108,7 +110,7 @@ class MigrationDrushCommandProgress implements EventSubscriberInterface {
    *   TRUE if a progress bar should be displayed, FALSE otherwise.
    */
   protected function isProgressBar(): bool {
-    // Can't do anything if the progress bar is not initialised; this probably
+    // Can't do anything if the progress bar is not initialized; this probably
     // means we're not running as a Drush command, therefore do nothing.
     if ($this->symfonyProgressBar === NULL) {
       return FALSE;

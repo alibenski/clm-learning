@@ -6,7 +6,7 @@ use Drupal\backup_migrate\Core\Config\Config;
 use Drupal\backup_migrate\Core\File\BackupFileReadableInterface;
 
 /**
- *
+ * A destination that adds debugging.
  *
  * @package Drupal\backup_migrate\Core\Destination
  */
@@ -16,7 +16,6 @@ class DebugDestination extends StreamDestination implements WritableDestinationI
    * {@inheritdoc}
    */
   public function saveFile(BackupFileReadableInterface $file) {
-
     // Quick and dirty way to html format this output.
     if ($this->confGet('format') == 'html') {
       print '<pre>';

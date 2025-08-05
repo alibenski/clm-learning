@@ -160,7 +160,10 @@ class FileDirectorySource extends PluginBase implements SourceInterface, FilePro
           ['!count' => $count, '!files' => $file_list]);
       }
       else {
-        // Throw new IgnorableException('!count files could not be read: (!files).', ['!files' => $filesmsg]);.
+        // @todo Finish this.
+        // @code
+        // throw new IgnorableException('!count files could not be read: (!files).', ['!files' => $filesmsg]);.
+        // @encode
         // @todo Log the ignored files.
       }
     }
@@ -191,7 +194,10 @@ class FileDirectorySource extends PluginBase implements SourceInterface, FilePro
           $path = $base_path . $subdir . $file;
 
           // Allow filters to modify or exclude this path.
-          $path = $this->plugins()->call('beforeFileBackup', $path, ['source' => $this, 'base_path' => $base_path]);
+          $path = $this->plugins()->call('beforeFileBackup', $path, [
+            'source' => $this,
+            'base_path' => $base_path,
+          ]);
           if ($path) {
             if (is_dir($path)) {
               list($sub_files, $sub_errors) =

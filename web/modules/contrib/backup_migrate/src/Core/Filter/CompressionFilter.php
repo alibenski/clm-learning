@@ -291,8 +291,9 @@ class CompressionFilter extends PluginBase implements FileProcessorInterface {
    * Zip encode a file.
    *
    * @param \Drupal\backup_migrate\Core\File\BackupFileReadableInterface $from
-   *
+   *   The source file.
    * @param \Drupal\backup_migrate\Core\File\BackupFileWritableInterface $to
+   *   The destination file.
    *
    * @return bool
    */
@@ -336,8 +337,8 @@ class CompressionFilter extends PluginBase implements FileProcessorInterface {
           $success = $to->close();
         }
       }
-      return $success;
     }
+    return $success;
   }
 
   /**

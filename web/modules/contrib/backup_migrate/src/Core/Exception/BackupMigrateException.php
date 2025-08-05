@@ -2,14 +2,12 @@
 
 namespace Drupal\backup_migrate\Core\Exception;
 
-use Exception;
-
 /**
  *
  *
  * @package Drupal\backup_migrate\Core\Exception
  */
-class BackupMigrateException extends Exception {
+class BackupMigrateException extends \Exception {
   protected $replacement = [];
   protected $messageRaw = 'Unknown exception';
 

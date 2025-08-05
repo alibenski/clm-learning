@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\migrate_tools\Functional;
 
@@ -16,6 +16,7 @@ use Drupal\Tests\BrowserTestBase;
  * @group migrate_tools
  */
 final class MigrateExecutionFormTest extends BrowserTestBase {
+
   use StringTranslationTrait;
 
   /**
@@ -39,7 +40,18 @@ final class MigrateExecutionFormTest extends BrowserTestBase {
    */
   protected $defaultTheme = 'stark';
 
+  /**
+   * The fruit vocabulary.
+   *
+   * @var \Drupal\taxonomy\VocabularyInterface
+   */
   private VocabularyInterface $vocabulary;
+
+  /**
+   * Vocabulary entity query.
+   *
+   * @var \Drupal\Core\Entity\Query\QueryInterface
+   */
   private QueryInterface $vocabularyQuery;
 
   /**

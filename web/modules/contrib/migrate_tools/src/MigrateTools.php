@@ -1,15 +1,19 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\migrate_tools;
 
 use Drupal\Core\Database\Connection;
 use Drupal\migrate\Plugin\MigrateIdMapInterface;
+use Drupal\migrate\Plugin\MigrateSourceInterface;
 use Drupal\migrate\Plugin\MigrationInterface;
 
 /**
  * Utility functionality for use in migrate_tools.
+ *
+ * @internal
+ *   The migrate tools utility functionality is internal.
  */
 class MigrateTools {
 
@@ -19,8 +23,7 @@ class MigrateTools {
   public const DEFAULT_ID_LIST_DELIMITER = ':';
 
   /**
-   * Maximum number of source IDs to keep in memory before flushing them
-   * to database.
+   * Maximum number of source IDs to keep in memory before flushing to database.
    */
   protected const MAX_BUFFERED_SYNC_SOURCE_IDS_ENTRIES = 1000;
 
@@ -31,25 +34,15 @@ class MigrateTools {
 
   /**
    * Array keeping track of migrations being in the Syncing IDs phase.
+   *
    * Structure: List of `string => bool` where the key is the migration ID and
    * the value is a boolean indicating whether it is currently syncing.
    */
   protected array $syncingMigrations = [];
 
-  /**
-   * Connection to the database.
-   */
-  public Connection $connection;
-
-  /**
-   * MigrateTools constructor.
-   *
-   * @param Connection $connection
-   *   Connection to the database.
-   */
-  public function __construct(Connection $connection) {
-    $this->connection = $connection;
-  }
+  public function __construct(
+    public Connection $connection,
+  ) {}
 
   /**
    * Build the list of specific source IDs to import.
@@ -80,8 +73,7 @@ class MigrateTools {
    * @param string $migrationId
    *   Migration ID.
    */
-  public function clearSyncSourceIds(string $migrationId): void
-  {
+  public function clearSyncSourceIds(string $migrationId): void {
     $query = $this->connection->delete('migrate_tools_sync_source_ids')
       ->condition('migration_id', $migrationId);
     $query->execute();
@@ -90,23 +82,59 @@ class MigrateTools {
   /**
    * Adds a SyncSourceIds entry to the database, for given migration.
    *
-   * @param string $migrationId
-   *   Migration ID.
+   * @param \Drupal\migrate\Plugin\MigrationInterface|string $migration
+   *   The migration.
    * @param array $sourceIds
    *   A set of SyncSourceIds. Gets serialized to retain its structure.
    *
    * @throws \Exception
    */
-  public function addToSyncSourceIds(string $migrationId, array $sourceIds): void
-  {
+  public function addToSyncSourceIds(MigrationInterface|string $migration, array $sourceIds): void {
+    if (!$migration instanceof MigrationInterface) {
+      // @phpstan-ignore-next-line
+      $migration = \Drupal::service('plugin.manager.migration')->createInstance($migration);
+      @trigger_error('Passing a migration ID to MigrateTools::addToSyncSourceIds is deprecated in migrate_tools:6.0.6 and is removed in migrate_tools:7.0.0. Instead passing MigrationInterface will be required. See https://www.drupal.org/node/3507073', E_USER_DEPRECATED);
+    }
+    $sourceIds = $this->prepareSourceIdValues($sourceIds, $migration->getSourcePlugin());
     $this->bufferedSyncIdsEntries[] = [
-      'migration_id' => $migrationId,
+      'migration_id' => $migration->getPluginId(),
       // Serialize source IDs before saving them to retain their structure.
       'source_ids' => serialize($sourceIds),
     ];
     if (count($this->bufferedSyncIdsEntries) >= static::MAX_BUFFERED_SYNC_SOURCE_IDS_ENTRIES) {
       $this->flushSyncSourceIdsToDatabase();
     }
+  }
+
+  /**
+   * Ensure all source IDs match the expected type.
+   *
+   * @param array $rowSourceIds
+   *   The source IDs from the current row.
+   * @param \Drupal\migrate\Plugin\MigrateSourceInterface $source
+   *   The migrate source.
+   *
+   * @return array
+   *   The updated source values.
+   *
+   * @see migrate_tools_migrate_prepare_row()
+   * @see https://www.drupal.org/node/3104268
+   */
+  protected function prepareSourceIdValues(array $rowSourceIds, MigrateSourceInterface $source): array {
+    $sourceIds = $source->getIds();
+    foreach ($rowSourceIds as $key => $value) {
+      if (!array_key_exists($key, $sourceIds)) {
+        continue;
+      }
+
+      // Cast the source ID as the configured type to avoid rollback
+      // and recreations when an exact match is not found.
+      if (in_array($sourceIds[$key]['type'], ['string', 'integer'], TRUE)) {
+        $rowSourceIds[$key] = $sourceIds[$key]['type'] === 'string' ? (string) $rowSourceIds[$key] : (int) $rowSourceIds[$key];
+      }
+    }
+
+    return $rowSourceIds;
   }
 
   /**
@@ -123,7 +151,7 @@ class MigrateTools {
     // Batch insert all buffered pending entries.
     $query = $this->connection->insert('migrate_tools_sync_source_ids')
       ->fields(['migration_id', 'source_ids']);
-    foreach($this->bufferedSyncIdsEntries as $entry) {
+    foreach ($this->bufferedSyncIdsEntries as $entry) {
       $query->values($entry);
     }
     $query->execute();
@@ -143,8 +171,7 @@ class MigrateTools {
    *
    * @throws \Exception
    */
-  public function getSyncSourceIds(string $migrationId): array
-  {
+  public function getSyncSourceIds(string $migrationId): array {
     // Ensure all data was flushed to database before retrieving all of them.
     $this->flushSyncSourceIdsToDatabase();
 
@@ -156,7 +183,7 @@ class MigrateTools {
       ->fetchCol();
 
     // Unserialize source IDs to restore their structure.
-    array_walk($serializedSourceIds, static function(&$entry) {
+    array_walk($serializedSourceIds, static function (&$entry) {
       $entry = unserialize($entry);
     });
 
@@ -168,11 +195,10 @@ class MigrateTools {
    *
    * @param string $migrationId
    *   Migration ID.
-   * @param bool   $isSyncing
+   * @param bool $isSyncing
    *   State to set.
    */
-  public function setMigrationSyncingState(string $migrationId, bool $isSyncing): void
-  {
+  public function setMigrationSyncingState(string $migrationId, bool $isSyncing): void {
     $this->syncingMigrations[$migrationId] = $isSyncing;
   }
 
@@ -185,8 +211,7 @@ class MigrateTools {
    * @return bool
    *   Whether the migration is currently syncing its IDs or not.
    */
-  public function isMigrationSyncing(string $migrationId): bool
-  {
+  public function isMigrationSyncing(string $migrationId): bool {
     return $this->syncingMigrations[$migrationId] ?? FALSE;
   }
 

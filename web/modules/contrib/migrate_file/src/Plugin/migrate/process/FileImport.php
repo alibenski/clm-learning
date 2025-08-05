@@ -346,8 +346,8 @@ class FileImport extends FileCopy {
    * @param string $destination
    *   The destination URI.
    *
-   * @return boolean
-   *   Whether or not the file exists.
+   * @return string
+   *   The destination filename.
    */
   protected function getDestinationFilePath($source, $destination) {
     if ($this->isDirectory($destination)) {
@@ -369,7 +369,7 @@ class FileImport extends FileCopy {
    * @param boolean $set_permanent
    *   Whether or not to set the file as permanent if it is currently temporary.
    *
-   * @return \Drupal\file\FileInterface
+   * @return \Drupal\file\FileInterface|null
    *   The matching file entity or NULL if no entity exists.
    */
   protected function getExistingFileEntity($destination, $set_permanent = TRUE) {

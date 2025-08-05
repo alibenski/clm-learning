@@ -23,7 +23,7 @@ class ServiceManager implements ServiceManagerInterface {
   protected $clients;
 
   /**
-   * The constructor. Initialise the list of services.
+   * The ServiceManager constructor.
    */
   public function __construct() {
     $this->services = [];

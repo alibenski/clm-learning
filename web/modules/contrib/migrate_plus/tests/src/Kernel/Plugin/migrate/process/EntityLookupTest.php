@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\migrate_plus\Kernel\Plugin\migrate\process;
 
@@ -99,6 +99,47 @@ final class EntityLookupTest extends KernelTestBase {
 
     // Check an unknown user is not found.
     $value = $plugin->transform('orange', $this->migrateExecutable, $row, 'name');
+    $this->assertNull($value);
+  }
+
+  /**
+   * Lookup an entity on an entity_reference field.
+   *
+   * @covers ::transform
+   */
+  public function testLookupEntityOnEntityReferenceField(): void {
+    $migration = \Drupal::service('plugin.manager.migration')
+      ->createStubMigration([
+        'id' => 'test',
+        'source' => [],
+        'process' => [],
+        'destination' => [
+          'plugin' => 'entity:node',
+        ],
+      ]);
+
+    // Create a user.
+    $known_user = $this->createUser([], 'lucuma');
+    // Create a node owned by this user.
+    $known_node = $this->createNode([
+      'title' => 'Node test',
+      'uid' => $known_user->id(),
+    ]);
+
+    $configuration = [
+      'entity_type' => 'node',
+      'value_key' => 'uid',
+    ];
+    $plugin = \Drupal::service('plugin.manager.migrate.process')
+      ->createInstance('entity_lookup', $configuration, $migration);
+    $row = new Row();
+
+    // Check the known node is found.
+    $value = $plugin->transform($known_user->id(), $this->migrateExecutable, $row, 'nid');
+    $this->assertSame($known_node->id(), $value);
+
+    // Check an unknown node is not found.
+    $value = $plugin->transform('not-an-id', $this->migrateExecutable, $row, 'nid');
     $this->assertNull($value);
   }
 

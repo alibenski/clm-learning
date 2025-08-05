@@ -7,6 +7,7 @@ use Drupal\backup_migrate\Core\Plugin\PluginCallerInterface;
 use Drupal\backup_migrate\Core\Plugin\PluginCallerTrait;
 use Drupal\backup_migrate\Core\Service\StashLogger;
 use Drupal\backup_migrate\Core\Service\TeeLogger;
+use Drupal\backup_migrate\Core\File\BackupFileReadableInterface;
 
 /**
  * Notifies by email when a backup succeeds or fails.
@@ -15,6 +16,52 @@ use Drupal\backup_migrate\Core\Service\TeeLogger;
  */
 class Notify extends PluginBase implements PluginCallerInterface {
   use PluginCallerTrait;
+
+  /**
+   * @var \Drupal\backup_migrate\Core\Service\StashLogger
+   */
+  protected $logstash;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function configSchema(array $params = []) {
+    $schema = [];
+    // Backup configuration.
+    if ($params['operation'] == 'backup') {
+      $schema['groups']['notify'] = [
+        'title' => 'Email Settings',
+      ];
+
+      $schema['fields']['notify_success_enable'] = [
+        'group' => 'notify',
+        'type' => 'boolean',
+        'title' => 'Send an email if backup succeeds',
+      ];
+      $schema['fields']['notify_success_email'] = [
+        'group' => 'notify',
+        'type' => 'text',
+        'title' => 'Email Address for Success Notices',
+        'default_value' => \Drupal::config('system.site')->get('mail'),
+        'description' => 'The email added to send a notification about backup.',
+      ];
+
+      $schema['fields']['notify_failure_enable'] = [
+        'group' => 'notify',
+        'type' => 'boolean',
+        'title' => 'Send an email if backup fails',
+      ];
+      $schema['fields']['notify_failure_email'] = [
+        'group' => 'notify',
+        'type' => 'text',
+        'title' => 'Email Address for Failure Notices',
+        'default_value' => \Drupal::config('system.site')->get('mail'),
+        'description' => 'The email added to send a notification about backup.',
+      ];
+    }
+
+    return $schema;
+  }
 
   /**
    * Add a weight so that our before* operations run before any others.
@@ -32,11 +79,6 @@ class Notify extends PluginBase implements PluginCallerInterface {
   }
 
   /**
-   * @var \Drupal\backup_migrate\Core\Service\StashLogger
-   */
-  protected $logstash;
-
-  /**
    *
    */
   public function beforeBackup() {
@@ -46,22 +88,34 @@ class Notify extends PluginBase implements PluginCallerInterface {
   /**
    *
    */
-  public function beforeRestore() {
+  public function beforeRestore(BackupFileReadableInterface $file) {
     $this->addLogger();
+    return $file;
   }
 
   /**
-   *
+   * Call notification function if backup was succeed
    */
-  public function backupSucceed() {
-    $this->sendNotification('Backup finished sucessfully');
+  public function backupSuccess() {
+    if ($this->config->get('notify_success_enable')) {
+      $subject = 'Backup finished successfully';
+      $body = t('Site backup succeeded ' . \Drupal::config('system.site')->get('name'));
+      $recipient = $this->config->get('notify_success_email');
+      $this->sendNotification('backup_success', $subject, $body, $recipient);
+    }
   }
 
   /**
-   *
+   * Call notification function if backup was failed.
    */
-  public function backupFail(Exception $e) {
-
+  public function backupFailure(\Exception $e) {
+    if ($this->config->get('notify_failure_enable')) {
+      $subject = t('Backup finished with failure');
+      $body = t('Site backup failed ' . \Drupal::config('system.site')->get('name') . "\n");
+      $body = $body . t('Exception Message: ') . $e;
+      $recipient = $this->config->get('notify_success_email');
+      $this->sendNotification('backup_failure', $subject, $body, $recipient);
+    }
   }
 
   /**
@@ -79,14 +133,10 @@ class Notify extends PluginBase implements PluginCallerInterface {
   /**
    * @param $subject
    * @param $body
-   * @param $messages
+   * @param $recipient
    */
-  protected function sendNotification($subject) {
-    $messages = $this->logstash->getAll();
-    $body = $subject . "\n";
-    if (count($messages)) {
-
-    }
+  protected function sendNotification($key, $subject, $body, $recipient) {
+    \Drupal::service('backup_migrate.mailer')->send($key, $recipient, $subject, $body);
   }
 
   /**
@@ -106,7 +156,7 @@ class Notify extends PluginBase implements PluginCallerInterface {
 
     // Add the services back into the plugin manager to re-inject existing
     // plugins.
-    $this->plugins()->setServiceLocator($services);
+    $this->plugins()->setServiceManager($services);
   }
 
   // @todo Add a tee to the logger to capture all messages.

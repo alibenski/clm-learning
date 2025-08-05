@@ -20,6 +20,11 @@ class LoadTest extends BrowserTestBase {
   protected static $modules = ['migrate_remote_file'];
 
   /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
+
+  /**
    * A user with permission to administer site configuration.
    *
    * @var \Drupal\user\UserInterface

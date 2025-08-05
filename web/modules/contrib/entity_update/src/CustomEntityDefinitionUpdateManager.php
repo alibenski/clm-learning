@@ -82,7 +82,7 @@ final class CustomEntityDefinitionUpdateManager implements ContainerInjectionInt
     EntityTypeManagerInterface $entity_type_manager,
     EntityTypeListenerInterface $entity_type_listener,
     EntityFieldManagerInterface $entity_field_manager,
-    FieldStorageDefinitionListenerInterface $field_storage_definition_listener
+    FieldStorageDefinitionListenerInterface $field_storage_definition_listener,
   ) {
     $this->entityDefinitionUpdateManager = $entity_definition_update_manager;
     $this->entityLastInstalledSchemaRepository = $entity_last_installed_schema_repository;
@@ -187,7 +187,11 @@ final class CustomEntityDefinitionUpdateManager implements ContainerInjectionInt
    * @param \Drupal\Core\Field\FieldStorageDefinitionInterface|null $original_storage_definition
    *   (optional) The original field storage definition. Defaults to none.
    */
-  public function doFieldUpdate($op, FieldStorageDefinitionInterface $storage_definition = NULL, FieldStorageDefinitionInterface $original_storage_definition = NULL) {
+  public function doFieldUpdate(
+    $op,
+    ?FieldStorageDefinitionInterface $storage_definition = NULL,
+    ?FieldStorageDefinitionInterface $original_storage_definition = NULL,
+  ) {
     switch ($op) {
       case EntityDefinitionUpdateManagerInterface::DEFINITION_CREATED:
         $this->fieldStorageDefinitionListener->onFieldStorageDefinitionCreate($storage_definition);

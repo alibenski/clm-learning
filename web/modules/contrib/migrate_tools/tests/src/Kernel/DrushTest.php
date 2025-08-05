@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\migrate_tools\Kernel {
 
@@ -13,7 +13,7 @@ namespace Drupal\Tests\migrate_tools\Kernel {
   use Psr\Log\LoggerInterface;
 
   /**
-   * Tests for the Drush 9 commands.
+   * Tests for the Drush commands.
    *
    * @group migrate_tools
    */
@@ -53,7 +53,18 @@ namespace Drupal\Tests\migrate_tools\Kernel {
       'sync' => FALSE,
     ];
 
+    /**
+     * Migrate Tools Drush commands.
+     *
+     * @var \Drupal\migrate_tools\Drush\Commands\MigrateToolsCommands|null
+     */
     private ?MigrateToolsCommands $commands = NULL;
+
+    /**
+     * The Migration plugin manager.
+     *
+     * @var \Drupal\migrate\Plugin\MigrationPluginManagerInterface
+     */
     private MigrationPluginManagerInterface $migrationPluginManager;
 
     /**
@@ -75,7 +86,11 @@ namespace Drupal\Tests\migrate_tools\Kernel {
         $this->migrationPluginManager,
         $this->container->get('date.formatter'),
         $this->container->get('entity_type.manager'),
-        $this->container->get('keyvalue'));
+        $this->container->get('keyvalue'),
+        $this->container->get('datetime.time'),
+        $this->container->get('string_translation'),
+        $this->container->get('migrate_tools.migration_drush_command_progress'),
+      );
       $this->commands->setLogger($this->logger);
     }
 

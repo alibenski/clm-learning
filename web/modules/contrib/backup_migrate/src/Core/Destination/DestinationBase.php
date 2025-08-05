@@ -8,7 +8,7 @@ use Drupal\backup_migrate\Core\File\BackupFileInterface;
 use Drupal\backup_migrate\Core\File\BackupFileReadableInterface;
 
 /**
- *
+ * A base class for managing destinations.
  *
  * @package Drupal\backup_migrate\Core\Destination
  */
