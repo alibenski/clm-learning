@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "84932fcb546d6675d9f0b47543b9b0cb",
+    "content-hash": "faf5a757de97f6fbaafaad48f49496ce",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4565,6 +4565,50 @@
             }
         },
         {
+            "name": "drupal/js_cookie",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/js_cookie.git",
+                "reference": "1.0.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/js_cookie-1.0.1.zip",
+                "reference": "1.0.1",
+                "shasum": "e010b3de64a0d57eef9c1773c4dd7e3d9bd9118c"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.1",
+                    "datestamp": "1693951097",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Dave Reid",
+                    "homepage": "https://www.drupal.org/user/53892"
+                }
+            ],
+            "description": "Provides the js-cookie library as a dependency.",
+            "homepage": "https://www.drupal.org/project/js_cookie",
+            "support": {
+                "source": "https://git.drupalcode.org/project/js_cookie"
+            }
+        },
+        {
             "name": "drupal/libraries",
             "version": "4.0.5",
             "source": {
@@ -5216,22 +5260,23 @@
         },
         {
             "name": "drupal/quicktabs",
-            "version": "3.0.0-alpha7",
+            "version": "4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/quicktabs.git",
-                "reference": "8.x-3.0-alpha7"
+                "reference": "4.0.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/quicktabs-8.x-3.0-alpha7.zip",
-                "reference": "8.x-3.0-alpha7",
-                "shasum": "96eb2614a791f924c5aea5922e5d46091d151752"
+                "url": "https://ftp.drupal.org/files/projects/quicktabs-4.0.1.zip",
+                "reference": "4.0.1",
+                "shasum": "18f0843088f9ea681c8dfe9ba560c223d88da445"
             },
             "require": {
-                "drupal/core": "^9 || ^10",
-                "drupal/jquery_ui_accordion": "^2.0",
-                "drupal/jquery_ui_tabs": "^2.0"
+                "drupal/core": "^10.3 || ^11",
+                "drupal/jquery_ui_accordion": "^2.1",
+                "drupal/jquery_ui_tabs": "^2.1",
+                "drupal/js_cookie": "^1.0"
             },
             "require-dev": {
                 "drupal/jquery_ui_accordion": "*",
@@ -5240,11 +5285,11 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.0-alpha7",
-                    "datestamp": "1679423302",
+                    "version": "4.0.1",
+                    "datestamp": "1740083814",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -5276,7 +5321,7 @@
                     "homepage": "https://www.drupal.org/user/89684"
                 },
                 {
-                    "name": "NickDickinsonWilde",
+                    "name": "nickdickinsonwilde",
                     "homepage": "https://www.drupal.org/user/3094661"
                 },
                 {
@@ -5284,12 +5329,12 @@
                     "homepage": "https://www.drupal.org/user/2995945"
                 },
                 {
-                    "name": "Pasqualle",
+                    "name": "pasqualle",
                     "homepage": "https://www.drupal.org/user/80733"
                 },
                 {
-                    "name": "shelane",
-                    "homepage": "https://www.drupal.org/user/2674989"
+                    "name": "smustgrave",
+                    "homepage": "https://www.drupal.org/user/3252890"
                 },
                 {
                     "name": "systemick",
@@ -11565,12 +11610,11 @@
         "drupal/floating_block": 10,
         "drupal/hacked": 10,
         "drupal/pathologic": 15,
-        "drupal/quicktabs": 15,
         "drupal/tamper": 15
     },
     "prefer-stable": true,
     "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
+    "platform": {},
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }

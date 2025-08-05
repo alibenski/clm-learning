@@ -5,7 +5,6 @@ namespace Drupal\quicktabs;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Component\Plugin\Factory\DefaultFactory;
 
 /**
  * Quick Tabs renderer plugin manager.
@@ -28,7 +27,6 @@ class TabRendererManager extends DefaultPluginManager {
 
     $this->alterInfo('quicktabs_tab_renderer_info');
     $this->setCacheBackend($cache_backend, 'quicktabs_tab_renderers');
-    $this->factory = new DefaultFactory($this->getDiscovery());
   }
 
 }

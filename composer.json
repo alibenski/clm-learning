@@ -58,7 +58,7 @@
         "drupal/panels": "^4.7",
         "drupal/pathologic": "^2.0@alpha",
         "drupal/protected_pages": "^1.6",
-        "drupal/quicktabs": "^3.0@alpha",
+        "drupal/quicktabs": "^4.0",
         "drupal/rules": "4.0",
         "drupal/scheduler": "^2.0",
         "drupal/scroll_top_button": "^2.0",

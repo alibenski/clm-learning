@@ -3,13 +3,15 @@
 namespace Drupal\quicktabs\Plugin\TabRenderer;
 
 use Drupal\Component\Utility\Xss;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\quicktabs\TabRendererBase;
 use Drupal\quicktabs\Entity\QuickTabsInstance;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Component\Utility\Html;
+use Drupal\quicktabs\TabTypeManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a 'QuickTabs' tab renderer.
@@ -19,14 +21,28 @@ use Drupal\Component\Utility\Html;
  *   name = @Translation("quicktabs"),
  * )
  */
-class QuickTabs extends TabRendererBase {
+class QuickTabs extends TabRendererBase implements ContainerFactoryPluginInterface {
 
   use StringTranslationTrait;
 
   /**
+   * {@inheritDoc}
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, protected TabTypeManager $tabTypeManager) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+  }
+
+  /**
    * {@inheritdoc}
    */
-  public function optionsForm(QuickTabsInstance $instance) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
+    return new static($configuration, $plugin_id, $plugin_definition, $container->get('plugin.manager.tab_type'));
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function optionsForm(QuickTabsInstance $instance): array {
     $instance_options = $instance->getOptions();
     $options = $instance_options['quick_tabs'] ?? [];
     $renderer = $instance->getRenderer();
@@ -70,9 +86,8 @@ class QuickTabs extends TabRendererBase {
    * @return array
    *   A render array.
    */
-  public function render(QuickTabsInstance $instance) {
+  public function render(QuickTabsInstance $instance): array {
     $qt_id = $instance->id();
-    $type = \Drupal::service('plugin.manager.tab_type');
 
     // The render array used to build the block.
     $build = [];
@@ -100,7 +115,7 @@ class QuickTabs extends TabRendererBase {
       $default_tab = $instance->getDefaultTab() == 9999 ? 0 : $instance->getDefaultTab();
       if ($is_ajax) {
         if ($default_tab == $index) {
-          $object = $type->createInstance($tab['type']);
+          $object = $this->tabTypeManager->createInstance($tab['type']);
           $render = $object->render($tab);
         }
         else {
@@ -108,7 +123,7 @@ class QuickTabs extends TabRendererBase {
         }
       }
       else {
-        $object = $type->createInstance($tab['type']);
+        $object = $this->tabTypeManager->createInstance($tab['type']);
         $render = $object->render($tab);
       }
 
@@ -144,12 +159,10 @@ class QuickTabs extends TabRendererBase {
         'aria-controls' => $block_id,
         'aria-selected' => 'false',
         'id' => $tab_id,
-        'tabIndex' => '-1',
       ];
       if ($default_tab == $index) {
         $wrapper_attributes['class'] = ['active'];
         $wrapper_attributes['aria-selected'] = 'true';
-        $wrapper_attributes['tabindex'] = '0';
       }
       if ($custom_class) {
         $wrapper_attributes['class'][] = $custom_class;
@@ -169,12 +182,26 @@ class QuickTabs extends TabRendererBase {
         $link_classes[] = 'quicktabs-loaded';
       }
 
+      $value = Xss::filter(
+        $this->t('@title', ['@title' => $tab['title']]),
+        [
+          'img',
+          'em',
+          'strong',
+          'h2',
+          'h3',
+          'h4',
+          'h5',
+          'h6',
+          'small',
+          'span',
+          'i',
+          'br',
+        ]
+      );
       $titles[] = [
         '0' => Link::fromTextAndUrl(
-          new TranslatableMarkup(Xss::filter(
-            $tab['title'],
-            ['img', 'em', 'strong', 'h2', 'h3', 'h4', 'h5', 'h6', 'small', 'span', 'i', 'br']
-          )),
+          $value,
           Url::fromRoute(
             'quicktabs.ajax_content',
             [
@@ -186,6 +213,8 @@ class QuickTabs extends TabRendererBase {
               'attributes' => [
                 'class' => $link_classes,
                 'data-quicktabs-tab-index' => $index,
+                'tabindex' => $default_tab == $index ? 0 : -1,
+                'rel' => 'noindex',
               ],
             ]
           )

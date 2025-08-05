@@ -2,12 +2,20 @@
 
 namespace Drupal\quicktabs\Plugin\TabType;
 
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Path\CurrentPathStack;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\path_alias\AliasManagerInterface;
 use Drupal\quicktabs\TabTypeBase;
 use Drupal\views\Views;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Provides a 'view content' tab type.
@@ -17,18 +25,52 @@ use Drupal\views\Views;
  *   name = @Translation("view"),
  * )
  */
-class ViewContent extends TabTypeBase {
+class ViewContent extends TabTypeBase implements ContainerFactoryPluginInterface {
 
   use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
    */
-  public function optionsForm(array $tab) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    protected CurrentPathStack $currentPath,
+    protected RequestStack $requestStack,
+    protected LanguageManagerInterface $languageManager,
+    protected AliasManagerInterface $aliasManager,
+    protected AccountProxyInterface $currentUser,
+    protected EntityTypeManagerInterface $entityTypeManager,
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('path.current'),
+      $container->get('request_stack'),
+      $container->get('language_manager'),
+      $container->get('path_alias.manager'),
+      $container->get('current_user'),
+      $container->get('entity_type.manager')
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function optionsForm(array $tab): array {
     $plugin_id = $this->getPluginDefinition()['id'];
     $views = $this->getViews();
     $views_keys = array_keys($views);
-    $selected_view = (isset($tab['content'][$plugin_id]['options']['vid']) ? $tab['content'][$plugin_id]['options']['vid'] : (isset($views_keys[0]) ? $views_keys[0] : ''));
+    $selected_view = ($tab['content'][$plugin_id]['options']['vid'] ?? ($views_keys[0] ?? ''));
 
     $form = [];
     $form['vid'] = [
@@ -50,7 +92,7 @@ class ViewContent extends TabTypeBase {
       '#type' => 'select',
       '#title' => 'display',
       '#options' => ViewContent::getViewDisplays($selected_view),
-      '#default_value' => isset($tab['content'][$plugin_id]['options']['display']) ? $tab['content'][$plugin_id]['options']['display'] : '',
+      '#default_value' => $tab['content'][$plugin_id]['options']['display'] ?? '',
       '#prefix' => '<div id="view-display-dropdown-' . $tab['delta'] . '">',
       '#suffix' => '</div>',
     ];
@@ -59,7 +101,7 @@ class ViewContent extends TabTypeBase {
       '#title' => 'arguments',
       '#size' => '40',
       '#required' => FALSE,
-      '#default_value' => isset($tab['content'][$plugin_id]['options']['args']) ? $tab['content'][$plugin_id]['options']['args'] : '',
+      '#default_value' => $tab['content'][$plugin_id]['options']['args'] ?? '',
       '#description' => $this->t('Additional arguments to send to the view as if they were part of the URL in the form of arg1/arg2/arg3. You may use %1, %2, ..., %N to grab arguments from the URL.'),
     ];
 
@@ -73,33 +115,33 @@ class ViewContent extends TabTypeBase {
     $options = $tab['content'][$tab['type']]['options'];
     $args = empty($options['args']) ? [] : array_map('trim', explode('/', $options['args']));
 
-    if (isset($args)) {
-      $current_path = \Drupal::service('path.current')->getPath();
+    $current_path = $this->currentPath->getPath();
 
-      // If the request is a ajax callback we need to use $_SERVER['HTTP_REFERER'] to get current path.
-      if (strpos($current_path, '/quicktabs/ajax/') !== FALSE) {
-        $request = \Drupal::request();
-        if ($request->server->get('HTTP_REFERER')) {
-          $referer = parse_url($request->server->get('HTTP_REFERER'), PHP_URL_PATH);
+    // If the request is an ajax callback we need to use
+    // $_SERVER['HTTP_REFERER'] to get current path.
+    if (str_contains($current_path, '/quicktabs/ajax/')) {
+      $request = $this->requestStack->getCurrentRequest();
+      if ($request->server->get('HTTP_REFERER')) {
+        $referer = parse_url($request->server->get('HTTP_REFERER'), PHP_URL_PATH);
 
-          // Stripping the language path prefix.
-          $current_language = \Drupal::service('language_manager')->getCurrentLanguage()->getId();
-          $path = str_replace("/$current_language/", '/', $referer);
+        // Stripping the language path prefix.
+        $current_language = $this->languageManager->getCurrentLanguage()->getId();
+        $path = str_replace("/$current_language/", '/', $referer);
 
-          $current_path = \Drupal::service('path_alias.manager')->getPathByAlias($path);
-        }
-
+        $current_path = $this->aliasManager->getPathByAlias($path);
       }
-      $url_args = explode('/', $current_path);
-      foreach ($url_args as $id => $arg) {
-        $args = str_replace("%$id", $arg, $args);
-      }
-      $args = preg_replace(',/?(%\d),', '', $args);
+
     }
+    $url_args = explode('/', $current_path);
+    foreach ($url_args as $id => $arg) {
+      $args = str_replace("%$id", $arg, $args);
+    }
+    $args = preg_replace(',/?(%\d),', '', $args);
+
     $view = Views::getView($options['vid']);
 
     // Return empty render array if user doesn't have access.
-    if (!$view->access($options['display'], \Drupal::currentUser())) {
+    if (!$view->access($options['display'], $this->currentUser)) {
       return [];
     }
 
@@ -117,25 +159,21 @@ class ViewContent extends TabTypeBase {
         foreach ($attachments as $attachment) {
           if (!empty(views_get_view_result($options['vid'], $attachment))) {
             $view_results = TRUE;
-            continue;
           }
         }
+      }
+
+      if (!$display->outputIsEmpty()) {
+        $view_results = TRUE;
       }
     }
 
     if (empty($view_results)) {
       return [];
     }
-
     else {
       $render = $view->buildRenderable($options['display'], $args);
     }
-
-    // Set additional cache keys that depend on the arguments provided for this
-    // view.
-    // Until this is fixed in core:
-    // https://www.drupal.org/project/drupal/issues/2823914
-    $render['#cache']['keys'] = array_merge($render['#cache']['keys'], $args);
 
     return $render;
   }
@@ -143,7 +181,7 @@ class ViewContent extends TabTypeBase {
   /**
    * Ajax callback to change views displays when view is selected.
    */
-  public static function viewsDisplaysAjaxCallback(array &$form, FormStateInterface $form_state) {
+  public static function viewsDisplaysAjaxCallback(array &$form, FormStateInterface $form_state): AjaxResponse {
     $tab_index = $form_state->getTriggeringElement()['#array_parents'][2];
     $element_id = '#view-display-dropdown-' . $tab_index;
     $ajax_response = new AjaxResponse();
@@ -155,7 +193,7 @@ class ViewContent extends TabTypeBase {
   /**
    * Get list of enabled views.
    */
-  private function getViews() {
+  private function getViews(): array {
     $views = [];
     foreach (Views::getEnabledViews() as $view_name => $view) {
       $views[$view_name] = $view->label() . ' (' . $view_name . ')';
@@ -168,13 +206,13 @@ class ViewContent extends TabTypeBase {
   /**
    * Get displays for a given view.
    */
-  public function getViewDisplays($view_name) {
+  public function getViewDisplays($view_name): array {
     $displays = [];
     if (empty($view_name)) {
       return $displays;
     }
 
-    $view = \Drupal::entityTypeManager()->getStorage('view')->load($view_name);
+    $view = $this->entityTypeManager->getStorage('view')->load($view_name);
     if (!$view) {
       return $displays;
     }

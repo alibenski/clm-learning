@@ -28,10 +28,10 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *     "label" = "label"
  *   },
  *   links = {
- *     "edit" = "/admin/structure/quicktabs/{quicktabs_instance}/edit",
- *     "add" = "/admin/structure/quicktabs/add",
- *     "delete" = "/admin/structure/quicktabs/{quicktabs_instance}/delete",
- *     "duplicate" = "/admin/structure/quicktabs/{quicktabs_instance}/duplicate"
+ *     "edit-form" = "/admin/structure/quicktabs/{quicktabs_instance}/edit",
+ *     "add-form" = "/admin/structure/quicktabs/add",
+ *     "delete-form" = "/admin/structure/quicktabs/{quicktabs_instance}/delete",
+ *     "duplicate-form" = "/admin/structure/quicktabs/{quicktabs_instance}/duplicate"
  *   },
  *   config_export = {
  *     "id" = "id",

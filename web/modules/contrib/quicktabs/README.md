@@ -5,7 +5,13 @@ selecting a view, a node, a block or an existing Quicktabs instance as the
 content of each tab. The module can be extended to display other types of
 content.
 
-## Requirements
+For a full description of the module, visit the
+[project page](https://www.drupal.org/project/quicktabs).
+
+Submit bug reports and feature suggestions, or track changes in the
+[issue queue](https://www.drupal.org/project/issues/quicktabs)
+
+# Recommended modules
 
 The main Quicktabs module does not require any additional modules. However, use
 of the submodules Quicktabs Accordion and Quicktabs jQuery UI require
@@ -13,23 +19,23 @@ jquery_ui_accordion and jquery_ui_tabs modules respectively. By including this
 module through composer, those modules will be downloaded as well. You must
 enable the ones you need.
 
-## Installation & Use:
+## Installation
 
-1.  Enable module in module list located at administer > structure > modules.
-2.  Go to admin/structure/quicktabs and click on "Add Quicktabs Instance".
-3.  Add a title (this will be the block title) and start entering information
-    for your tabs
-4.  Use the Add another tab button to add more tabs.
-5.  Tab titles can use a minimal set of HTML tags, specifically _img_, _em_,
-    _strong_, _h2_, _h3_, _h4_, _h5_, _h6_, _small_, _span_, _i_ and _br_.
-6.  Use the drag handles on the left to re-arrange tabs.
-7.  Once you have defined all the tabs, click 'Save'.
-8.  Be sure to FLUSH THE CACHE - when working with blocks you need to flush the
-    cache whenever you make a change
-9.  Your new block will be available at admin/structure/blocks.
-10.  Configure & enable it as required.
+Install as you would normally install a contributed Drupal module. For further
+information, see
+[Installing Drupal Modules](https://www.drupal.org/docs/extending-drupal/installing-drupal-modules).
 
-## Note:
+## Configuration
+
+1. Go to Administration » Structure » Quick Tabs
+1. Add a title (this will be the block title) and start entering information for your tabs
+1. Use the Add another tab button to add more tabs.
+1. Use the drag handles on the left to re-arrange tabs.
+1. Once you have defined all the tabs, click 'Save'.
+1. Your new block will be available at admin/structure/blocks.
+1. Configure & enable it as required.
+
+### Note
 
 Because Quicktabs allows your tabbed content to be pulled via ajax, it has its
 own menu callback for getting this content and returning it in JSON format. For
@@ -43,7 +49,7 @@ be excluded on teaser and node view. Setting them as private through some other
 mechanism, e.g., Panels, will not prevent them from being displayed in an ajax
 Quicktab.
 
-## For Developers:
+### For Developers
 
 One way to extend Quicktabs is to add a renderer plugin. Quicktabs comes with
 3 renderer plugins: jQuery UI Tabs, jQuery UI Accordion, and classic Quicktabs.
@@ -58,19 +64,9 @@ and callback tab content types. Your contents plugins should extend the
 QuickContent class. See the existing plugins and the hook_quicktabs_contents
 implementation for guidance.
 
-
-## Author:
-
-Mike Garthwaite <michael@systemick.co.uk>
-https://www.drupal.org/u/systemick
-
 ## Maintainers
 
-Mike Garthwaite <michael@systemick.co.uk>
-https://www.drupal.org/u/systemick
-
-Shelane French
-https://www.drupal.org/u/shelane
-
-Nick Dickinson-Wilde
-https://www.drupal.org/u/nickdickinsonwilde
+- Shelane French - [shelane](https://www.drupal.org/u/shelane)
+- Mike Garthwaite - [systemick](https://www.drupal.org/u/systemick)
+- Joël Pittet - [joelpittet](https://www.drupal.org/u/joelpittet)
+- Nick Dickinson-Wilde - [NickDickinsonWilde](https://www.drupal.org/u/nickdickinsonwilde)
