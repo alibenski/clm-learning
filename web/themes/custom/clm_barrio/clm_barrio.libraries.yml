@@ -14,6 +14,7 @@ global-styling:
       css/group-accordion.css: {}
       css/icons-list.css: {}
       css/colors.css: {}
+      css/quicktabs.css: {}
       css/style.css: {}
 bootstrap:
   js:

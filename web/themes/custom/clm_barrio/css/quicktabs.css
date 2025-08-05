@@ -1,0 +1,13 @@
+#block-clm-barrio-quicktabscareerweek .list-group-item.active {
+   background-color: #fff;
+   border-color: #fff;
+ }
+
+ #block-clm-barrio-quicktabscareerweek .list-group-item {
+   color: #333;
+ }
+
+ #block-clm-barrio-quicktabscareerweek .list-group-item a:hover {
+   color: #0056b3;
+   background-color: #f8f9fa;
+ }
