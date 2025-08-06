@@ -52,6 +52,9 @@ a, .link {
 div#main.container {
     padding: 30px 0;
 }
+body.page-view-frontpage div#main.container {
+    padding: 5px 0;
+}
 
 /* 
   Language Switcher  
@@ -1369,15 +1372,25 @@ a.more.round-button {font-size: 12px; border-radius: 25px;}
   padding: 0;
   list-style: none;
 }
+#block-clm-barrio-sidemenu ul.menu {
+    padding-left: 0rem;
+    margin: 0;
+    list-style: circle;
+}
 #block-clm-barrio-sidemenu ul.nav li {
-  margin: 0 35px;
+  margin: 0 15px;
   position: relative;
   list-style: none;
   padding: 0 5px;
 }
-#block-clm-barrio-sidemenu ul.nav li a,
-#block-clm-barrio-sidemenu ul.nav li span {
+#block-clm-barrio-sidemenu ul.nav li a {
   padding: 7px 0 8px 25px;
+  line-height: 150%;
+  display: block;
+}
+
+#block-clm-barrio-sidemenu ul.nav li span {
+  padding: 7px 0 8px 15px;
   line-height: 150%;
   display: block;
 }
@@ -1397,8 +1410,7 @@ a.more.round-button {font-size: 12px; border-radius: 25px;}
   padding-left: 25px;
 }
 /*nav arrows  */
-#block-clm-barrio-sidemenu ul.nav li.nav-item > a:before,
-#block-clm-barrio-sidemenu ul.nav li.nav-item > span:before {
+#block-clm-barrio-sidemenu ul.nav li.nav-item > a:before{
   content: "\f105";
   font-family: 'FontAwesome';
   position: absolute;

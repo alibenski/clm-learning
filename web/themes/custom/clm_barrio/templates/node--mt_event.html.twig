@@ -6,14 +6,23 @@
 #}
 {% extends "node.html.twig" %}
 {% block content %}
-{{ dump() }}
+{% set view_mode = view_mode|default('full') %}
+{% set event_date_month = '' %}
+{% set event_date_day = '' %}
+{% set event_date_custom = '' %}
+{% set timezone = datetime|date('T') %}
+
+{# Set the event date if it exists #}
+{% if node.field_mt_event_date %}
+  {% set event_date_month = node.field_mt_event_date.value|date('M') %}
+  {% set event_date_day = node.field_mt_event_date.value|date('d') %}
+  {% set event_date_custom = node.field_mt_event_date.value|date('d M H:i') ~ ' - ' ~ node.field_mt_event_date.end_value|date('d M H:i') %}
+{% endif %}
+
   <div class="event-content-wrapper clearfix">
     {% if view_mode=='full' %}
       <div class="event-info"> 
-        {% if view_mode=='full' %}
-         {{ content.field_mt_event_date[0]  }}
-        {% endif %}
-        {% if event_date %}
+        {% if node.field_lms_code %}
           <div class="event-date-wrapper">
             <div class="event-date">
               <div class="month">{{ event_date_month }}</div>
@@ -21,8 +30,8 @@
             </div>
           </div>
           <div class="event-duration">
-            <i class="fa fa-clock-o"></i>
-            {{ event_date_custom }}
+            <i class="fa fa-clock"></i>
+            {{ event_date_custom }} {{ timezone }}
           </div>
         {% endif %}
         {% if content.field_mt_event_location|render %}

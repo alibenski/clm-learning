@@ -1,0 +1,139 @@
+.event-content.custom-width {
+  margin-left: 225px;
+}
+.event-info {
+  max-width: 205px;
+  padding-top: 6px;
+  text-align: right;
+  width: 100%;
+  float: left;
+}
+@media (min-width: 992px) {
+  .two-sidebars .event-content.custom-width {
+    margin-left: 160px;
+  }
+  .two-sidebars .event-info {
+    max-width: 140px;
+  }
+}
+.node-teaser .event-place,
+.node-teaser .event-duration,
+.node-teaser #event-map {
+  display: none;
+}
+.node-teaser .event-content.custom-width {
+  margin-left: 95px;
+}
+.node-teaser .event-info {
+  max-width: 75px;
+  padding-top: 9px;
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .event-content.custom-width {
+    margin-left: 190px;
+  }
+  .event-info {
+    max-width: 170px;
+  }
+}
+@media (max-width: 767px) {
+  .event-content.custom-width {
+    margin-left: 150px;
+  }
+  .event-info {
+    max-width: 130px;
+  }
+}
+@media (max-width: 480px) {
+  .event-info,
+  .node-teaser .event-info {
+    max-width: 100%;
+    float: none;
+    text-align: left;
+    margin: 10px 0 30px;
+  }
+  .event-content.custom-width,
+  .node-teaser .event-content.custom-width {
+    margin-left: 0;
+  }
+}
+.field--name-field-mt-event-date,
+.field--name-field-mt-event-location {
+  margin:0 0 20px 0;
+}
+.field--name-field-mt-event-date .field__label,
+.field--name-field-mt-event-location .field__label {
+  font-size: 28px;
+  margin-bottom: 5px;
+  font-weight: 400;
+}
+.event-place .field__label {
+  display: none;
+}
+.node-mt-event .field--name-field-mt-subheader-body {
+  padding-bottom: 20px;
+}
+.event-date-wrapper {
+  position: relative;
+  width: 100%;
+  height: 75px;
+  margin-bottom: 45px;
+}
+.event-date {
+  width: 75px;
+  height: 75px;
+  background-color: #2a68af;
+  color: #fff;
+  font-weight: 900;
+  position: absolute;
+  right: 0;
+}
+.event-date .month {
+  font-size: 24px;
+  text-transform: uppercase;
+  position: absolute;
+  top: 11px;
+  right: -2px;
+  line-height: 1;
+}
+.event-date .day {
+  font-size: 48px;
+  position: absolute;
+  bottom: -6px;
+  right: -3px;
+  line-height: 1;
+}
+.event-info .event-duration {
+  margin-bottom: 35px;
+}
+.event-info i {
+  display: block;
+  margin: 0 auto;
+  font-size: 24px;
+  font-weight: 400;
+  margin: 0 12px 10px 0;
+  color: #2a68af;
+}
+.event-info .event-place i {
+  margin: 0 15px 10px 0;
+}
+@media (max-width: 480px) {
+  .event-info i {
+    margin: 0 12px 5px 0;
+    display: inline-block;
+  }
+  .event-info .event-place i {
+    margin: 0 15px 0px 3px;
+  }
+  .event-info .event-duration {
+    margin-bottom: 5px;
+  }
+  .event-date-wrapper {
+    width: 75px;
+    margin: 0 0 15px;
+  }
+}
+.event-info .google-map-canvas {
+  height: 250px;
+  margin: 20px 0;
+}

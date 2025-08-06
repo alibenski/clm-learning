@@ -10,6 +10,7 @@ global-styling:
       css/node.css: {}
       css/images.css: {}
       css/node-faculty_student.css: {}
+      css/node-events.css: {}
       css/views-faculty-students.css: {}
       css/group-accordion.css: {}
       css/icons-list.css: {}
