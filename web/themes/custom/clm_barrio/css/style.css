@@ -274,6 +274,11 @@ footer.site-footer .nav-link:focus {
     z-index: 2;
 }
 
+/* CSS for language index pages */
+.node--type-language-course .node--view-mode-teaser-title h2.node__title {
+    visibility: hidden;
+}
+
 .highlight-item.views-row {
     border: none;
     padding-left: 10px;
@@ -1459,4 +1464,8 @@ ul.nav li.nav-item--active-trail > span:hover:before {
 #block-clm-barrio-views-block-courses-block-12 {
     background-color: #fff;
     border-color: #fff;
+}
+
+.node--type-sdlspeople.node--view-mode-teaser-title header h2.node__title {
+    display: none;
 }

@@ -139,6 +139,12 @@
 }
 .ui-widget-content .node h2 a {
   color: #1e1e1e;
+  transition: all .2s ease-in-out;
+}
+.ui-widget-content .node h2 a:hover {
+  color: #2a68af;
+  font-size: 24px;
+  transition: all .2s ease-in-out;
 }
 
 @media (max-width: 767px) {

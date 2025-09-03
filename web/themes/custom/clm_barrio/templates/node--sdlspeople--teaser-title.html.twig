@@ -1,0 +1,68 @@
+{#
+/**
+ * @file
+ * Scholarly's theme implementation to display a Faculty node.
+ */
+#}
+{% extends "node.html.twig" %}
+{% block content %}
+  <div class="student-content-wrapper clearfix">
+    {% if (content.field_mt_photo|render) %}
+      <div class="photo-wrapper">
+        {{ content.field_mt_photo }}
+        {% if (content.field_mt_email|render) or (content.field_mt_twitter|render) or (content.field_mt_linkedin|render) %}
+          <ul class="members-social-bookmarks">
+            {% if content.field_mt_email|render %}
+              <li class="email"><a target="_blank" href="mailto:{{node.field_mt_email.value}}"><i class="fa fa-email"></i></a></li>
+            {% endif %}
+            {% if content.field_mt_twitter|render %}
+              <li class="twitter"><a target="_blank" href="{{node.field_mt_twitter.uri}}"><i class="fa fa-twitter"></i></a></li>
+            {% endif %}
+            {% if content.field_mt_linkedin|render %}
+              <li class="linkedin"><a target="_blank" href="{{node.field_mt_linkedin.uri}}"><i class="fa fa-linkedin"></i></a></li>
+            {% endif %}
+          </ul>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if not (content.field_mt_photo|render) %}
+      {% if (content.field_mt_email|render) or (content.field_mt_twitter|render) or (content.field_mt_linkedin|render) %}
+        <ul class="members-social-bookmarks">
+          {% if content.field_mt_email|render %}
+            <li class="email"><a target="_blank" href="mailto:{{node.field_mt_email.value}}"><i class="fa fa-email"></i></a></li>
+          {% endif %}
+          {% if content.field_mt_twitter|render %}
+            <li class="twitter"><a target="_blank" href="{{node.field_mt_twitter.uri}}"><i class="fa fa-twitter"></i></a></li>
+          {% endif %}
+          {% if content.field_mt_linkedin|render %}
+            <li class="linkedin"><a target="_blank" href="{{node.field_mt_linkedin.uri}}"><i class="fa fa-linkedin"></i></a></li>
+          {% endif %}
+        </ul>
+      {% endif %}
+    {% endif %}
+
+    {% if (content.field_mt_photo|render) %}
+      <div class="article-content custom-width">
+    {% endif %}
+
+    {% if not (content.field_mt_photo|render) %}
+      <div class="article-content full-width">
+    {% endif %}
+
+      {{ title_prefix }}
+      {% if not page %}
+        <h2 class="node-title">
+          <a href="{{ url }}">{{ label }}</a>
+        </h2>
+      {% endif %}
+
+      <div{{ content_attributes }}>
+        {{ content | without('field_mt_photo','field_mt_email','field_mt_twitter','field_mt_linkedin', 'group_mt_faculty_details','comment')}}
+      </div>
+    </div>
+  </div>
+
+  {{ content.group_mt_faculty_details }}
+  {{ content.comment }}
+{% endblock %}

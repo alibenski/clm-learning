@@ -1,0 +1,66 @@
+{#
+/**
+ * @file
+ * CLM Barrio's theme implementation to display an Event node.
+ */
+#}
+{% extends "node.html.twig" %}
+{% block content %}
+{% set view_mode = view_mode|default('full') %}
+{% set event_date_month = '' %}
+{% set event_date_day = '' %}
+{% set event_date_custom = '' %}
+{% set timezone = datetime|date('T') %}
+
+{# Set the event date if it exists #}
+{% if node.field_mt_event_date %}
+  {% set event_date_month = node.field_mt_event_date.value|date('M') %}
+  {% set event_date_day = node.field_mt_event_date.value|date('d') %}
+  {% set event_date_custom = node.field_mt_event_date.value|date('d M H:i') ~ ' - ' ~ node.field_mt_event_date.end_value|date('d M H:i') %}
+{% endif %}
+
+  <div class="event-content-wrapper clearfix">
+    {% if view_mode=='full' %}
+      <div class="event-info-cw">
+
+        {% if node.field_mt_event_date %}
+          <div class="event-date-wrapper">
+            <div class="event-date">
+              <div class="month">{{ event_date_month }}</div>
+              <div class="day">{{ event_date_day }}</div>
+            </div>
+          </div>
+          <div class="event-duration">
+            <i class="fas fa-clock  fa-xl"></i>
+            {{ event_date_custom }} {{ timezone }}
+          </div>
+        {% endif %}
+
+        {% if node.field_language.value %}
+          <div class="event-place">
+            <i class="fas fa-language fa-2xl"></i>
+            {{ node.field_language.value }}
+          </div>
+        {% endif %}
+        </br>
+        <div class="register-button">
+		  <a href={{ node.field_cw_vimeo_link.value.0.uri }} target="_blank" class="btn btn-primary"> Watch Here </a>
+		</div>
+		</br>
+        <div class="download-file-button">
+		  <a href={{ node.field_cw_session_files.value.0.uri }} target="_blank" class="btn btn-outline-dark"> Download Presentation </a>
+		</div>
+
+      </div>
+    {% endif %}
+
+    <div class="event-content {{ view_mode=='full' ? 'custom-width' : 'full-width' }}">
+      <div class="node--main-content">
+        <div{{ content_attributes }}>
+          {{ content | without('field_mt_event_latitude', 'field_mt_event_longitude', 'group_mt_event_details','comment','field_mt_event_date')}}
+        </div>
+      </div>
+    </div>
+    {{ content.group_mt_event_details }}
+  </div>
+{% endblock %}

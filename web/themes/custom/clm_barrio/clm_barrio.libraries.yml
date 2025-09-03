@@ -10,6 +10,7 @@ global-styling:
       css/node.css: {}
       css/images.css: {}
       css/node-faculty_student.css: {}
+      css/node-career-week.css: {}
       css/node-events.css: {}
       css/views-faculty-students.css: {}
       css/group-accordion.css: {}
@@ -43,7 +44,7 @@ font-awesome:
   version: VERSION
   css:
     component:
-      //cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css: {}
+      //cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css: {}
 color.preview:
   version: VERSION
   css:
