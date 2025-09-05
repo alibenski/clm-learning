@@ -22,11 +22,11 @@
               <li class="linkedin"><a target="_blank" href="{{node.field_mt_linkedin.uri}}"><i class="fa fa-linkedin"></i></a></li>
             {% endif %}
             {% if content.field_mt_booking|render %}
-              <li class="booking"><a target="_blank" href="{{node.field_mt_booking.uri}}"><i class="fa fa-calendar"></i></a></li>
+              <li class="booking"><a target="_blank" href="{{node.field_mt_booking.value}}"><i class="fa fa-calendar"></i></a></li>
             {% endif %}
           </ul>
           {% if content.field_mt_booking|render %}
-            <div class="booking"><a class="btn btn-outline-secondary" target="_blank" href="{{node.field_mt_booking.uri}}">Book Coaching Session</a></div>
+            <div class="booking"><a class="btn btn-outline-secondary" target="_blank" href="{{node.field_mt_booking.value}}">Book Coaching Session</a></div>
           {% endif %}
         {% endif %}
       </div>
@@ -45,11 +45,11 @@
             <li class="linkedin"><a target="_blank" href="{{node.field_mt_linkedin.uri}}"><i class="fa fa-linkedin"></i></a></li>
           {% endif %}
           {% if content.field_mt_booking|render %}
-            <li class="booking"><a target="_blank" href="{{node.field_mt_booking.uri}}"><i class="fa fa-calendar"></i></a></li>
+            <li class="booking"><a target="_blank" href="{{node.field_mt_booking.value}}"><i class="fa fa-calendar"></i></a></li>
           {% endif %}
         </ul>
         {% if content.field_mt_booking|render %}
-          <div class="booking"><a class="btn btn-outline-secondary" target="_blank" href="{{node.field_mt_booking.uri}}">Book Coaching Session</a></div>
+          <div class="booking"><a class="btn btn-outline-secondary" target="_blank" href="{{node.field_mt_booking.value}}">Book Coaching Session</a></div>
         {% endif %}
       {% endif %}
     {% endif %}

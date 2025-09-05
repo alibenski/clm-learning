@@ -13,6 +13,7 @@ global-styling:
       css/node-career-week.css: {}
       css/node-events.css: {}
       css/views-faculty-students.css: {}
+      css/views-frontpage-news.css: {}
       css/group-accordion.css: {}
       css/icons-list.css: {}
       css/colors.css: {}

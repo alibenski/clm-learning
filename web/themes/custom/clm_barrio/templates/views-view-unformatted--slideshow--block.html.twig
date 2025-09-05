@@ -1,4 +1,4 @@
-  <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+  <div id="myCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
     {# <div class="carousel-indicators">
     {% for key, row in rows %}
           {% if key == 0 %}
@@ -29,13 +29,14 @@
             <div{{ row.attributes.addClass(row_classes,'carousel-item') }}>
           {% endif %}
               
-              <img class="d-block img-fluid"  src="{{file_url(row.content['#row']._entity.field_teaser_image.entity.uri.value)}}" alt="First Slide" width="100%" style="background-size: cover;">
+              <img class="d-block img-fluid"  src="{{file_url(row.content['#row']._entity.field_teaser_image.entity.uri.value)}}" alt="Slide-{{ key }}" width="100%" style="object-fit:cover; object-position: 50% 50%; height: 400px;">
               
               <div class="container caption-bg">
-                <div class="d-none d-md-block position-relative text-center text-white">
-                  <h3>{{row.content['#row']._entity.title.value|raw }}</h3>
+                <div class="d-block position-relative text-center text-white">
+                  {# <h3>{{row.content['#row']._entity.title.value|raw }}</h3> #}
                   {# <p>Some representative placeholder content for the first slide of the carousel.</p> #}
-                  <p><a class="btn btn-lg btn-primary" href="#">Read More</a></p>
+                  {# <p><a class="btn btn-lg btn-primary" href="#">Read More</a></p> #}
+                  {{ row.content }}
                 </div>
               </div>
             </div>
@@ -44,11 +45,13 @@
 
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      {# <span class="carousel-control-prev-icon" aria-hidden="true"></span> #}
+      <i class="fa-solid fa-angle-left fa-2xl"></i>
       <span class="visually-hidden">Previous</span>
     </button>
     <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      {# <span class="carousel-control-next-icon" aria-hidden="true"></span> #}
+      <i class="fa-solid fa-angle-right fa-2xl"></i>
       <span class="visually-hidden">Next</span>
     </button>
   </div>
