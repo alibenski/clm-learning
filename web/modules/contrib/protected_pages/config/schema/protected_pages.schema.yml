@@ -22,6 +22,9 @@ protected_pages.settings:
         protected_pages_session_expire_time:
           type: string
           label: 'Session expire time'
+        protected_pages_global_password:
+          type: string
+          label: 'Global password'
     email:
       label: 'Email settings'
       type: mapping

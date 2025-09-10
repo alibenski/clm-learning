@@ -4,6 +4,7 @@ namespace Drupal\protected_pages\EventSubscriber;
 
 use Drupal\Core\PageCache\ResponsePolicy\KillSwitch;
 use Drupal\Core\Path\CurrentPathStack;
+use Drupal\Core\Path\PathMatcher;
 use Drupal\Core\Routing\RedirectDestination;
 use Drupal\Core\Session\AccountProxy;
 use Drupal\Core\Url;
@@ -71,6 +72,13 @@ class ProtectedPagesSubscriber implements EventSubscriberInterface {
   protected $pageCacheKillSwitch;
 
   /**
+   * The Patch matcher service.
+   *
+   * @var \Drupal\Core\Path\PathMatcher
+   */
+  protected $pathMatcher;
+
+  /**
    * Constructs a new ProtectedPagesSubscriber.
    *
    * @param \Drupal\path_alias\AliasManagerInterface $aliasManager
@@ -87,8 +95,10 @@ class ProtectedPagesSubscriber implements EventSubscriberInterface {
    *   The request stack service.
    * @param \Drupal\Core\PageCache\ResponsePolicy\KillSwitch $pageCacheKillSwitch
    *   The cache kill switch service.
+   * @param \Drupal\Core\Path\PathMatcher $pathMatcher
+   *   The path matcher service.
    */
-  public function __construct(AliasManagerInterface $aliasManager, AccountProxy $currentUser, CurrentPathStack $currentPathStack, RedirectDestination $destination, RequestStack $requestStack, ProtectedPagesStorage $protectedPagesStorage, KillSwitch $pageCacheKillSwitch) {
+  public function __construct(AliasManagerInterface $aliasManager, AccountProxy $currentUser, CurrentPathStack $currentPathStack, RedirectDestination $destination, RequestStack $requestStack, ProtectedPagesStorage $protectedPagesStorage, KillSwitch $pageCacheKillSwitch, PathMatcher $pathMatcher) {
     $this->aliasManager = $aliasManager;
     $this->currentUser = $currentUser;
     $this->currentPath = $currentPathStack;
@@ -96,6 +106,7 @@ class ProtectedPagesSubscriber implements EventSubscriberInterface {
     $this->requestStack = $requestStack;
     $this->protectedPagesStorage = $protectedPagesStorage;
     $this->pageCacheKillSwitch = $pageCacheKillSwitch;
+    $this->pathMatcher = $pathMatcher;
   }
 
   /**
@@ -170,20 +181,33 @@ class ProtectedPagesSubscriber implements EventSubscriberInterface {
    *   The protected page id.
    */
   public function protectedPagesIsPageLocked(string $current_path, string $normal_path) {
-    $fields = ['pid'];
-    $conditions = [];
-    $conditions['or'][] = [
-      'field' => 'path',
-      'value' => $normal_path,
-      'operator' => '=',
-    ];
-    $conditions['or'][] = [
-      'field' => 'path',
-      'value' => $current_path,
-      'operator' => '=',
-    ];
-    $pid = $this->protectedPagesStorage->loadProtectedPage($fields, $conditions, TRUE);
+    $pid = NULL;
 
+    // Check all protected pages entries for path match including wildcards.
+    $all_protected_pages = $this->protectedPagesStorage->loadAllProtectedPages();
+    foreach ($all_protected_pages as $protected_page) {
+      if ($this->pathMatcher->matchPath($current_path, $protected_page->path) && $current_path != '/protected-page') {
+        $pid = $protected_page->pid;
+        break;
+      }
+    }
+
+    if (!$pid) {
+      $fields = ['pid'];
+      $conditions = [];
+      $conditions['or'][] = [
+        'field' => 'path',
+        'value' => $normal_path,
+        'operator' => '=',
+      ];
+      $conditions['or'][] = [
+        'field' => 'path',
+        'value' => $current_path,
+        'operator' => '=',
+      ];
+
+      $pid = $this->protectedPagesStorage->loadProtectedPage($fields, $conditions, TRUE);
+    }
     if (isset($_SESSION['_protected_page']['passwords'][$pid]['expire_time'])) {
       if (time() >= $_SESSION['_protected_page']['passwords'][$pid]['expire_time']) {
         unset($_SESSION['_protected_page']['passwords'][$pid]['request_time']);

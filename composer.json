@@ -79,7 +79,7 @@
         "drupal/webform": "^6.2",
         "drush/drush": "~13",
         "enshrined/svg-sanitize": "^0.16.0",
-        "symfony/process": "6.4.14",
+        "symfony/process": "6.4.25",
         "wikimedia/composer-merge-plugin": "^2.1"
     },
     "conflict": {

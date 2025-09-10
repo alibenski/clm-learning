@@ -7,7 +7,7 @@ dependencies:
   - drupal:update
 configure: hacked.settings
 
-# Information added by Drupal.org packaging script on 2025-03-29
-version: '8.x-2.0-beta6'
+# Information added by Drupal.org packaging script on 2025-08-21
+version: '8.x-2.0-beta8'
 project: 'hacked'
-datestamp: 1743230312
+datestamp: 1755785655

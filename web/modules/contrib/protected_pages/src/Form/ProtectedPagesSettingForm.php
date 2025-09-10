@@ -243,13 +243,13 @@ class ProtectedPagesSettingForm extends ConfigFormBase {
     $config->set('password.per_page_or_global', $form_state->getValue('protected_pages_user_global_password'));
     $config->set('password.protected_pages_session_expire_time', $form_state->getValue('protected_pages_session_expire_time'));
     $config->set('email.subject', $form_state->getValue('protected_pages_email_subject'));
-    $config->set('email.body', $form_state->getValue('protected_pages_email_body'));
+    $config->set('email.body', str_replace("\r\n", "\n", $form_state->getValue('protected_pages_email_body')));
     $config->set('others.protected_pages_title', $form_state->getValue('protected_pages_title'));
-    $config->set('others.protected_pages_description', $form_state->getValue('protected_pages_description'));
+    $config->set('others.protected_pages_description', str_replace("\r\n", "\n", $form_state->getValue('protected_pages_description')));
     $config->set('others.protected_pages_password_fieldset_legend', $form_state->getValue('protected_pages_password_fieldset_legend'));
     $config->set('others.protected_pages_password_label', $form_state->getValue('protected_pages_password_label'));
     $config->set('others.protected_pages_submit_button_text', $form_state->getValue('protected_pages_submit_button_text'));
-    $config->set('others.protected_pages_incorrect_password_msg', $form_state->getValue('protected_pages_incorrect_password_msg'));
+    $config->set('others.protected_pages_incorrect_password_msg', str_replace("\r\n", "\n", $form_state->getValue('protected_pages_incorrect_password_msg')));
     $password = $form_state->getValue('protected_pages_global_password_field');
     if ($password) {
       $password_hash = $this->password->hash(Html::escape($password));

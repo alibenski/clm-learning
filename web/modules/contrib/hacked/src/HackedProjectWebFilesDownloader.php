@@ -2,6 +2,7 @@
 
 namespace Drupal\hacked;
 
+use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
 
 /**
@@ -97,7 +98,8 @@ class HackedProjectWebFilesDownloader extends HackedProjectWebDownloader {
       mkdir($cache_directory);
     }
 
-    return system_retrieve_file($url, $local, FALSE, FileSystemInterface::EXISTS_REPLACE);
+    $data = (string) \Drupal::httpClient()->get($url)->getBody();
+    return \Drupal::service('file_system')->saveData($data, $local, FileExists::Replace);
   }
 
   /**

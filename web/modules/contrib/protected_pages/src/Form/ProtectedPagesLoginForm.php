@@ -7,6 +7,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Flood\FloodInterface;
 use Drupal\Core\Password\PasswordInterface;
 use Drupal\Core\Session\AccountProxy;
 use Drupal\protected_pages\ProtectedPagesStorage;
@@ -46,6 +47,13 @@ class ProtectedPagesLoginForm extends FormBase {
   protected $time;
 
   /**
+   * The flood service.
+   *
+   * @var \Drupal\Core\Flood\FloodInterface
+   */
+  protected $flood;
+
+  /**
    * Constructs a new ProtectedPagesLoginForm.
    *
    * @param \Drupal\Core\Password\PasswordInterface $password
@@ -56,12 +64,15 @@ class ProtectedPagesLoginForm extends FormBase {
    *   The current user service.
    * @param \Drupal\Component\Datetime\TimeInterface $time
    *   A date time instance.
+   * @param \Drupal\Core\Flood\FloodInterface $flood
+   *   The flood service.
    */
-  public function __construct(PasswordInterface $password, ProtectedPagesStorage $protectedPagesStorage, AccountProxy $currentUser, TimeInterface $time) {
+  public function __construct(PasswordInterface $password, ProtectedPagesStorage $protectedPagesStorage, AccountProxy $currentUser, TimeInterface $time, FloodInterface $flood) {
     $this->password = $password;
     $this->protectedPagesStorage = $protectedPagesStorage;
     $this->currentUser = $currentUser;
     $this->time = $time;
+    $this->flood = $flood;
   }
 
   /**
@@ -72,7 +83,8 @@ class ProtectedPagesLoginForm extends FormBase {
       $container->get('password'),
       $container->get('protected_pages.storage'),
       $container->get('current_user'),
-      $container->get('datetime.time')
+      $container->get('datetime.time'),
+      $container->get('flood')
     );
   }
 
@@ -146,7 +158,15 @@ class ProtectedPagesLoginForm extends FormBase {
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('protected_pages.settings');
+    $limit = $config->get('flood_control.limit') ?? 5;
+    $window = $config->get('flood_control.window') ?? 900;
     $global_password_setting = $config->get('password.per_page_or_global');
+
+    // Check flood control.
+    if (!$this->flood->isAllowed('protected_pages.failed_login_ip', $limit, $window)) {
+      $form_state->setErrorByName('password', $this->t('Too many failed login attempts from your IP address. Try again later.'));
+      return;
+    }
 
     if ($global_password_setting == 'per_page_password') {
       $fields = ['password'];
@@ -157,9 +177,10 @@ class ProtectedPagesLoginForm extends FormBase {
         'operator' => '=',
       ];
 
-      $password = $this->protectedPagesStorage->loadProtectedPage($fields, $conditions, TRUE);
+      $password = (string) $this->protectedPagesStorage->loadProtectedPage($fields, $conditions, TRUE);
 
       if (!$this->password->check($form_state->getValue('password'), $password)) {
+        $this->flood->register('protected_pages.failed_login_ip', $window);
         $form_state->setErrorByName('password', $config->get('others.protected_pages_incorrect_password_msg'));
       }
     }
@@ -172,17 +193,19 @@ class ProtectedPagesLoginForm extends FormBase {
         'operator' => '=',
       ];
 
-      $password = $this->protectedPagesStorage->loadProtectedPage($fields, $conditions, TRUE);
-      $global_password = $config->get('password.protected_pages_global_password');
+      $password = (string) $this->protectedPagesStorage->loadProtectedPage($fields, $conditions, TRUE);
+      $global_password = (string) $config->get('password.protected_pages_global_password');
 
       if (!$this->password->check($form_state->getValue('password'), $password) && !$this->password->check($form_state->getValue('password'), $global_password)) {
+        $this->flood->register('protected_pages.failed_login_ip', $window);
         $form_state->setErrorByName('password', $config->get('others.protected_pages_incorrect_password_msg'));
       }
     }
     else {
-      $global_password = $config->get('password.protected_pages_global_password');
+      $global_password = (string) $config->get('password.protected_pages_global_password');
 
       if (!$this->password->check($form_state->getValue('password'), $global_password)) {
+        $this->flood->register('protected_pages.failed_login_ip', $window);
         $form_state->setErrorByName('password', $config->get('others.protected_pages_incorrect_password_msg'));
       }
     }
@@ -198,6 +221,7 @@ class ProtectedPagesLoginForm extends FormBase {
     if ($session_expire_time) {
       $_SESSION['_protected_page']['passwords'][$form_state->getValue('protected_page_pid')]['expire_time'] = strtotime("+{$session_expire_time} minutes");
     }
+    $this->flood->clear('protected_pages.failed_login_ip');
   }
 
 }

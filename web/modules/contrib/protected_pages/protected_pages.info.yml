@@ -7,7 +7,7 @@ core_version_requirement: ^8.8 || ^9 || ^10 || ^11
 dependencies:
   - drupal:path_alias
 
-# Information added by Drupal.org packaging script on 2025-01-21
-version: '8.x-1.7'
+# Information added by Drupal.org packaging script on 2025-09-06
+version: '8.x-1.9'
 project: 'protected_pages'
-datestamp: 1737461915
+datestamp: 1757194940
