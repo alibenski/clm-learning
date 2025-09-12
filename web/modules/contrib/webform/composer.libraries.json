@@ -30,7 +30,6 @@
         "jquery/hotkeys": "*",
         "jquery/icheck": "*",
         "jquery/select2": "*",
-        "jquery/textcounter": "*",
         "jquery/toggles": "*",
         "popperjs/popperjs": "*",
         "tippyjs/tippyjs": "*"
