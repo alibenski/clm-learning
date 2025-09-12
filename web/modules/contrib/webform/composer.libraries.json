@@ -24,26 +24,15 @@
         "forum": "https://drupal.stackexchange.com/questions/tagged/webform"
     },
     "require": {
-        "algolia/places": "*",
-        "choices/choices": "*",
         "codemirror/codemirror": "*",
         "jquery/chosen": "*",
         "jquery/geocomplete": "*",
         "jquery/hotkeys": "*",
         "jquery/icheck": "*",
-        "jquery/image-picker": "*",
-        "jquery/inputmask": "*",
-        "jquery/intl-tel-input": "*",
-        "jquery/rateit": "*",
         "jquery/select2": "*",
         "jquery/textcounter": "*",
-        "jquery/timepicker": "*",
         "jquery/toggles": "*",
         "popperjs/popperjs": "*",
-        "progress-tracker/progress-tracker": "*",
-        "signature_pad/signature_pad": "*",
-        "svg-pan-zoom/svg-pan-zoom": "*",
-        "tabby/tabby": "*",
         "tippyjs/tippyjs": "*"
     },
     "suggest": {
